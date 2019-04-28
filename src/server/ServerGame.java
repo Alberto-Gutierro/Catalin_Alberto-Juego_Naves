@@ -81,6 +81,7 @@ public class ServerGame {
          * 5. devolver un byte[]
          */
         try {
+            //POR AQUI: EL SERVIDOR RECIBE UN ARRAY Y NO UN OBJETO.
             System.out.println(Transformer.packetDataToString(packet));
             switch (Transformer.packetDataToString(packet)) {
                 case "Connect":
