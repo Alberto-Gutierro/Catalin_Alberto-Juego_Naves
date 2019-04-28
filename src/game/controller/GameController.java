@@ -22,10 +22,7 @@ import transformmer.Transformer;
 
 import java.awt.*;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.net.URL;
+import java.net.*;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -165,6 +162,7 @@ public class GameController extends GameSetter implements Initializable {
                         ipServer,
                         portServer);
                 try {
+
                     socket.send(packet);
                     socket.setSoTimeout(500);
                     packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
@@ -175,20 +173,50 @@ public class GameController extends GameSetter implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                if(navesRecivedService.getMyLives() != 0) {
+                    navesRecivedService.renderNavesRecibidas();
 
-                navesRecivedService.renderNavesRecibidas();
+                    nave.setLives(navesRecivedService.getMyLives());
 
-                nave.setLives(navesRecivedService.getMyLives());
+                    nave.update(timing);
 
-                nave.update(timing);
+                    checkCollisions();
 
-                checkCollisions();
+                    nave.render();
+                }else {
+                    multiplayerSpectatorMode(navesRecivedService, socket);
+                    this.stop();
+                }
 
-                nave.render();
 
             }
         }.start();
     }
+
+    private void multiplayerSpectatorMode(NavesRecivedService navesRecivedService, DatagramSocket socket){
+        packet = new DatagramPacket("Dead".getBytes(),
+                "Dead".getBytes().length,
+                ipServer,
+                portServer);
+        new AnimationTimer(){
+
+            @Override
+            public void handle(long l) {
+                try {
+                    socket.send(packet);
+                    socket.setSoTimeout(500);
+                    packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
+                    socket.receive(packet);
+
+                    navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                navesRecivedService.renderNavesRecibidas();
+
+            }
+        }.start();}
 
     private void checkCollisions(){
         checkNaveInScreen();

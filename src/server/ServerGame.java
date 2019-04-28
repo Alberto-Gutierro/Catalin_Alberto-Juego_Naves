@@ -25,6 +25,9 @@ public class ServerGame {
 
     private Map<Integer, Integer> livesNaves;
 
+    private boolean[] navesVivas = {false, true, true, true, true};
+    private int[] vidasNaves = {-1, 3, 3, 3, 3};
+
     public void init(int port) throws SocketException {
         socket = new DatagramSocket(port);
         naves = new ArrayList<>();
@@ -58,6 +61,7 @@ public class ServerGame {
 
             if (!new String(sendingData).equals("Starting")) {
                 //creació del paquet per enviar la resposta
+                System.out.println(clientIP.getHostAddress());
                 packet = new DatagramPacket(sendingData, sendingData.length, clientIP, clientPort);
                 //System.out.println(new String(respuesta, Charset.defaultCharset()));
 
@@ -77,11 +81,14 @@ public class ServerGame {
          * 5. devolver un byte[]
          */
         try {
+            System.out.println(Transformer.packetDataToString(packet));
             switch (Transformer.packetDataToString(packet)) {
                 case "Connect":
                     return getIdOfNaveClient(packet).getBytes();
                 case "Start":
                     return signalToStart().getBytes();
+                case "Dead":
+                    return deadData(packet.getAddress()).getBytes();
                 default:
                     return updateJsonGame(packet).getBytes();
 
@@ -104,6 +111,20 @@ public class ServerGame {
 //        }
     }
 
+    private NaveToRecive naveToRemove;
+    private String deadData(InetAddress ipClient){
+        if(navesVivas[mapIdNaves.get(ipClient).getIdNave()]) {
+            naves.forEach(nave -> {
+                if (nave.getIdNave() == mapIdNaves.get(ipClient).getIdNave()) {
+                    naveToRemove = nave;
+                }
+            });
+            naves.remove(naveToRemove);
+        }
+
+        return Transformer.classToJson(naves);
+    }
+
 
     private String updateJsonGame(DatagramPacket packet) throws UnsupportedEncodingException {
         NaveToRecive naveRecibida = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
@@ -117,10 +138,14 @@ public class ServerGame {
         }
         if(naveRecibida.getNavesTocadas() != null || naveRecibida.getNavesTocadas().size() == 0) {
             naves.forEach(nave -> {
-                System.out.println(nave.getLives());
+                nave.setLives(vidasNaves[nave.getIdNave()]);
                 naveRecibida.getNavesTocadas().forEach(naveTocada -> {
                     if (nave.getIdNave() == naveTocada) {
-                        nave.subsLives();
+                        System.out.println("NAVE: " + nave.getIdNave());
+                        System.out.println(nave.getLives());
+                        vidasNaves[naveTocada]--;
+                        nave.setLives(vidasNaves[naveTocada]);
+
                         System.out.println(nave.getLives());
                     }
                 });

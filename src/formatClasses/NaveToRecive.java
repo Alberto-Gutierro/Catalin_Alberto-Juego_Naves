@@ -70,6 +70,9 @@ public class NaveToRecive {
         return lives;
     }
 
+    public void setLives(int lives){
+        this.lives = lives;
+    }
     public ArrayList<Integer> getNavesTocadas() {
         return navesTocadas;
     }
@@ -78,7 +81,5 @@ public class NaveToRecive {
         return meteoritosTocados;
     }
 
-    public void subsLives() {
-        lives--;
-    }
+
 }
