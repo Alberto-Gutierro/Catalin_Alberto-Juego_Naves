@@ -32,6 +32,8 @@ public class NaveToSend {
     public NaveToSend(){
         naveArmaBalas = new ArrayList<>();
         timer = new Timer(3);
+        navesTocadas = new ArrayList<>();
+        meteoritosTocados = new ArrayList<>();
     }
 
     public void setData(Nave nave, double time) {
