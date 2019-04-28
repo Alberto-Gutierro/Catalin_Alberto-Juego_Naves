@@ -93,7 +93,6 @@ public class Arma {
     }
 
     public void render(){
-        System.out.println(balasDisponibles);
         for (int i = 0; i < balasDisponibles; i++) {
             graphicsContext.drawImage(imgAmmoBala, 125 + 20*i, 85);
         }
