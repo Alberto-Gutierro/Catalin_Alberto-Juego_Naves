@@ -35,6 +35,7 @@ public class NaveToSend {
         navesTocadas = new ArrayList<>();
         meteoritosTocados = new ArrayList<>();
     }
+    //change
 
     public void setData(Nave nave, double time) {
         timer.update(time);
