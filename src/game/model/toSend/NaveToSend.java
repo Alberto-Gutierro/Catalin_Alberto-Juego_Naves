@@ -26,6 +26,8 @@ public class NaveToSend {
     private ArrayList<Integer> navesTocadas;
     private ArrayList<Integer> meteoritosTocados;
 
+    private int lives;
+
     //////FALTA: ESTA VARIABLE NO SE TIENE QUE PASAR EN EL JSON.
     private Timer timer;
 
@@ -38,6 +40,8 @@ public class NaveToSend {
     //change
 
     public void setData(Nave nave, double time) {
+        lives = nave.getLives();
+
         timer.update(time);
 
         //Sin han pasado 10 segundos se borran todas las balas de dentro del array.

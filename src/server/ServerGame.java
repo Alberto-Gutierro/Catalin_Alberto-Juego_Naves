@@ -46,7 +46,7 @@ public class ServerGame {
             //espera de les dades
 
             socket.receive(packet);
-            System.out.println(Transformer.packetDataToString(packet));
+            //System.out.println(Transformer.packetDataToString(packet));
             //obtenció de l'adreça del client
             clientIP = packet.getAddress();
             //obtenció del port del client
@@ -115,11 +115,13 @@ public class ServerGame {
         }else {
             naves.add(naveRecibida);
         }
-        if(naveRecibida.getNavesTocadas() != null) {
+        if(naveRecibida.getNavesTocadas() != null || naveRecibida.getNavesTocadas().size() == 0) {
             naves.forEach(nave -> {
+                System.out.println(nave.getLives());
                 naveRecibida.getNavesTocadas().forEach(naveTocada -> {
                     if (nave.getIdNave() == naveTocada) {
                         nave.subsLives();
+                        System.out.println(nave.getLives());
                     }
                 });
             });

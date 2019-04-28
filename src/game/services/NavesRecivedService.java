@@ -48,6 +48,7 @@ public class NavesRecivedService {
     public int getMyLives(){
 
         for (NaveToRecive naveToRecive : navesRecived) {
+            System.out.println(naveToRecive.getIdNave());
             if(myNaveId == naveToRecive.getIdNave()){
                 System.out.println(naveToRecive.getLives());
                 return naveToRecive.getLives();
