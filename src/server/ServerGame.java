@@ -36,7 +36,7 @@ public class ServerGame {
     }
 
     public void runServer() throws IOException {
-        byte [] receivingData = new byte[1024];
+        byte [] receivingData = new byte[Packets.PACKET_LENGHT];
         byte [] sendingData;
         InetAddress clientIP;
         int clientPort;
