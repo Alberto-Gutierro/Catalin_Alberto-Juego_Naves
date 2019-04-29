@@ -50,11 +50,11 @@ public class Arma {
             if(balasDisponibles == MAX_BALAS){
                 reloadTimer.setTime(0);
             }
-            new MediaPlayer(soundBala).play();
+            //new MediaPlayer(soundBala).play();
             balasDisponibles--;
             balas.add(new Bala(graphicsContext, x, y, cc, co, angle, addIdToBala()));
         }else {
-            new MediaPlayer(soundOutOfAmmo).play();
+            //new MediaPlayer(soundOutOfAmmo).play();
         }
     }
 

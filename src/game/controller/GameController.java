@@ -174,7 +174,7 @@ public class GameController extends GameSetter implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if(navesRecivedService.getMyLives() != 0) {
+                if(navesRecivedService.getMyLives() >= 0) {
                     navesRecivedService.renderNavesRecibidas();
 
                     nave.setLives(navesRecivedService.getMyLives());
