@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import transformmer.Transformer;
 
@@ -36,7 +37,7 @@ public abstract class GameSetter extends SceneStageSetter {
 
     protected boolean runningGame;
 
-    public void beforeStartGame(Stage stage, Scene scene, DatagramPacket packet) {
+    public void beforeStartGame(Stage stage, Scene scene, DatagramPacket packet, Pane pane) {
         this.packet = packet;
         int idNave = 1;
         if(packet != null) {
@@ -54,7 +55,7 @@ public abstract class GameSetter extends SceneStageSetter {
 
         initControlPress();
 
-        setNave(new Nave(graphicsContext,500,500, idNave, new ImageView("game/res/img/naves/navePlayer_" + idNave + ".png"), this.upPressed, this.downPressed, this.rightPressed, this.leftPressed, this.anyPressed));
+        setNave(new Nave(graphicsContext, pane,500,500, idNave, new ImageView("game/res/img/naves/navePlayer_" + idNave + ".png"), this.upPressed, this.downPressed, this.rightPressed, this.leftPressed, this.anyPressed));
 
         setControls();
 

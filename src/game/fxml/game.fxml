@@ -56,7 +56,7 @@
          </Text>
       </children>
    </Pane>
-   <AnchorPane fx:id="gameOverScreen" layoutX="500.0" layoutY="200.0" prefHeight="500" prefWidth="500">
+   <AnchorPane fx:id="gameOverScreen" layoutX="700.0" layoutY="350.0" prefHeight="500" prefWidth="500">
       <!--AQUI IRÁ LA PANTALLA DE GAME OVER.-->
    </AnchorPane>
    <cursor>

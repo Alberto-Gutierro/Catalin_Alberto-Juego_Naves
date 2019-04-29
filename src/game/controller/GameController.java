@@ -3,6 +3,8 @@ package game.controller;
 import game.services.NavesRecivedService;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import statVars.Packets;
 import statVars.Resoluciones;
 
@@ -27,6 +29,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GameController extends GameSetter implements Initializable {
+    @FXML private Pane pane;
 
     //Datos que se mandan al servidor
     private NaveToSend dataToSend;
@@ -38,10 +41,13 @@ public class GameController extends GameSetter implements Initializable {
     @FXML Text score_p1;
     @FXML AnchorPane gameOverScreen;
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         graphicsContext = canvas.getGraphicsContext2D();
+        graphicsContext.scale(1,1);
 
         dataToSend = new NaveToSend();
 
@@ -50,6 +56,10 @@ public class GameController extends GameSetter implements Initializable {
 
         recivingData = new byte[Packets.PACKET_LENGHT];
 
+    }
+
+    public Pane getPane(){
+        return pane;
     }
 
     @Override
@@ -112,6 +122,7 @@ public class GameController extends GameSetter implements Initializable {
 
 
                 if(!runningGame){
+
                     this.stop();
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/gameOver.fxml"));

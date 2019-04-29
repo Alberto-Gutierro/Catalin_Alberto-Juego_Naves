@@ -1,6 +1,8 @@
 package game.model;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import statVars.Enums;
@@ -28,11 +30,20 @@ public class Arma {
 
     private Timer reloadTimer;
 
-    private Image imgAmmoBala;
+
+    private ImageView[] imgAmmoBalas;
 
 
-    public Arma(GraphicsContext graphicsContext){
-        imgAmmoBala = new Image("game/res/img/bala.png");
+    public Arma(GraphicsContext graphicsContext, Pane pane){
+        imgAmmoBalas = new ImageView[MAX_BALAS];
+        ///IMAGENES A LAS VIDAS
+        for (int i = 0; i<MAX_BALAS; i++) {
+            ImageView imagen = new ImageView("game/res/img/bala.png");
+            imagen.setX(125 + (imagen.getImage().getWidth() + 20) * i+1);
+            imagen.setY(85);
+            pane.getChildren().add(imagen);
+            imgAmmoBalas[i] = imagen;
+        }
 
         reloadTimer = new Timer(0.75);
 
@@ -93,9 +104,14 @@ public class Arma {
     }
 
     public void render(){
-        for (int i = 0; i < balasDisponibles; i++) {
-            graphicsContext.drawImage(imgAmmoBala, 125 + 20*i, 85);
+        for (int i = 0; i < MAX_BALAS; i++) {
+            if(i<balasDisponibles) {
+                imgAmmoBalas[i].setOpacity(1);
+            }else{
+                imgAmmoBalas[i].setOpacity(0.5);
+            }
         }
+
         if(!balas.isEmpty()) {
             balas.forEach(Bala::render);
         }

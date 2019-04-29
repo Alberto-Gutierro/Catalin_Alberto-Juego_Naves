@@ -48,7 +48,7 @@ public class GameOverController extends SceneStageSetter {
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
             GameController gameController = loader.getController();
-            gameController.beforeStartGame(stage,scene, null);
+            gameController.beforeStartGame(stage,scene, null, gameController.getPane());
             gameController.start(false);
 
             stage.setTitle(Strings.NOMBRE_JUEGO);

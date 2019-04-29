@@ -7,6 +7,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class Nave {
@@ -33,16 +34,24 @@ public class Nave {
 
     private GraphicsContext graphicsContext;
 
-    private Image imgCorazonVida;
+    private ImageView[] imgVidas;
 
+    public Nave(GraphicsContext graphicsContext, Pane pane, int posX, int posY, int idNave, ImageView imgNave, BooleanProperty upPressed, BooleanProperty downPressed, BooleanProperty rightPressed, BooleanProperty leftPressed, BooleanBinding anyPressed) {
+        imgVidas = new ImageView[MAX_LIFES];
+        ///IMAGENES A LAS VIDAS
+        for (int i = 0; i<MAX_LIFES; i++) {
+            ImageView imagen = new ImageView("game/res/img/vida.png");
+            imagen.setX(120 + (imagen.getImage().getWidth() + 5) * i+1);
+            imagen.setY(110);
+            pane.getChildren().add(imagen);
+            imgVidas[i] = imagen;
+        }
 
-    public Nave(GraphicsContext graphicsContext, int posX, int posY, int idNave, ImageView imgNave, BooleanProperty upPressed, BooleanProperty downPressed, BooleanProperty rightPressed, BooleanProperty leftPressed, BooleanBinding anyPressed) {
         lives = 3;
-        imgCorazonVida = new Image("game/res/img/vida.png");
 
         this.id = idNave;
 
-        arma = new Arma(graphicsContext);
+        arma = new Arma(graphicsContext, pane);
         orientation = new Cursor();
 
         this.graphicsContext = graphicsContext;
@@ -168,8 +177,12 @@ public class Nave {
         graphicsContext.drawImage(imagenRotada, posX, posY);
 
         arma.render();
-        for (int i = 0; i < lives; i++) {
-            graphicsContext.drawImage(imgCorazonVida, 120 + 30*i, 110);
+        for (int i = 0; i < MAX_LIFES; i++) {
+            if(i<lives) {
+                imgVidas[i].setOpacity(1);
+            }else{
+                imgVidas[i].setOpacity(0.5);
+            }
         }
     }
 

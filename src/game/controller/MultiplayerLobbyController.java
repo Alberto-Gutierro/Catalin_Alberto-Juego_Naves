@@ -22,7 +22,7 @@ public class MultiplayerLobbyController extends SceneStageSetter {
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
             GameController gameController = loader.getController();
-            gameController.beforeStartGame(stage, scene, paket);
+            gameController.beforeStartGame(stage, scene, paket, gameController.getPane());
             gameController.start(true);
 
             stage.setTitle(Strings.NOMBRE_JUEGO);
