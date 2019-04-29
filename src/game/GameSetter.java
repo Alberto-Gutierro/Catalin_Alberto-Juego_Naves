@@ -18,6 +18,8 @@ import java.net.InetAddress;
 public abstract class GameSetter extends SceneStageSetter {
     protected GraphicsContext graphicsContext;
 
+    protected boolean isMultiplayer;
+
     //Si se ha pulsado alguna.
     protected BooleanBinding anyPressed;
 
@@ -81,14 +83,20 @@ public abstract class GameSetter extends SceneStageSetter {
 
     private void setControls() {
         scene.setOnMouseReleased(event->{
-            nave.shoot(event.getX(), event.getY());
+            if(runningGame) {
+                nave.shoot(event.getX(), event.getY());
+            }
         });
 
         scene.setOnMouseDragged(event->{
-            nave.setOrientation(event.getX(), event.getY());
+            if(runningGame) {
+                nave.setOrientation(event.getX(), event.getY());
+            }
         });
         scene.setOnMouseMoved(event->{
-            nave.setOrientation(event.getX(), event.getY());
+            if(runningGame) {
+                nave.setOrientation(event.getX(), event.getY());
+            }
         });
         scene.setOnKeyPressed(key -> {
             if (key.getCode() == KeyCode.UP || key.getCode() == KeyCode.W) {

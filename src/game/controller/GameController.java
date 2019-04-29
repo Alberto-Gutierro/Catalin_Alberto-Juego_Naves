@@ -60,6 +60,7 @@ public class GameController extends GameSetter implements Initializable {
     }
 
     void start(boolean isMultiplayer){
+        this.isMultiplayer = isMultiplayer;
         if(isMultiplayer){
             try {
                 startMultiplayer();
@@ -184,6 +185,7 @@ public class GameController extends GameSetter implements Initializable {
 
                     nave.render();
                 }else {
+                    runningGame = false;
                     multiplayerSpectatorMode(navesRecivedService, socket);
                     this.stop();
                 }
@@ -194,21 +196,23 @@ public class GameController extends GameSetter implements Initializable {
     }
 
     private void multiplayerSpectatorMode(NavesRecivedService navesRecivedService, DatagramSocket socket){
-        packet = new DatagramPacket("Dead".getBytes(),
-                "Dead".getBytes().length,
-                ipServer,
-                portServer);
         new AnimationTimer(){
 
             @Override
             public void handle(long l) {
                 try {
+                    packet = new DatagramPacket("Dead".getBytes(),
+                            "Dead".getBytes().length,
+                            ipServer,
+                            portServer);
                     socket.send(packet);
                     socket.setSoTimeout(500);
                     packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
                     socket.receive(packet);
 
+                    graphicsContext.clearRect(0,0, stage.getWidth(), stage.getHeight());
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -218,10 +222,12 @@ public class GameController extends GameSetter implements Initializable {
             }
         }.start();}
 
-    private void checkCollisions(){
+    private void checkCollisions() {
         checkNaveInScreen();
         checkCollisionBala();
-        //checkCollisionMeteor();
+        if (!isMultiplayer) {
+            checkCollisionMeteor();
+        }
     }
 
     private void checkCollisionMeteor() {
@@ -290,33 +296,35 @@ public class GameController extends GameSetter implements Initializable {
             }
         });
 
-        Map<Integer, Image> imagenRotadaOtrasNaves = navesRecivedService.getImagenRotadaOtrasNaves();
+        if(isMultiplayer) {
+            Map<Integer, Image> imagenRotadaOtrasNaves = navesRecivedService.getImagenRotadaOtrasNaves();
 
-        Map<Integer, ImageView> imagenOtrasNaves = navesRecivedService.getImagenOtrasNaves();
+            Map<Integer, ImageView> imagenOtrasNaves = navesRecivedService.getImagenOtrasNaves();
 
-        navesRecivedService.getNavesRecived().forEach(naveRecivedService->{
-            if(naveRecivedService.getIdNave() != nave.getId()) {
-                Rectangle naveArea = new Rectangle(
-                        (int) naveRecivedService.getNavePosX(),
-                        (int) naveRecivedService.getNavePosY(),
-                        (int) imagenRotadaOtrasNaves.get(naveRecivedService.getIdNave()).getWidth(),
-                        (int) imagenRotadaOtrasNaves.get(naveRecivedService.getIdNave()).getHeight());
+            navesRecivedService.getNavesRecived().forEach(naveRecivedService -> {
+                if (naveRecivedService.getIdNave() != nave.getId()) {
+                    Rectangle naveArea = new Rectangle(
+                            (int) naveRecivedService.getNavePosX(),
+                            (int) naveRecivedService.getNavePosY(),
+                            (int) imagenRotadaOtrasNaves.get(naveRecivedService.getIdNave()).getWidth(),
+                            (int) imagenRotadaOtrasNaves.get(naveRecivedService.getIdNave()).getHeight());
 
-                nave.getArma().getBalas().forEach(bala -> {
-                    if (naveArea.intersects(new Rectangle(
-                            (int) bala.getPosX(),
-                            (int) bala.getPosY(),
-                            (int) bala.getImagenRotada().getWidth(),
-                            (int) bala.getImagenRotada().getHeight()))) {
-                        bala.remove();
-                        //HACER QUE SE GUARDE EL ID DE LA NAVE QUE HA SIDO TOCADA EN LOS DATOS QUE VAMOS A MANDAR AL SERVIDOR.
+                    nave.getArma().getBalas().forEach(bala -> {
+                        if (naveArea.intersects(new Rectangle(
+                                (int) bala.getPosX(),
+                                (int) bala.getPosY(),
+                                (int) bala.getImagenRotada().getWidth(),
+                                (int) bala.getImagenRotada().getHeight()))) {
+                            bala.remove();
+                            //HACER QUE SE GUARDE EL ID DE LA NAVE QUE HA SIDO TOCADA EN LOS DATOS QUE VAMOS A MANDAR AL SERVIDOR.
 
-                        // Añadimos la las id de las naves que han sido tocadas por tus balas
-                        dataToSend.addIdNaveTocada(naveRecivedService.getIdNave());
-                    }
-                });
-            }
-        });
+                            // Añadimos la las id de las naves que han sido tocadas por tus balas
+                            dataToSend.addIdNaveTocada(naveRecivedService.getIdNave());
+                        }
+                    });
+                }
+            });
+        }
     }
 
     private void checkNaveInScreen() {
