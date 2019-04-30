@@ -1,5 +1,6 @@
 package server;
 
+import statVars.AjustesNave;
 import statVars.Packets;
 import server.model.ClientData;
 import formatClasses.NaveToRecive;
@@ -23,16 +24,13 @@ public class ServerGame {
 
     private Map<InetAddress, ClientData> mapIdNaves;
 
-    private Map<Integer, Integer> livesNaves;
-
     private boolean[] navesVivas = {false, true, true, true, true};
-    private int[] vidasNaves = {-1, 3, 3, 3, 3};
+    private int[] vidasNaves = {-1, AjustesNave.START_LIFES, AjustesNave.START_LIFES, AjustesNave.START_LIFES, AjustesNave.START_LIFES};
 
     public void init(int port) throws SocketException {
         socket = new DatagramSocket(port);
         naves = new ArrayList<>();
         mapIdNaves = new HashMap<>();
-        livesNaves = new HashMap<>();
     }
 
     public void runServer() throws IOException {
@@ -40,7 +38,6 @@ public class ServerGame {
         byte [] sendingData;
         InetAddress clientIP;
         int clientPort;
-
 
         //el servidor atén el port indefinidament
         while(true/* No esten todos los jugadores */){
@@ -142,12 +139,13 @@ public class ServerGame {
                 nave.setLives(vidasNaves[nave.getIdNave()]);
                 naveRecibida.getNavesTocadas().forEach(naveTocada -> {
                     if (nave.getIdNave() == naveTocada) {
-                        System.out.println("NAVE: " + nave.getIdNave());
-                        System.out.println(nave.getLives());
                         vidasNaves[naveTocada]--;
-                        nave.setLives(vidasNaves[naveTocada]);
 
-                        System.out.println(nave.getLives());
+                        if(vidasNaves[naveRecibida.getIdNave()] < AjustesNave.MAX_LIFES) {
+                            vidasNaves[naveRecibida.getIdNave()]++;
+                        }
+
+                        nave.setLives(vidasNaves[naveTocada]);
                     }
                 });
             });

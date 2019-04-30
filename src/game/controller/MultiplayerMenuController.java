@@ -52,7 +52,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
 
             socket.send(packet);
 
-            socket.setSoTimeout(3000);
+            socket.setSoTimeout(500);
 
             socket.receive(packet);
 

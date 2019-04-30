@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import statVars.AjustesNave;
 
 public class Nave {
     private int id;
@@ -19,8 +20,8 @@ public class Nave {
     private double posY;
 
     private final int SPEED = 5;
-    private int lives;
-    private final int MAX_LIFES = 5;
+    private int lifes;
+    private final int MAX_LIFES = AjustesNave.MAX_LIFES;
 
     private BooleanProperty upPressed, downPressed, rightPressed, leftPressed;
     private BooleanBinding anyPressed;
@@ -47,7 +48,7 @@ public class Nave {
             imgVidas[i] = imagen;
         }
 
-        lives = 3;
+        lifes = AjustesNave.START_LIFES;
 
         this.id = idNave;
 
@@ -178,7 +179,7 @@ public class Nave {
 
         arma.render();
         for (int i = 0; i < MAX_LIFES; i++) {
-            if(i<lives) {
+            if(i< lifes) {
                 imgVidas[i].setOpacity(1);
             }else{
                 imgVidas[i].setOpacity(0.5);
@@ -187,21 +188,21 @@ public class Nave {
     }
 
     public void subsLive(){
-        lives--;
+        lifes--;
     }
 
     public void addLive(){
-        if(lives != 5) {
-            lives++;
+        if(lifes != 5) {
+            lifes++;
         }
     }
 
-    public int getLives() {
-        return lives;
+    public int getLifes() {
+        return lifes;
     }
 
-    public void setLives(int lives) {
-        this.lives = lives;
+    public void setLifes(int lifes) {
+        this.lifes = lifes;
     }
 
 }

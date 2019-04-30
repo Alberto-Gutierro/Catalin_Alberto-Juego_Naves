@@ -40,7 +40,7 @@ public class NaveToSend {
     //change
 
     public void setData(Nave nave, double time) {
-        lives = nave.getLives();
+        lives = nave.getLifes();
 
         timer.update(time);
 

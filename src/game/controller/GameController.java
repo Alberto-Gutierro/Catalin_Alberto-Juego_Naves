@@ -7,7 +7,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import statVars.Packets;
 import statVars.Resoluciones;
 
@@ -33,6 +32,8 @@ import java.io.IOException;
 import java.net.*;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class GameController extends GameSetter implements Initializable {
     @FXML private Pane pane;
@@ -84,6 +85,8 @@ public class GameController extends GameSetter implements Initializable {
     }
 
     void start(boolean isMultiplayer){
+        final Executor executor = Executors.newFixedThreadPool(4);
+
         this.isMultiplayer = isMultiplayer;
         if(isMultiplayer){
             try {
@@ -187,8 +190,8 @@ public class GameController extends GameSetter implements Initializable {
                         sendData.getBytes().length,
                         ipServer,
                         portServer);
-                try {
 
+                try {
                     socket.send(packet);
                     socket.setSoTimeout(500);
                     packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
@@ -196,26 +199,22 @@ public class GameController extends GameSetter implements Initializable {
 
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
 
+                    navesRecivedService.renderNavesRecibidas();
+
+                    nave.setLifes(navesRecivedService.getMyLives());
                 }
                 catch (SocketTimeoutException e){
-
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("ERROR");
                     alert.setHeaderText("Connection Time Out");
                     alert.setContentText("");
                     alert.showAndWait();
-
-                    e.printStackTrace();
-
                 }
                 catch (IOException e) {
                     e.printStackTrace();
                 }
+
                 if(navesRecivedService.getMyLives() >= 0) {
-                    navesRecivedService.renderNavesRecibidas();
-
-                    nave.setLives(navesRecivedService.getMyLives());
-
                     nave.update(timing);
 
                     checkCollisions();
@@ -298,7 +297,7 @@ public class GameController extends GameSetter implements Initializable {
                     bala.remove();
                     meteor.remove();
                     score_p1.setText(String.valueOf(Integer.parseInt(score_p1.getText()) + 50));
-                    if(Integer.parseInt(score_p1.getText())%500 == 0 && nave.getLives() != 5){
+                    if(Integer.parseInt(score_p1.getText())%500 == 0 && nave.getLifes() != 5){
                         nave.addLive();
                     }
                     dificulty += 0.5;
@@ -311,7 +310,7 @@ public class GameController extends GameSetter implements Initializable {
                     (int)nave.getImagenRotada().getHeight()))){
                 meteor.remove();
                 nave.subsLive();
-                if(nave.getLives() == 0){
+                if(nave.getLifes() == 0){
                     runningGame = false;
                 }
             }
