@@ -10,11 +10,16 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <Pane fx:id="pane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameController">
+
    <ImageView pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../res/img/img_fondo_espacio.png" />
       </image>
    </ImageView>
+
+   <children>
+      <Canvas fx:id="canvas" />
+   </children>
    <Pane fx:id="scores" layoutX="10.0" layoutY="10.0">
       <children>
          <Text fx:id="score_p1" fill="#3c42d8" layoutX="40.0" layoutY="50.0">
@@ -56,9 +61,6 @@
    <AnchorPane fx:id="gameOverScreen" layoutX="700.0" layoutY="350.0" prefHeight="500" prefWidth="500">
       <!--AQUI IRÁ LA PANTALLA DE GAME OVER.-->
    </AnchorPane>
-   <children>
-      <Canvas fx:id="canvas" />
-   </children>
    <cursor>
       <Cursor fx:constant="CROSSHAIR" />
    </cursor>
