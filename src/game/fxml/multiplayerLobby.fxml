@@ -18,10 +18,10 @@
       </ImageView>
       <Pane layoutX="108.0" layoutY="309.0" prefHeight="402.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7c7c7c" height="400.0" layoutY="1.0" opacity="0.83" stroke="BLACK" strokeType="INSIDE" width="800.0" />
-            <Pane layoutX="96.0" layoutY="141.0" prefHeight="200.0" prefWidth="612.0">
+            <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#7c7c7c" height="400.0" layoutY="1.0" opacity="0.83" stroke="BLACK" strokeType="INSIDE" width="800.0" />
+            <Pane layoutX="96.0" layoutY="101.0" prefHeight="200.0" prefWidth="612.0">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#615d5d" height="200.0" opacity="0.83" stroke="BLACK" strokeType="INSIDE" width="612.0" />
+                  <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#615d5d" height="200.0" opacity="0.83" stroke="BLACK" strokeType="INSIDE" width="612.0" />
                   <Pane layoutX="321.0" layoutY="36.0" prefHeight="150.0" prefWidth="100.0">
                      <children>
                         <ImageView fitHeight="100.0" fitWidth="100.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
@@ -64,14 +64,14 @@
                   </Pane>
                </children>
             </Pane>
-            <ImageView fitHeight="83.0" fitWidth="246.0" layoutX="279.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="83.0" fitWidth="246.0" layoutX="277.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../res/img/img_titulo_apolo_x.png" />
                </image>
             </ImageView>
-            <Button layoutX="31.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="51.0" prefWidth="92.0" text="Exit" />
+            <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="51.0" prefWidth="92.0" text="Exit" />
+            <Button layoutX="356.0" layoutY="315.0" mnemonicParsing="false" onAction="#playGameServer" prefHeight="51.0" prefWidth="92.0" text="Play" />
          </children>
       </Pane>
-      <Button layoutX="462.0" layoutY="679.0" mnemonicParsing="false" onAction="#playGameServer" prefHeight="51.0" prefWidth="92.0" text="Play" />
    </children>
 </AnchorPane>

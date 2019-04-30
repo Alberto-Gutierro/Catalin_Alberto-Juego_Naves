@@ -27,8 +27,8 @@
       </ImageView>
       <Pane layoutX="300.0" layoutY="300.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#999999af" height="400.0" stroke="BLACK" strokeType="INSIDE" width="400.0" />
-            <GridPane layoutX="33.0" layoutY="19.0" prefHeight="336.0" prefWidth="323.0">
+            <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#999999af" height="400.0" stroke="BLACK" strokeType="INSIDE" width="400.0" />
+            <GridPane layoutX="39.0" layoutY="32.0" prefHeight="336.0" prefWidth="323.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
@@ -51,7 +51,7 @@
                         <Insets />
                      </opaqueInsets>
                      <GridPane.margin>
-                        <Insets left="55.0" right="15.0" />
+                        <Insets left="65.0" right="15.0" />
                      </GridPane.margin>
                   </TextField>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="IP:P " GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
@@ -62,8 +62,8 @@
                         <Insets />
                      </GridPane.margin>
                   </Text>
-                  <Button fx:id="bt_back" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="50.0" prefWidth="102.0" text="Back" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                  <Button fx:id="bt_connect" mnemonicParsing="false" onAction="#connectToServer" text="Conect" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                  <Button fx:id="bt_back" blendMode="COLOR_BURN" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="50.0" prefWidth="102.0" text="Back" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                  <Button fx:id="bt_connect" blendMode="COLOR_BURN" mnemonicParsing="false" onAction="#connectToServer" text="Conect" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>

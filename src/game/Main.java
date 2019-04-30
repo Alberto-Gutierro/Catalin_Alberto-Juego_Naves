@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class Main extends Application {
             controller.setStage(primaryStage);
 
             primaryStage.setTitle("Apolo X");
+            primaryStage.getIcons().add(new Image("game\\res\\img\\naves\\navePlayerOriginal.png"));
             primaryStage.setMaximized(true);
             primaryStage.setScene(scene);
             primaryStage.show();

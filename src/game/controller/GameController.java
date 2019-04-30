@@ -1,8 +1,11 @@
 package game.controller;
 
 import game.services.NavesRecivedService;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import statVars.Packets;
@@ -23,6 +26,9 @@ import javafx.stage.Stage;
 import transformmer.Transformer;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.*;
 import java.util.Map;
@@ -38,14 +44,22 @@ public class GameController extends GameSetter implements Initializable {
     private MeteorService meteorService;
 
     @FXML Canvas canvas;
-    @FXML Text score_p1;
+    @FXML Text score_p1, tv_ammo, tv_lives;
     @FXML AnchorPane gameOverScreen;
 
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            score_p1.setFont(Font.loadFont(new FileInputStream(new File("src/game/res/fonts/arcadeClassic.TTF")), 40));
+            tv_ammo.setFont(Font.loadFont(new FileInputStream(new File("src/game/res/fonts/arcadeClassic.TTF")), 28));
+            tv_ammo.setTextAlignment(TextAlignment.RIGHT);
+            tv_lives.setFont(Font.loadFont(new FileInputStream(new File("src/game/res/fonts/arcadeClassic.TTF")), 28));
 
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.scale(1,1);
 
@@ -182,7 +196,19 @@ public class GameController extends GameSetter implements Initializable {
 
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
 
-                } catch (IOException e) {
+                }
+                catch (SocketTimeoutException e){
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("ERROR");
+                    alert.setHeaderText("Connection Time Out");
+                    alert.setContentText("");
+                    alert.showAndWait();
+
+                    e.printStackTrace();
+
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
                 if(navesRecivedService.getMyLives() >= 0) {

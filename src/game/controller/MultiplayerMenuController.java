@@ -66,7 +66,6 @@ public class MultiplayerMenuController extends SceneStageSetter {
             multiplayerLobbyController.setStage(stage);
             multiplayerLobbyController.setPaket(packet);
 
-            stage.setTitle(Strings.NOMBRE_JUEGO);
             stage.setScene(scene);
             stage.show();
 
@@ -79,7 +78,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
             alert.showAndWait();
 
         }catch (ArrayIndexOutOfBoundsException | SocketException e){
-            alert=new Alert(Alert.AlertType.ERROR);
+            alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
             alert.setHeaderText("Format Error");
             alert.setContentText("This Ip format is Incorrect, example: 123.456.7.89:1234");

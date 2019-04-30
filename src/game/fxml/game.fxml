@@ -15,9 +15,6 @@
          <Image url="@../res/img/img_fondo_espacio.png" />
       </image>
    </ImageView>
-   <children>
-      <Canvas fx:id="canvas" />
-   </children>
    <Pane fx:id="scores" layoutX="10.0" layoutY="10.0">
       <children>
          <Text fx:id="score_p1" fill="#3c42d8" layoutX="40.0" layoutY="50.0">
@@ -44,12 +41,12 @@
    </Pane>
    <Pane layoutX="4.0" layoutY="79.0">
       <children>
-         <Text fill="WHITE" layoutX="21.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AMMO:">
+         <Text fx:id="tv_ammo" fill="WHITE" layoutX="21.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AMMO:">
             <font>
                <Font name="Arial Bold" size="27.0" />
             </font>
          </Text>
-         <Text fill="WHITE" layoutX="25.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LIVES:">
+         <Text fx:id="tv_lives" fill="WHITE" layoutX="25.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LIVES:">
             <font>
                <Font name="Arial Bold" size="27.0" />
             </font>
@@ -59,6 +56,9 @@
    <AnchorPane fx:id="gameOverScreen" layoutX="700.0" layoutY="350.0" prefHeight="500" prefWidth="500">
       <!--AQUI IRÁ LA PANTALLA DE GAME OVER.-->
    </AnchorPane>
+   <children>
+      <Canvas fx:id="canvas" />
+   </children>
    <cursor>
       <Cursor fx:constant="CROSSHAIR" />
    </cursor>

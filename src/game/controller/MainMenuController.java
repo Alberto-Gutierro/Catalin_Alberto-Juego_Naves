@@ -22,7 +22,6 @@ public class MainMenuController extends SceneStageSetter {
             gameController.beforeStartGame(stage,scene, null, gameController.getPane());
             gameController.start(false);
 
-            stage.setTitle(Strings.NOMBRE_JUEGO);
             stage.setScene(scene);
             stage.show();
         }catch (IOException e){
@@ -41,8 +40,6 @@ public class MainMenuController extends SceneStageSetter {
             multiplayerMenuController.setScene(scene);
             multiplayerMenuController.setStage(stage);
 
-
-            stage.setTitle(Strings.NOMBRE_JUEGO);
             stage.setScene(scene);
             stage.show();
 
