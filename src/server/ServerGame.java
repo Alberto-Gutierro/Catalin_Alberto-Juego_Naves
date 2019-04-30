@@ -58,7 +58,6 @@ public class ServerGame {
 
             if (!new String(sendingData).equals("Starting")) {
                 //creació del paquet per enviar la resposta
-                System.out.println(clientIP.getHostAddress());
                 packet = new DatagramPacket(sendingData, sendingData.length, clientIP, clientPort);
                 //System.out.println(new String(respuesta, Charset.defaultCharset()));
 
@@ -79,7 +78,6 @@ public class ServerGame {
          */
         try {
             //POR AQUI: EL SERVIDOR RECIBE UN ARRAY Y NO UN OBJETO.
-            System.out.println(Transformer.packetDataToString(packet));
             switch (Transformer.packetDataToString(packet)) {
                 case "Connect":
                     return getIdOfNaveClient(packet).getBytes();
@@ -139,11 +137,14 @@ public class ServerGame {
                     if (nave.getIdNave() == naveTocada) {
                         //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
                         nave.setLives(--vidasNaves[naveTocada]);
+                        System.out.println("NAVE RESTA: " + nave.getIdNave() + "\n" + nave.getLives());
 
                         //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
                         if(vidasNaves[naveRecibida.getIdNave()] < AjustesNave.MAX_LIFES) {
                             naveRecibida.setLives(++vidasNaves[naveRecibida.getIdNave()]);
+                            System.out.println("NAVE SUMA: " + naveRecibida.getIdNave() + "\n" + naveRecibida.getLives());
                         }
+
                     }
                 });
             });

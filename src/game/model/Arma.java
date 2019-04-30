@@ -5,6 +5,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import statVars.AjustesNave;
 import statVars.Enums;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -23,7 +24,7 @@ public class Arma {
     private int idBalaActual;
 
     private int balasDisponibles;
-    private final int MAX_BALAS = 3;
+    private final int MAX_BALAS = AjustesNave.MAX_AMMO;
 
     private Media soundBala;
     private Media soundOutOfAmmo;
