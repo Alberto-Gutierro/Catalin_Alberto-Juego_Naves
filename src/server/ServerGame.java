@@ -126,31 +126,30 @@ public class ServerGame {
 
     private String updateJsonGame(DatagramPacket packet) throws UnsupportedEncodingException {
         NaveToRecive naveRecibida = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
+        if(!naves.contains(naveRecibida)) {
+            naves.add(naveRecibida);
+        }
 
         //naveRecibida.getNaveArmaBalas().forEach(balaToSend -> System.out.println(balaToSend.getAngle()));
 
-        if(naves.contains(naveRecibida)){
-            naves.set(naves.indexOf(naveRecibida), naveRecibida);
-        }else {
-            naves.add(naveRecibida);
-        }
         if(naveRecibida.getNavesTocadas() != null || naveRecibida.getNavesTocadas().size() == 0) {
             naves.forEach(nave -> {
                 nave.setLives(vidasNaves[nave.getIdNave()]);
                 naveRecibida.getNavesTocadas().forEach(naveTocada -> {
                     if (nave.getIdNave() == naveTocada) {
-                        vidasNaves[naveTocada]--;
+                        //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
+                        nave.setLives(--vidasNaves[naveTocada]);
 
+                        //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
                         if(vidasNaves[naveRecibida.getIdNave()] < AjustesNave.MAX_LIFES) {
-                            vidasNaves[naveRecibida.getIdNave()]++;
+                            naveRecibida.setLives(++vidasNaves[naveRecibida.getIdNave()]);
                         }
-
-                        nave.setLives(vidasNaves[naveTocada]);
                     }
                 });
             });
         }
 
+        naves.set(naves.indexOf(naveRecibida), naveRecibida);
 
         //naves.forEach(nave-> System.out.println(nave.toString()));
         return Transformer.classToJson(naves);
