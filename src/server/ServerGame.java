@@ -136,20 +136,18 @@ public class ServerGame {
                 naveRecibida.getNavesTocadas().forEach(naveTocada -> {
                     if (nave.getIdNave() == naveTocada) {
                         //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
-                        nave.setLives(--vidasNaves[naveTocada]);
-                        System.out.println("NAVE RESTA: " + nave.getIdNave() + "\n" + nave.getLives());
+                        nave.setLives(vidasNaves[naveTocada]++);
 
                         //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
                         if(vidasNaves[naveRecibida.getIdNave()] < AjustesNave.MAX_LIFES) {
-                            naveRecibida.setLives(++vidasNaves[naveRecibida.getIdNave()]);
-                            System.out.println("NAVE SUMA: " + naveRecibida.getIdNave() + "\n" + naveRecibida.getLives());
+                            vidasNaves[naveRecibida.getIdNave()]++;
                         }
-
                     }
                 });
             });
         }
 
+        naveRecibida.setLives(vidasNaves[naveRecibida.getIdNave()]);
         naves.set(naves.indexOf(naveRecibida), naveRecibida);
 
         //naves.forEach(nave-> System.out.println(nave.toString()));
