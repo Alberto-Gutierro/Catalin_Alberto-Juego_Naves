@@ -84,7 +84,7 @@ public class ServerGame {
                 case "Waiting":
                     return "Waiting".getBytes();
                 case "Start":
-                    return signalToStart().getBytes();
+                    return signalToStart(packet).getBytes();
                 case "Dead":
                     return deadData(packet.getAddress()).getBytes();
                 default:
@@ -156,8 +156,8 @@ public class ServerGame {
         return Transformer.classToJson(naves);
     }
 
-    private String signalToStart() {
-        sendAll("Start");
+    private String signalToStart(DatagramPacket packet) {
+        sendAll("Start", packet);
         return "Starting";
     }
 
@@ -172,7 +172,7 @@ public class ServerGame {
         if (!mapIdNaves.containsKey(packet.getAddress()) && mapIdNaves.size() < 4) {
             mapIdNaves.put(packet.getAddress(),new ClientData(mapIdNaves.size()+1, packet.getPort()));
 
-            sendAll(String.valueOf(mapIdNaves.size()));
+            sendAll(String.valueOf(mapIdNaves.size()), packet);
 
             return String.valueOf(mapIdNaves.size());
         } else if (mapIdNaves.containsKey(packet.getAddress())) {
@@ -181,12 +181,16 @@ public class ServerGame {
     }
 
 
-    private void sendAll(String signal) {
+    private void sendAll(String signal, DatagramPacket packet) {
         mapIdNaves.forEach((ip,clientData)-> {
-            try {
-                socket.send(new DatagramPacket(signal.getBytes(), signal.getBytes().length, ip, clientData.getPort() ));
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(ip != packet.getAddress()) {
+                System.out.println("MANDA A " + ip.getHostAddress() + ":" + clientData.getPort());
+
+                try {
+                    socket.send(new DatagramPacket(signal.getBytes(), signal.getBytes().length, ip, clientData.getPort()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

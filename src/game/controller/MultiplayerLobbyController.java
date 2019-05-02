@@ -93,10 +93,11 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                             "Waiting".getBytes().length,
                             packet.getAddress(),
                             packet.getPort());
-
                     socket.send(packetWait);
+                    System.out.println("SENDED");
 
                     socket.receive(packetWait);
+                    System.out.println("RECIVED");
 
                     señalServer = Transformer.packetDataToString(packetWait);
 
