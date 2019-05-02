@@ -56,7 +56,7 @@ public class ServerGame {
             sendingData = processData(packet);
             //System.out.println(sendingData.length);
 
-            if (!new String(sendingData).equals("Starting")) {
+            if (!new String(sendingData).equals("Starting") && !new String(sendingData).equals("Waiting")) {
                 //creació del paquet per enviar la resposta
                 packet = new DatagramPacket(sendingData, sendingData.length, clientIP, clientPort);
                 //System.out.println(new String(respuesta, Charset.defaultCharset()));
@@ -81,6 +81,8 @@ public class ServerGame {
             switch (Transformer.packetDataToString(packet)) {
                 case "Connect":
                     return getIdOfNaveClient(packet).getBytes();
+                case "Waiting":
+                    return "Waiting".getBytes();
                 case "Start":
                     return signalToStart().getBytes();
                 case "Dead":

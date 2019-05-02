@@ -80,23 +80,28 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         Executors.newFixedThreadPool(4).execute(() -> {
             String señalServer = "";
             DatagramSocket socket = null;
-            /*try {
+            DatagramPacket packetWait;
+            try {
                 socket = new DatagramSocket();
             } catch (SocketException e) {
                 e.printStackTrace();
-            }*/
+            }
 
             do{
                 try {
-                    //FALLO
-                    socket = new DatagramSocket();
-                    System.out.println("asdasd");
-                    socket.receive(packet);
+                    packetWait = new DatagramPacket("Waiting".getBytes(),
+                            "Waiting".getBytes().length,
+                            packet.getAddress(),
+                            packet.getPort());
 
-                    señalServer = Transformer.packetDataToString(packet);
+                    socket.send(packetWait);
+
+                    socket.receive(packetWait);
+
+                    señalServer = Transformer.packetDataToString(packetWait);
 
                     if(!señalServer.equals("Start")) {
-                        showNaves(packet);
+                        showNaves(packetWait);
                     }
 
                 } catch (IOException e) {
