@@ -1,7 +1,6 @@
 package game.controller;
 
 import javafx.scene.control.Alert;
-import statVars.Resoluciones;
 import statVars.Strings;
 import game.SceneStageSetter;
 import javafx.event.ActionEvent;
@@ -65,7 +64,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
                 MultiplayerLobbyController multiplayerLobbyController = loader.getController();
                 multiplayerLobbyController.setScene(scene);
                 multiplayerLobbyController.setStage(stage);
-                multiplayerLobbyController.setPaket(packet);
+                multiplayerLobbyController.setPacket(packet);
 
                 stage.setScene(scene);
                 stage.show();

@@ -37,9 +37,11 @@ public abstract class GameSetter extends SceneStageSetter {
 
     protected boolean runningGame;
 
-    public void beforeStartGame(Stage stage, Scene scene, DatagramPacket packet, Pane pane) {
+    public void beforeStartGame(Stage stage, Scene scene, int idNave, Pane pane, DatagramPacket packet) {
         this.packet = packet;
-        int idNave = 1;
+
+
+        /*int idNave = 1;
         if(packet != null) {
             try {
                 idNave = Integer.parseInt(Transformer.packetDataToString(packet));
@@ -47,7 +49,7 @@ public abstract class GameSetter extends SceneStageSetter {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
         setScene(scene);
 

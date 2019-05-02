@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.MultiplayerLobbyController">
+<AnchorPane fx:id="pane" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.MultiplayerLobbyController">
    <children>
       <ImageView fitHeight="1000.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -22,40 +22,40 @@
             <Pane layoutX="96.0" layoutY="101.0" prefHeight="200.0" prefWidth="612.0">
                <children>
                   <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#615d5d" height="200.0" opacity="0.83" stroke="BLACK" strokeType="INSIDE" width="612.0" />
-                  <Pane layoutX="321.0" layoutY="36.0" prefHeight="150.0" prefWidth="100.0">
+                  <Pane layoutX="327.2" layoutY="36.0" prefHeight="150.0" prefWidth="100.0">
                      <children>
-                        <ImageView fitHeight="100.0" fitWidth="100.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
-                        <Text layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jugador X" textAlignment="CENTER" wrappingWidth="100.0">
+                        <ImageView fx:id="img_playerNave3" fitHeight="100.0" fitWidth="100.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
+                        <Text fx:id="playerName3" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jugador X" textAlignment="CENTER" wrappingWidth="100.0">
                            <font>
                               <Font size="21.0" />
                            </font>
                         </Text>
                      </children>
                   </Pane>
-                  <Pane layoutX="14.0" layoutY="36.0" prefHeight="150.0" prefWidth="100.0">
+                  <Pane layoutX="42.4" layoutY="36.0" prefHeight="150.0" prefWidth="100.0">
                      <children>
-                        <ImageView fitHeight="100.0" fitWidth="100.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
-                        <Text layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jugador X" textAlignment="CENTER" wrappingWidth="100.0">
+                        <ImageView fx:id="img_playerNave1" fitHeight="100.0" fitWidth="100.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
+                        <Text fx:id="playerName1" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jugador X" textAlignment="CENTER" wrappingWidth="100.0">
                            <font>
                               <Font size="21.0" />
                            </font>
                         </Text>
                      </children>
                   </Pane>
-                  <Pane layoutX="176.0" layoutY="36.0" prefHeight="150.0" prefWidth="100.0">
+                  <Pane layoutX="184.8" layoutY="36.0" prefHeight="150.0" prefWidth="100.0">
                      <children>
-                        <ImageView fitHeight="100.0" fitWidth="100.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
-                        <Text layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jugador X" textAlignment="CENTER" wrappingWidth="100.0">
+                        <ImageView fx:id="img_playerNave2" fitHeight="100.0" fitWidth="100.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
+                        <Text fx:id="playerName2" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jugador X" textAlignment="CENTER" wrappingWidth="100.0">
                            <font>
                               <Font size="21.0" />
                            </font>
                         </Text>
                      </children>
                   </Pane>
-                  <Pane layoutX="498.0" layoutY="36.0" prefHeight="150.0" prefWidth="100.0">
+                  <Pane layoutX="469.6" layoutY="36.0" prefHeight="150.0" prefWidth="100.0">
                      <children>
-                        <ImageView fitHeight="100.0" fitWidth="100.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
-                        <Text layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jugador X" textAlignment="CENTER" wrappingWidth="100.0">
+                        <ImageView fx:id="img_playerNave4" fitHeight="100.0" fitWidth="100.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" />
+                        <Text fx:id="playerName4" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jugador X" textAlignment="CENTER" wrappingWidth="100.0">
                            <font>
                               <Font size="21.0" />
                            </font>

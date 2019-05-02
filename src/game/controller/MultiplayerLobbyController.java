@@ -1,20 +1,33 @@
 package game.controller;
 
-import statVars.Strings;
+import javafx.fxml.Initializable;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import game.SceneStageSetter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import transformmer.Transformer;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MultiplayerLobbyController extends SceneStageSetter {
+public class MultiplayerLobbyController extends SceneStageSetter implements Initializable {
 
-    private DatagramPacket paket;
+    public ImageView img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4;
+    public Text playerName1, playerName2, playerName3, playerName4;
+    private DatagramPacket packet;
 
+    private int idNave;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 
     public void playGameServer(ActionEvent event) {
         try {
@@ -24,7 +37,7 @@ public class MultiplayerLobbyController extends SceneStageSetter {
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
             GameController gameController = loader.getController();
-            gameController.beforeStartGame(stage, scene, paket, gameController.getPane());
+            gameController.beforeStartGame(stage, scene, idNave, gameController.getPane(), packet);
             gameController.start(true);
 
             stage.setScene(scene);
@@ -53,7 +66,18 @@ public class MultiplayerLobbyController extends SceneStageSetter {
         }
     }
 
-    void setPaket(DatagramPacket paket) {
-        this.paket = paket;
+    void setPacket(DatagramPacket packet) {
+        try {
+            idNave = Integer.parseInt(Transformer.packetDataToString(packet));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        showNaves(packet);
+        this.packet = packet;
     }
+
+    private void showNaves(DatagramPacket paket) {
+
+    }
+
 }
