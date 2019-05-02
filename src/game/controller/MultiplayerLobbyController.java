@@ -33,36 +33,10 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
     private int idNave;
 
-    private Executor executor;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         imagesNave = new ImageView[]{img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4};
         textsNave = new Text[]{playerName1, playerName2, playerName3, playerName4};
-
-        /*executor = Executors.newFixedThreadPool(4);
-
-        executor.execute(() -> {
-            String señalServer = "";
-            do{
-
-                try {
-                    DatagramSocket socket = new DatagramSocket(packet.getPort(), packet.getAddress());
-
-                    socket.receive(packet);
-
-                    señalServer = Transformer.packetDataToString(packet);
-
-                    showNaves(packet);
-
-            } catch (SocketException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            }while (!señalServer.equals("Start"));
-
-        });*/
     }
 
     public void playGameServer(ActionEvent event) {
@@ -103,6 +77,29 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     }
 
     void setPacket(DatagramPacket packet) {
+        Executors.newFixedThreadPool(4).execute(() -> {
+            String señalServer = "";
+            do{
+
+                try {
+                    DatagramSocket socket = new DatagramSocket(packet.getPort(), packet.getAddress());
+
+                    socket.receive(packet);
+
+                    señalServer = Transformer.packetDataToString(packet);
+
+                    if(!señalServer.equals("Start")) {
+                        showNaves(packet);
+                    }
+
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }while (!señalServer.equals("Start"));
+        });
+
         try {
             idNave = Integer.parseInt(Transformer.packetDataToString(packet));
         } catch (UnsupportedEncodingException e) {
@@ -113,23 +110,19 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     }
 
     private void showNaves(DatagramPacket packet) {
-        try{
-            idNave = Integer.parseInt(Transformer.packetDataToString(packet));
-            for (int i = 0; i < idNave ; i++) {
-                if(i != idNave-1) {
-                    textsNave[i].setText("Player " + i+1);
-                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i+1) + ".png"));
-                }else {
+        try {
+            for (int i = 0; i < Integer.parseInt(Transformer.packetDataToString(packet)); i++) {
+                if (i+1 != idNave) {
+                    textsNave[i].setText("Player " + i + 1);
+                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i + 1) + ".png"));
+                } else {
                     textsNave[i].setText("You");
-                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i+1) + ".png"));
+                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i + 1) + ".png"));
                 }
             }
-        }catch (NumberFormatException e){
-            e.printStackTrace();
-        }catch (UnsupportedEncodingException e) {
+        }catch (UnsupportedEncodingException e){
             e.printStackTrace();
         }
-
     }
 
 }

@@ -214,7 +214,7 @@ public class GameController extends GameSetter implements Initializable {
                     e.printStackTrace();
                 }
 
-                if(navesRecivedService.getMyLives() >= 0) {
+                if(navesRecivedService.getMyLives() > 0) {
                     nave.update(timing);
 
                     checkCollisions();
