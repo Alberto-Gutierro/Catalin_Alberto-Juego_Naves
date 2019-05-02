@@ -1,6 +1,7 @@
 package game.controller;
 
 import javafx.fxml.Initializable;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import game.SceneStageSetter;
@@ -13,20 +14,55 @@ import transformmer.Transformer;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class MultiplayerLobbyController extends SceneStageSetter implements Initializable {
 
     public ImageView img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4;
     public Text playerName1, playerName2, playerName3, playerName4;
+
+    private ImageView[] imagesNave;
+    private Text[] textsNave;
+
     private DatagramPacket packet;
 
     private int idNave;
 
+    private Executor executor;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        imagesNave = new ImageView[]{img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4};
+        textsNave = new Text[]{playerName1, playerName2, playerName3, playerName4};
 
+        /*executor = Executors.newFixedThreadPool(4);
+
+        executor.execute(() -> {
+            String señalServer = "";
+            do{
+
+                try {
+                    DatagramSocket socket = new DatagramSocket(packet.getPort(), packet.getAddress());
+
+                    socket.receive(packet);
+
+                    señalServer = Transformer.packetDataToString(packet);
+
+                    showNaves(packet);
+
+            } catch (SocketException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            }while (!señalServer.equals("Start"));
+
+        });*/
     }
 
     public void playGameServer(ActionEvent event) {
@@ -76,7 +112,23 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         this.packet = packet;
     }
 
-    private void showNaves(DatagramPacket paket) {
+    private void showNaves(DatagramPacket packet) {
+        try{
+            idNave = Integer.parseInt(Transformer.packetDataToString(packet));
+            for (int i = 0; i < idNave ; i++) {
+                if(i != idNave-1) {
+                    textsNave[i].setText("Player " + i+1);
+                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i+1) + ".png"));
+                }else {
+                    textsNave[i].setText("You");
+                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i+1) + ".png"));
+                }
+            }
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+        }catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
     }
 
