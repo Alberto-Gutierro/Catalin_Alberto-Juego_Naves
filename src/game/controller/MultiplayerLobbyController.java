@@ -14,6 +14,8 @@ public class MultiplayerLobbyController extends SceneStageSetter {
 
     private DatagramPacket paket;
 
+
+
     public void playGameServer(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/game.fxml"));

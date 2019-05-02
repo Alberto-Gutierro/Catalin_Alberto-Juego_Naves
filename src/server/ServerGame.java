@@ -136,7 +136,7 @@ public class ServerGame {
                 naveRecibida.getNavesTocadas().forEach(naveTocada -> {
                     if (nave.getIdNave() == naveTocada) {
                         //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
-                        nave.setLives(vidasNaves[naveTocada]++);
+                        nave.setLives(--vidasNaves[naveTocada]);
 
                         //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
                         if(vidasNaves[naveRecibida.getIdNave()] < AjustesNave.MAX_LIFES) {
@@ -167,7 +167,7 @@ public class ServerGame {
          *
          */
 
-        if (!mapIdNaves.containsKey(packet.getAddress()) && mapIdNaves.size() <= 4) {
+        if (!mapIdNaves.containsKey(packet.getAddress()) && mapIdNaves.size() < 4) {
             mapIdNaves.put(packet.getAddress(),new ClientData(mapIdNaves.size()+1, packet.getPort()));
             return String.valueOf(mapIdNaves.size());
         } else if (mapIdNaves.containsKey(packet.getAddress())) {

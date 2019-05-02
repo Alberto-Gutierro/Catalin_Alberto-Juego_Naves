@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import transformmer.Transformer;
 
 import java.io.IOException;
 import java.net.*;
@@ -55,19 +56,26 @@ public class MultiplayerMenuController extends SceneStageSetter {
             socket.setSoTimeout(500);
 
             socket.receive(packet);
+            if(!Transformer.packetDataToString(packet).equals("0")) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/multiplayerLobby.fxml"));
+                Parent root = loader.load();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/multiplayerLobby.fxml"));
-            Parent root = loader.load();
+                scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
-            scene = new Scene(root, stage.getWidth(), stage.getHeight());
+                MultiplayerLobbyController multiplayerLobbyController = loader.getController();
+                multiplayerLobbyController.setScene(scene);
+                multiplayerLobbyController.setStage(stage);
+                multiplayerLobbyController.setPaket(packet);
 
-            MultiplayerLobbyController multiplayerLobbyController = loader.getController();
-            multiplayerLobbyController.setScene(scene);
-            multiplayerLobbyController.setStage(stage);
-            multiplayerLobbyController.setPaket(packet);
-
-            stage.setScene(scene);
-            stage.show();
+                stage.setScene(scene);
+                stage.show();
+            }else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("LLENO");
+                alert.setHeaderText("Servidor lleno");
+                alert.setContentText("La cantidad máxima de jugadores ha sido alcanzada.");
+                alert.showAndWait();
+            }
 
         }catch (SocketTimeoutException e){
             //MOSTRAR UN DIALOG DICIENDO QUE EL SERVIDOR NO RESPONDE
