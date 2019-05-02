@@ -169,6 +169,9 @@ public class ServerGame {
 
         if (!mapIdNaves.containsKey(packet.getAddress()) && mapIdNaves.size() < 4) {
             mapIdNaves.put(packet.getAddress(),new ClientData(mapIdNaves.size()+1, packet.getPort()));
+
+            sendAll(String.valueOf(mapIdNaves.size()));
+
             return String.valueOf(mapIdNaves.size());
         } else if (mapIdNaves.containsKey(packet.getAddress())) {
             return String.valueOf(mapIdNaves.get(packet.getAddress()).getIdNave());

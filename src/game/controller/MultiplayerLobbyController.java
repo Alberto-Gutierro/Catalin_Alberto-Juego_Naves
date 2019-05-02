@@ -79,11 +79,15 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     void setPacket(DatagramPacket packet) {
         Executors.newFixedThreadPool(4).execute(() -> {
             String señalServer = "";
+            DatagramSocket socket = null;
+            try {
+                socket = new DatagramSocket(packet.getPort(), packet.getAddress());
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+
             do{
-
                 try {
-                    DatagramSocket socket = new DatagramSocket(packet.getPort(), packet.getAddress());
-
                     socket.receive(packet);
 
                     señalServer = Transformer.packetDataToString(packet);
@@ -92,8 +96,6 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                         showNaves(packet);
                     }
 
-                } catch (SocketException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
