@@ -43,6 +43,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
         try{
             String ip = et_ipServer.getText().split(":")[0];//192.168.253.215:5568
             int port = Integer.parseInt(et_ipServer.getText().split(":")[1]);//5568
+            System.out.println("asdasd");
 
             System.out.println("IP: " + ip + "\nPORT: " + port);
 
@@ -76,6 +77,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
                 alert.setContentText("La cantidad máxima de jugadores ha sido alcanzada.");
                 alert.showAndWait();
             }
+            System.out.println("PEPEPEPE");
 
         }catch (SocketTimeoutException e){
             //MOSTRAR UN DIALOG DICIENDO QUE EL SERVIDOR NO RESPONDE
@@ -85,7 +87,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
             alert.setContentText("Server not found, IP or Port are incorrect.");
             alert.showAndWait();
 
-        }catch (ArrayIndexOutOfBoundsException | SocketException e){
+        }catch (ArrayIndexOutOfBoundsException e){
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
             alert.setHeaderText("Format Error");

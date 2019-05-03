@@ -111,7 +111,8 @@ public class ServerGame {
     }
 
     private byte[] waitingData(){
-        return ByteBuffer.allocate(4).putInt(naves.size()).array();
+        System.out.println(naves.size());
+        return String.valueOf(mapIdNaves.size()).getBytes();
     }
 
     private NaveToRecive naveToRemove;
