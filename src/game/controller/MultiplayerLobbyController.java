@@ -17,6 +17,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -96,13 +97,14 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                     socket.send(packetWait);
                     System.out.println("SENDED");
 
+
+
+                    socket.receive(packetWait);
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
-                    socket.receive(packetWait);
                     System.out.println("RECIVED");
 
                     señalServer = Transformer.packetDataToString(packetWait);
@@ -127,18 +129,14 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     }
 
     private void showNaves(DatagramPacket packet) {
-        try {
-            for (int i = 0; i < Integer.parseInt(Transformer.packetDataToString(packet)); i++) {
-                if (i+1 != idNave) {
-                    textsNave[i].setText("Player " + i + 1);
-                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i + 1) + ".png"));
-                } else {
-                    textsNave[i].setText("You");
-                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i + 1) + ".png"));
-                }
+        for (int i = 0; i < ByteBuffer.wrap(packet.getData()).getInt(); i++) {
+            if (i+1 != idNave) {
+                textsNave[i].setText("Player " + i + 1);
+                imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i + 1) + ".png"));
+            } else {
+                textsNave[i].setText("You");
+                imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i + 1) + ".png"));
             }
-        }catch (UnsupportedEncodingException e){
-            e.printStackTrace();
         }
     }
 
