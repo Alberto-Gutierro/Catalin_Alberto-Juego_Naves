@@ -55,6 +55,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
             socket.setSoTimeout(500);
 
             socket.receive(packet);
+
             if(!Transformer.packetDataToString(packet).equals("0")) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/multiplayerLobby.fxml"));
                 Parent root = loader.load();

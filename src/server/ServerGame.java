@@ -12,6 +12,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class ServerGame {
             sendingData = processData(packet);
             //System.out.println(sendingData.length);
 
-            if (!new String(sendingData).equals("Starting") && !new String(sendingData).equals("Waiting")) {
+            if (!new String(sendingData).equals("Starting")) {
                 //creació del paquet per enviar la resposta
                 packet = new DatagramPacket(sendingData, sendingData.length, clientIP, clientPort);
                 //System.out.println(new String(respuesta, Charset.defaultCharset()));
@@ -82,7 +83,7 @@ public class ServerGame {
                 case "Connect":
                     return getIdOfNaveClient(packet).getBytes();
                 case "Waiting":
-                    return "Waiting".getBytes();
+                    return waitingData();
                 case "Start":
                     return signalToStart(packet).getBytes();
                 case "Dead":
@@ -107,6 +108,10 @@ public class ServerGame {
 //            System.out.println("Has GANADO");
 //            return ByteBuffer.allocate(4).putInt(0).array(); //de integer a array de bytes;
 //        }
+    }
+
+    private byte[] waitingData(){
+        return ByteBuffer.allocate(4).putInt(naves.size()).array();
     }
 
     private NaveToRecive naveToRemove;
@@ -172,7 +177,7 @@ public class ServerGame {
         if (!mapIdNaves.containsKey(packet.getAddress()) && mapIdNaves.size() < 4) {
             mapIdNaves.put(packet.getAddress(),new ClientData(mapIdNaves.size()+1, packet.getPort()));
 
-            sendAll(String.valueOf(mapIdNaves.size()), packet);
+            //sendAll(String.valueOf(mapIdNaves.size()), packet);
 
             return String.valueOf(mapIdNaves.size());
         } else if (mapIdNaves.containsKey(packet.getAddress())) {
@@ -187,7 +192,9 @@ public class ServerGame {
                 System.out.println("MANDA A " + ip.getHostAddress() + ":" + clientData.getPort());
 
                 try {
-                    socket.send(new DatagramPacket(signal.getBytes(), signal.getBytes().length, ip, clientData.getPort()));
+                    //¡¡¡NO FUNCIONA!!!
+                    new DatagramSocket().send(new DatagramPacket(signal.getBytes(), signal.getBytes().length, ip, clientData.getPort()));
+                    System.out.println("asdasd");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

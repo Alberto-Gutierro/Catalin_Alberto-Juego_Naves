@@ -66,9 +66,6 @@ public class GameController extends GameSetter implements Initializable {
 
         dataToSend = new NaveToSend();
 
-        //Al ser 60 fotogramas por segundo, quiere decir que entre fotograma
-        //y fotograma pasan 0.017 segundos más o menos.
-
         recivingData = new byte[Packets.PACKET_LENGHT];
 
     }

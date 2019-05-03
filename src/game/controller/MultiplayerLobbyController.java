@@ -96,6 +96,12 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                     socket.send(packetWait);
                     System.out.println("SENDED");
 
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                     socket.receive(packetWait);
                     System.out.println("RECIVED");
 
