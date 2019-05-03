@@ -34,6 +34,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
     private int idNave;
 
+    Executor executor;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         imagesNave = new ImageView[]{img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4};
@@ -53,6 +55,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
             stage.setScene(scene);
             stage.show();
+            //executor
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -78,7 +81,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     }
 
     void setPacket(DatagramPacket packet) {
-        Executors.newFixedThreadPool(4).execute(() -> {
+        executor = Executors.newFixedThreadPool(4);
+        executor.execute(() -> {
             String señalServer = "";
             DatagramSocket socket = null;
             DatagramPacket packetWait;
@@ -99,7 +103,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
                     socket.receive(packetWait);
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(750);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -130,7 +134,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         try {
             for (int i = 0; i < Integer.parseInt(Transformer.packetDataToString(packet)); i++) {
                 if (i + 1 != idNave) {
-                    textsNave[i].setText("Player " + i + 1);
+                    textsNave[i].setText("Player " + (i + 1));
                     imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i + 1) + ".png"));
                 } else {
                     textsNave[i].setText("You");
