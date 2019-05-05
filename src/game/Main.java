@@ -22,7 +22,7 @@ public class Main extends Application {
             controller.setStage(primaryStage);
 
             primaryStage.setTitle("Apolo X");
-            primaryStage.getIcons().add(new Image("game\\res\\img\\naves\\navePlayerOriginal.png"));
+            primaryStage.getIcons().add(new Image("game/res/img/naves/navePlayerOriginal.png"));
             primaryStage.setMaximized(true);
             primaryStage.setScene(scene);
             primaryStage.show();

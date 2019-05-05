@@ -13,7 +13,7 @@ import java.io.IOException;
 public class MainMenuController extends SceneStageSetter {
     @FXML public void playGame() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/game.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/game.fxml"));
             Parent root = loader.load();
 
             scene = new Scene(root, stage.getWidth(), stage.getHeight());

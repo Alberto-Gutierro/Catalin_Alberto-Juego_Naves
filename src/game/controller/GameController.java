@@ -25,10 +25,7 @@ import javafx.stage.Stage;
 import transformmer.Transformer;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -53,12 +50,16 @@ public class GameController extends GameSetter implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            score_p1.setFont(Font.loadFont(new FileInputStream(new File("src/game/res/fonts/arcadeClassic.TTF")), 40));
-            tv_ammo.setFont(Font.loadFont(new FileInputStream(new File("src/game/res/fonts/arcadeClassic.TTF")), 28));
+            //EXTERNAL FORM: file:/C:/Users/cata6/IdeaProjects/M03ProgramacioOrientadaAObjectes/M03-M09-Catalin_Alberto-Juego_Naves/out/production/M03%20-%20Juego%20Naves/game/res/fonts/arcadeClassic.TTF
+            //TO URI:        file:/C:/Users/cata6/IdeaProjects/M03ProgramacioOrientadaAObjectes/M03-M09-Catalin_Alberto-Juego_Naves/out/production/M03%20-%20Juego%20Naves/game/res/fonts/arcadeClassic.TTF
+            score_p1.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
+            tv_ammo.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 28));
             tv_ammo.setTextAlignment(TextAlignment.RIGHT);
-            tv_lives.setFont(Font.loadFont(new FileInputStream(new File("src/game/res/fonts/arcadeClassic.TTF")), 28));
+            tv_lives.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 28));
 
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         graphicsContext = canvas.getGraphicsContext2D();
@@ -139,7 +140,7 @@ public class GameController extends GameSetter implements Initializable {
 
                     this.stop();
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/gameOver.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/gameOver.fxml"));
 
                         loader.load();
 

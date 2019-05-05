@@ -10,7 +10,9 @@ import statVars.Enums;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
 
 public class Arma {
     ///////UTILIZAR UN ARRAY DE BALAS Y QUE SE QUITEN CUANDO HAYAN SALIDO DE LA PANTALLA
@@ -50,8 +52,12 @@ public class Arma {
 
         balasDisponibles = 3;
 
-        soundBala = new Media(new File("src/game/res/audio/chipium.mp3").toURI().toString());
-        soundOutOfAmmo = new Media(new File("src/game/res/audio/outOfAmmo.mp3").toURI().toString());
+        try {
+            soundBala = new Media(getClass().getClassLoader().getResource("game/res/audio/chipium.mp3").toURI().toString());
+            soundOutOfAmmo = new Media(getClass().getClassLoader().getResource("game/res/audio/outOfAmmo.mp3").toURI().toString());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
         this.graphicsContext = graphicsContext;
         balas = new ArrayList<>();
@@ -62,11 +68,11 @@ public class Arma {
             if(balasDisponibles == MAX_BALAS){
                 reloadTimer.setTime(0);
             }
-            //new MediaPlayer(soundBala).play();
+            Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundBala).play());
             balasDisponibles--;
             balas.add(new Bala(graphicsContext, x, y, cc, co, angle, addIdToBala()));
         }else {
-            //new MediaPlayer(soundOutOfAmmo).play();
+            Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundOutOfAmmo).play());
         }
     }
 

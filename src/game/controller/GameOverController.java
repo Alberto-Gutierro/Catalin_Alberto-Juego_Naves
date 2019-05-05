@@ -10,10 +10,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
 
 public class GameOverController extends SceneStageSetter {
 
@@ -25,11 +24,13 @@ public class GameOverController extends SceneStageSetter {
 
         try {
 
-            tv_gameOver.setFont(Font.loadFont(new FileInputStream(new File("src/game/res/fonts/arcadeClassic.TTF")), 80));
+            tv_gameOver.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 80));
 
-            tv_score.setFont(Font.loadFont(new FileInputStream(new File("src/game/res/fonts/arcadeClassic.TTF")), 40));
+            tv_score.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
 
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
@@ -37,7 +38,7 @@ public class GameOverController extends SceneStageSetter {
 
     public void exitGame(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/mainMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/mainMenu.fxml"));
             Parent root = loader.load();
 
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
@@ -57,7 +58,7 @@ public class GameOverController extends SceneStageSetter {
 
     public void restartGame(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/game.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/game.fxml"));
             Parent root = loader.load();
 
             scene = new Scene(root, stage.getWidth(), stage.getHeight());

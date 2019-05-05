@@ -44,7 +44,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
     public void playGameServer(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/game.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/game.fxml"));
             Parent root = loader.load();
 
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
@@ -63,7 +63,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
     public void backToMainMenu(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/multiplayerLobby.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
             Parent root = loader.load();
 
             scene = new Scene(root, stage.getWidth(), stage.getHeight());

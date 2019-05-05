@@ -24,7 +24,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
     @FXML TextField et_ipServer;
 
     public void backToMainMenu(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/mainMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/mainMenu.fxml"));
         Parent root = loader.load();
 
         scene = new Scene(root, stage.getWidth(), stage.getHeight());
@@ -58,7 +58,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
             socket.receive(packet);
 
             if(!Transformer.packetDataToString(packet).equals("0")) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/multiplayerLobby.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
                 Parent root = loader.load();
 
                 scene = new Scene(root, stage.getWidth(), stage.getHeight());
