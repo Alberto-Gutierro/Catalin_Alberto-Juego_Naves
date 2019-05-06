@@ -6,6 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,8 @@ public class NavesRecivedService {
     private SnapshotParameters snapshotParameters;
     private SnapshotParameters snapshotParametersBalas;
 
+    private Text[] scores;// score_p1,score_p2,score_p3,score_p4;
+
     private ImageView imagenBala;
 
     private ArrayList<NaveToRecive> navesRecived;
@@ -25,7 +28,13 @@ public class NavesRecivedService {
 
     private int myNaveId;
 
-    public NavesRecivedService(GraphicsContext graphicsContext, int myNaveId) {
+    public NavesRecivedService(GraphicsContext graphicsContext, int myNaveId, Text score_p1, Text score_p2, Text score_p3, Text score_p4) {
+        this.scores = new Text[]{score_p1, score_p2, score_p3, score_p4};
+//        this.score_p1 = score_p1;
+//        this.score_p2 = score_p2;
+//        this.score_p3 = score_p3;
+//        this.score_p4 = score_p4;
+
         this.myNaveId = myNaveId;
 
         this.graphicsContext = graphicsContext;
@@ -58,6 +67,7 @@ public class NavesRecivedService {
 
     public void renderNavesRecibidas(){
         navesRecived.forEach(nave->{
+            scores[nave.getIdNave()-1].setText(String.valueOf(nave.getScore()));
             if(myNaveId != nave.getIdNave()) {
                 if (!imagenOtrasNaves.containsKey(nave.getIdNave())) {
                     imagenOtrasNaves.put(nave.getIdNave(), new ImageView("game/res/img/naves/navePlayer_" + nave.getIdNave() + ".png"));

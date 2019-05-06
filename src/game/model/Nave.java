@@ -16,6 +16,8 @@ public class Nave {
 
     private Cursor orientation;
 
+    private int score;
+
     private double posX;
     private double posY;
 
@@ -47,6 +49,8 @@ public class Nave {
             pane.getChildren().add(imagen);
             imgVidas[i] = imagen;
         }
+
+        score = 0;
 
         lifes = AjustesNave.START_LIFES;
 
@@ -196,7 +200,13 @@ public class Nave {
             lifes++;
         }
     }
+    public int getScore() {
+        return score;
+    }
 
+    public void addScore(int score) {
+        this.score += score;
+    }
     public int getLifes() {
         return lifes;
     }

@@ -42,7 +42,7 @@ public class GameController extends GameSetter implements Initializable {
     private MeteorService meteorService;
 
     @FXML Canvas canvas;
-    @FXML Text score_p1, tv_ammo, tv_lives;
+    @FXML Text score_p1, score_p2, score_p3, score_p4, tv_ammo, tv_lives;
     @FXML AnchorPane gameOverScreen;
 
 
@@ -53,6 +53,10 @@ public class GameController extends GameSetter implements Initializable {
             //EXTERNAL FORM: file:/C:/Users/cata6/IdeaProjects/M03ProgramacioOrientadaAObjectes/M03-M09-Catalin_Alberto-Juego_Naves/out/production/M03%20-%20Juego%20Naves/game/res/fonts/arcadeClassic.TTF
             //TO URI:        file:/C:/Users/cata6/IdeaProjects/M03ProgramacioOrientadaAObjectes/M03-M09-Catalin_Alberto-Juego_Naves/out/production/M03%20-%20Juego%20Naves/game/res/fonts/arcadeClassic.TTF
             score_p1.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
+            score_p2.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
+            score_p3.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
+            score_p4.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
+
             tv_ammo.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 28));
             tv_ammo.setTextAlignment(TextAlignment.RIGHT);
             tv_lives.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 28));
@@ -166,7 +170,7 @@ public class GameController extends GameSetter implements Initializable {
         runningGame = true;
 
         DatagramSocket socket = new DatagramSocket();
-        navesRecivedService = new NavesRecivedService(graphicsContext, nave.getId());
+        navesRecivedService = new NavesRecivedService(graphicsContext, nave.getId(), score_p1, score_p2, score_p3, score_p4);
 
         //POR AQUI: AL COMENZAR EL JUEGO EN LINEA QUE HAGA ALL LO QUE TENGA QUE HACER
         new AnimationTimer() {
@@ -353,6 +357,7 @@ public class GameController extends GameSetter implements Initializable {
                             //HACER QUE SE GUARDE EL ID DE LA NAVE QUE HA SIDO TOCADA EN LOS DATOS QUE VAMOS A MANDAR AL SERVIDOR.
 
                             // Añadimos la las id de las naves que han sido tocadas por tus balas
+                            nave.addScore(50);
                             dataToSend.addIdNaveTocada(naveRecivedService.getIdNave());
                         }
                     });

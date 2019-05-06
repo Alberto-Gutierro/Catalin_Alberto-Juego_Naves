@@ -8,6 +8,9 @@ public class NaveToRecive {
     // Identificador de la nave
     private int idNave;
 
+    // puntuación
+    private int score;
+
     //posicion nave
     private double navePosX;
     private double navePosY;
@@ -26,6 +29,10 @@ public class NaveToRecive {
 
     //balas
     private ArrayList<BalaToSend> naveArmaBalas;
+
+    public int getScore() {
+        return score;
+    }
 
     public int getIdNave() {
         return idNave;

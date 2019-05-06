@@ -10,6 +10,8 @@ public class NaveToSend {
 
     private int idNave;
 
+    private int score;
+
     //posicion nave
     private double navePosX;
     private double navePosY;
@@ -41,6 +43,8 @@ public class NaveToSend {
 
     public void setData(Nave nave, double time) {
         lives = nave.getLifes();
+
+        score = nave.getScore();
 
         timer.update(time);
 
