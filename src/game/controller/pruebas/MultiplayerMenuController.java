@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import statVars.Packets;
 import statVars.Strings;
 import transformmer.Transformer;
 
@@ -59,6 +60,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
 
             socket.setSoTimeout(500);
 
+            packet = new DatagramPacket(new byte[Packets.PACKET_LENGHT], Packets.PACKET_LENGHT);
             socket.receive(packet);
 
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerSalas.fxml"));
