@@ -31,7 +31,7 @@ public abstract class Transformer {
     }
 
     public static Map<String, Sala> jsonToMapSalas(String json){
-        return new Gson().fromJson(json, new TypeToken<Map<Integer, Sala>>(){}.getType());
+        return new Gson().fromJson(json, new TypeToken<Map<String, Sala>>(){}.getType());
     }
 
     public static Sala jsonToSala(String json){
