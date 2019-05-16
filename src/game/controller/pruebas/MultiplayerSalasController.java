@@ -42,6 +42,7 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
         executor.execute(() -> {
             DatagramSocket socket = null;
             DatagramPacket packetWait;
+            byte[] messageLength = new byte[Packets.PACKET_LENGHT];
             try {
                 System.out.println(Transformer.packetDataToString(packet));
             } catch (UnsupportedEncodingException e) {
@@ -61,6 +62,7 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
                             packet.getPort());
                     socket.send(packetWait);
 
+                    packetWait = new DatagramPacket(messageLength, Packets.PACKET_LENGHT);
                     socket.receive(packetWait);
                     try {
                         Thread.sleep(750);

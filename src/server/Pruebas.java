@@ -111,6 +111,7 @@ public class Pruebas {
     }
 
     private String getSalas() {
+        System.out.println(Transformer.classToJson(salas));
         return Transformer.classToJson(salas);
     }
 
