@@ -37,18 +37,18 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
 
     }
 
-    void setPacket(DatagramPacket packet) {
+    void setPacket(DatagramPacket p) {
         executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
         executor.execute(() -> {
             DatagramSocket socket = null;
             DatagramPacket packetWait;
             byte[] messageLength = new byte[Packets.PACKET_LENGHT];
             try {
-                System.out.println(Transformer.packetDataToString(packet));
+                System.out.println(Transformer.packetDataToString(p));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            showSalas(packet);
+            showSalas(p);
             try {
                 socket = new DatagramSocket();
             } catch (SocketException e) {
@@ -77,7 +77,7 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
             }
         });
 
-        this.packet = packet;
+        this.packet = p;
     }
 
     private void showSalas(DatagramPacket packetWait) {
