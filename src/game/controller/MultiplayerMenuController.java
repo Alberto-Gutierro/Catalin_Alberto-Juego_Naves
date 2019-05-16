@@ -1,6 +1,7 @@
 package game.controller;
 
 import javafx.scene.control.Alert;
+import statVars.Packets;
 import statVars.Strings;
 import game.SceneStageSetter;
 import javafx.event.ActionEvent;
@@ -39,6 +40,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
     }
     public void connectToServer(ActionEvent event) throws IOException {
         socket = new DatagramSocket();
+        byte[] recivingData = new byte[Packets.PACKET_LENGHT];
 
         try{
             String ip = et_ipServer.getText().split(":")[0];//192.168.253.215:5568
@@ -53,6 +55,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
             socket.send(packet);
 
             socket.setSoTimeout(500);
+            packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
 
             socket.receive(packet);
 

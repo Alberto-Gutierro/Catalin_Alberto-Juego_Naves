@@ -42,6 +42,11 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
         executor.execute(() -> {
             DatagramSocket socket = null;
             DatagramPacket packetWait;
+            try {
+                System.out.println(Transformer.packetDataToString(packet));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             showSalas(packet);
             try {
                 socket = new DatagramSocket();

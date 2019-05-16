@@ -56,10 +56,10 @@ public class NavesRecivedService {
 
     public int getMyLives(){
 
-        for (DataToRecive dataToRecive : navesRecived) {
-            if(myNaveId == dataToRecive.getIdNave()){
-                System.out.println(dataToRecive.getLives());
-                return dataToRecive.getLives();
+        for (DataToRecive naveToRecive : navesRecived) {
+            if(myNaveId == naveToRecive.getIdNave()){
+                System.out.println(naveToRecive.getLives());
+                return naveToRecive.getLives();
             }
         }
         return -1;

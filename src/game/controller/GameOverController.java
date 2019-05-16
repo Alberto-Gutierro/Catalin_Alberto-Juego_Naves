@@ -35,7 +35,6 @@ public class GameOverController extends SceneStageSetter {
         }
     }
 
-
     public void exitGame(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/mainMenu.fxml"));

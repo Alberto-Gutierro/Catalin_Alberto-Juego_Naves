@@ -17,6 +17,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 
 public abstract class GameSetter extends SceneStageSetter {
+
     protected GraphicsContext graphicsContext;
 
     protected boolean isMultiplayer;

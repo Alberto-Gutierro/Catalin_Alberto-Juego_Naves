@@ -91,7 +91,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             } catch (SocketException e) {
                 e.printStackTrace();
             }
-
+// 192.168.254.77:5568
             do{
                 try {
                     packetWait = new DatagramPacket("Waiting".getBytes(),
