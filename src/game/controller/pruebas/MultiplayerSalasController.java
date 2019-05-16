@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.shape.Rectangle;
 import server.model.Sala;
+import server.model.SalaToSend;
 import statVars.Packets;
 import transformmer.Transformer;
 
@@ -83,9 +84,9 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
     private void showSalas(DatagramPacket packetWait) {
         try {
             int height = 0;
-            Map<String, Sala> salas = Transformer.jsonToMapSalas(Transformer.packetDataToString(packet));
+            Map<String, SalaToSend> salas = Transformer.jsonToMapSalas(Transformer.packetDataToString(packet));
 
-            for (Sala sala:salas.values()) {
+            for (SalaToSend sala:salas.values()) {
                 scrollPaneSalas.getChildrenUnmodifiable().add(new Rectangle(0, height,scrollPaneSalas.getMaxWidth(),50));
                 height+=50;
             }

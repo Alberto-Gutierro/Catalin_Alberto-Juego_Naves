@@ -4,6 +4,7 @@ import formatClasses.DataToRecive;
 import javafx.scene.transform.Transform;
 import server.model.ClientData;
 import server.model.Sala;
+import server.model.SalaToSend;
 import statVars.AjustesNave;
 import statVars.Packets;
 import transformmer.Transformer;
@@ -24,9 +25,12 @@ public class Pruebas {
 
     private Map<String, Sala> salas;
 
+    private Map<String, SalaToSend> salasToSend;
+
     public void init(int port) throws SocketException {
         socket = new DatagramSocket(port);
         salas = new HashMap<>();
+        salasToSend = new HashMap<>();
     }
 
     public void runServer() throws IOException {
@@ -112,7 +116,7 @@ public class Pruebas {
 
     private String getSalas() {
         System.out.println(Transformer.classToJson(salas));
-        return Transformer.classToJson(salas);
+        return Transformer.classToJson(salasToSend);
     }
 
     private byte[] waitingData(DatagramPacket packet){
@@ -212,9 +216,10 @@ public class Pruebas {
             salas.get(numSala).getMapIdNaves().put(packet.getAddress(),new ClientData(salas.get(numSala).getMapIdNaves().size()+1, packet.getPort()));
 
             //sendAll(String.valueOf(mapIdNaves.size()), packet);
-
+            salasToSend.get(numSala).addNumPlayers();
             return String.valueOf(salas.get(numSala).getMapIdNaves().size());
         } else if (salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress())) {
+            salasToSend.get(numSala).addNumPlayers();
             return String.valueOf(salas.get(numSala).getMapIdNaves().get(packet.getAddress()).getIdNave());
         } else return String.valueOf(0);
     }
@@ -227,6 +232,8 @@ public class Pruebas {
         salas.put(sala.getIdSala(), sala);
 
         System.out.println("SALA CREADA" + sala.getIdSala());
+
+        salasToSend.put(sala.getIdSala(), new SalaToSend(sala.getIdSala()));
 
         return String.valueOf(sala.getIdSala());
     }

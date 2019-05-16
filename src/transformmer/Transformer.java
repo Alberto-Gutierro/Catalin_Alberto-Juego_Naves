@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import formatClasses.DataToRecive;
 import server.model.Sala;
+import server.model.SalaToSend;
 
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
@@ -30,8 +31,8 @@ public abstract class Transformer {
         return new Gson().fromJson(json, DataToRecive.class);
     }
 
-    public static Map<String, Sala> jsonToMapSalas(String json){
-        return new Gson().fromJson(json, new TypeToken<Map<String, Sala>>(){}.getType());
+    public static Map<String, SalaToSend> jsonToMapSalas(String json){
+        return new Gson().fromJson(json, new TypeToken<Map<String, SalaToSend>>(){}.getType());
     }
 
     public static Sala jsonToSala(String json){
