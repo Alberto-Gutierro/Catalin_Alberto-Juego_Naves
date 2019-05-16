@@ -83,7 +83,7 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
     private void showSalas(DatagramPacket packetWait) {
         try {
             int height = 0;
-            Map<Integer, Sala> salas = Transformer.jsonToMapSalas(Transformer.packetDataToString(packet));
+            Map<String, Sala> salas = Transformer.jsonToMapSalas(Transformer.packetDataToString(packet));
 
             for (Sala sala:salas.values()) {
                 scrollPaneSalas.getChildrenUnmodifiable().add(new Rectangle(0, height,scrollPaneSalas.getMaxWidth(),50));
