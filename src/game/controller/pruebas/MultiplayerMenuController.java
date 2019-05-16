@@ -1,18 +1,23 @@
-package game.controller;
+package game.controller.pruebas;
 
-import javafx.scene.control.Alert;
-import statVars.Strings;
 import game.SceneStageSetter;
+import game.controller.MainMenuController;
+import game.controller.pruebas.MultiplayerSalasController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import statVars.Strings;
 import transformmer.Transformer;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 
 public class MultiplayerMenuController extends SceneStageSetter {
     private DatagramSocket socket;
@@ -56,27 +61,18 @@ public class MultiplayerMenuController extends SceneStageSetter {
 
             socket.receive(packet);
 
-            if(!Transformer.packetDataToString(packet).equals("0")) {
-                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
-                Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerSalas.fxml"));
+            Parent root = loader.load();
 
-                scene = new Scene(root, stage.getWidth(), stage.getHeight());
+            scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
-                MultiplayerLobbyController multiplayerLobbyController = loader.getController();
-                multiplayerLobbyController.setScene(scene);
-                multiplayerLobbyController.setStage(stage);
-                multiplayerLobbyController.setPacket(packet);
+            MultiplayerSalasController multiplayerSalasController = loader.getController();
+            multiplayerSalasController.setScene(scene);
+            multiplayerSalasController.setStage(stage);
+            multiplayerSalasController.setPacket(packet);
 
-                stage.setScene(scene);
-                stage.show();
-            }else {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("LLENO");
-                alert.setHeaderText("Servidor lleno");
-                alert.setContentText("La cantidad máxima de jugadores ha sido alcanzada.");
-                alert.showAndWait();
-            }
-            System.out.println("PEPEPEPE");
+            stage.setScene(scene);
+            stage.show();
 
         }catch (SocketTimeoutException e){
             //MOSTRAR UN DIALOG DICIENDO QUE EL SERVIDOR NO RESPONDE

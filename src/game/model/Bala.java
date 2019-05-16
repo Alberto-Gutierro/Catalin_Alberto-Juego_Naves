@@ -44,7 +44,7 @@ public class Bala {
         snapshotParameters.setFill(Color.TRANSPARENT);
 
         ImageView imgBala = new ImageView("game/res/img/bala.png");
-        System.out.println(angle);
+
         imgBala.setRotate(angle);
         imagenRotada = imgBala.snapshot(snapshotParameters, null);
 

@@ -1,27 +1,26 @@
-package game.controller;
-
-import game.services.NavesRecivedService;
-import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.layout.Pane;
-import statVars.Packets;
-import statVars.Resoluciones;
+package game.controller.pruebas;
 
 import game.GameSetter;
 import game.model.Bala;
 import game.model.toSend.DataToSend;
 import game.services.MeteorService;
+import game.services.NavesRecivedService;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import statVars.Packets;
+import statVars.Resoluciones;
 import transformmer.Transformer;
 
 import java.awt.*;
@@ -235,13 +234,14 @@ public class GameController extends GameSetter implements Initializable {
     }
 
     private void multiplayerSpectatorMode(NavesRecivedService navesRecivedService, DatagramSocket socket){
+        String message = "Dead:" + idSala;
         new AnimationTimer(){
 
             @Override
             public void handle(long l) {
                 try {
-                    packet = new DatagramPacket("Dead".getBytes(),
-                            "Dead".getBytes().length,
+                    packet = new DatagramPacket(message.getBytes(),
+                            message.getBytes().length,
                             ipServer,
                             portServer);
                     socket.send(packet);

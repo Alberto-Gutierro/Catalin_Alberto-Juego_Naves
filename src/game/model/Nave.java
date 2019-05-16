@@ -200,6 +200,7 @@ public class Nave {
             lifes++;
         }
     }
+
     public int getScore() {
         return score;
     }

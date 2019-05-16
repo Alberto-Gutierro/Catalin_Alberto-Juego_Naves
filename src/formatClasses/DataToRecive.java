@@ -4,9 +4,12 @@ import game.model.toSend.BalaToSend;
 
 import java.util.ArrayList;
 
-public class NaveToRecive {
+public class DataToRecive {
     // Identificador de la nave
     private int idNave;
+
+    // Identificador de la sala.
+    private String idSala;
 
     // puntuación
     private int score;
@@ -38,6 +41,10 @@ public class NaveToRecive {
         return idNave;
     }
 
+    public String getIdSala(){
+        return idSala;
+    }
+
     public double getNavePosX() {
         return navePosX;
     }
@@ -62,17 +69,6 @@ public class NaveToRecive {
         return naveArmaBalas;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return idNave == ((NaveToRecive) obj).getIdNave();
-    }
-
-
-    @Override
-    public String toString() {
-        return "ID: " + idNave + "\nAngulo: " + angle;
-    }
-
     public int getLives() {
         return lives;
     }
@@ -80,6 +76,7 @@ public class NaveToRecive {
     public void setLives(int lives){
         this.lives = lives;
     }
+
     public ArrayList<Integer> getNavesTocadas() {
         return navesTocadas;
     }
@@ -88,5 +85,14 @@ public class NaveToRecive {
         return meteoritosTocados;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return idNave == ((DataToRecive) obj).getIdNave();
+    }
 
+
+    @Override
+    public String toString() {
+        return "ID: " + idNave + "\nAngulo: " + angle;
+    }
 }

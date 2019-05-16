@@ -2,19 +2,21 @@ package transformmer;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import formatClasses.NaveToRecive;
+import formatClasses.DataToRecive;
+import server.model.Sala;
 
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
+import java.util.Map;
 
 public abstract class Transformer {
     public static String classToJson(Object object){
         return new Gson().toJson(object);
     }
 
-    public static ArrayList<NaveToRecive> jsonToArrayListNaves(String json) {
-        return new Gson().fromJson(json, new TypeToken<ArrayList<NaveToRecive>>(){}.getType());
+    public static ArrayList<DataToRecive> jsonToArrayListNaves(String json) {
+        return new Gson().fromJson(json, new TypeToken<ArrayList<DataToRecive>>(){}.getType());
     }
 
     public static String packetDataToString(DatagramPacket packet) throws UnsupportedEncodingException {
@@ -24,7 +26,15 @@ public abstract class Transformer {
                 packet.getLength(), "UTF-8");
     }
 
-    public static NaveToRecive jsonToNaveToRecive(String json) {
-        return new Gson().fromJson(json, NaveToRecive.class);
+    public static DataToRecive jsonToNaveToRecive(String json) {
+        return new Gson().fromJson(json, DataToRecive.class);
+    }
+
+    public static Map<Integer, Sala> jsonToMapSalas(String json){
+        return new Gson().fromJson(json, new TypeToken<Map<Integer, Sala>>(){}.getType());
+    }
+
+    public static Sala jsonToSala(String json){
+        return new Gson().fromJson(json, Sala.class);
     }
 }

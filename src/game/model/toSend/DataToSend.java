@@ -6,9 +6,11 @@ import game.model.Timer;
 import java.util.ArrayList;
 
 //Se pondrán las variables que se necesite para mandar al servidor.
-public class NaveToSend {
+public class DataToSend {
 
     private int idNave;
+
+    private String idSala;
 
     private int score;
 
@@ -33,7 +35,7 @@ public class NaveToSend {
     //////FALTA: ESTA VARIABLE NO SE TIENE QUE PASAR EN EL JSON.
     private Timer timer;
 
-    public NaveToSend(){
+    public DataToSend(){
         naveArmaBalas = new ArrayList<>();
         timer = new Timer(3);
         navesTocadas = new ArrayList<>();
@@ -41,7 +43,9 @@ public class NaveToSend {
     }
     //change
 
-    public void setData(Nave nave, double time) {
+    public void setData(Nave nave, double time, String idSala) {
+        this.idSala = idSala;
+
         lives = nave.getLifes();
 
         score = nave.getScore();

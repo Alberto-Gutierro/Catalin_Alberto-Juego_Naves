@@ -1,6 +1,6 @@
 package game.services;
 
-import formatClasses.NaveToRecive;
+import formatClasses.DataToRecive;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -22,7 +22,7 @@ public class NavesRecivedService {
 
     private ImageView imagenBala;
 
-    private ArrayList<NaveToRecive> navesRecived;
+    private ArrayList<DataToRecive> navesRecived;
 
     private GraphicsContext graphicsContext;
 
@@ -50,16 +50,16 @@ public class NavesRecivedService {
         imagenBala = new ImageView("game/res/img/bala.png");
     }
 
-    public void setNavesRecived(ArrayList<NaveToRecive> navesRecived) {
+    public void setNavesRecived(ArrayList<DataToRecive> navesRecived) {
         this.navesRecived = navesRecived;
     }
 
     public int getMyLives(){
 
-        for (NaveToRecive naveToRecive : navesRecived) {
-            if(myNaveId == naveToRecive.getIdNave()){
-                System.out.println(naveToRecive.getLives());
-                return naveToRecive.getLives();
+        for (DataToRecive dataToRecive : navesRecived) {
+            if(myNaveId == dataToRecive.getIdNave()){
+                System.out.println(dataToRecive.getLives());
+                return dataToRecive.getLives();
             }
         }
         return -1;
@@ -91,7 +91,7 @@ public class NavesRecivedService {
 
     }
 
-    private void renderRecivedData(NaveToRecive nave) {
+    private void renderRecivedData(DataToRecive nave) {
         rotateNaveRecibida(nave.getIdNave(), nave.getAngle());
         graphicsContext.drawImage(imagenRotadaOtrasNaves.get(nave.getIdNave()), nave.getNavePosX(), nave.getNavePosY());
         nave.getNaveArmaBalas().forEach(bala -> {
@@ -109,7 +109,7 @@ public class NavesRecivedService {
         return imagenBala.snapshot(snapshotParameters, null);
     }
 
-    public ArrayList<NaveToRecive> getNavesRecived() {
+    public ArrayList<DataToRecive> getNavesRecived() {
         return navesRecived;
     }
 
