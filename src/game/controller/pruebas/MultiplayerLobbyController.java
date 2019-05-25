@@ -164,4 +164,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         }
     }
 
+    private void exitSala(){
+        //DatagramPacket exitPacket = new DatagramPacket();
+    }
+
 }

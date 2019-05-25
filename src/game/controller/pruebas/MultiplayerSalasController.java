@@ -1,14 +1,21 @@
 package game.controller.pruebas;
 
 import game.SceneStageSetter;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import server.model.Sala;
+import javafx.scene.text.Text;
 import server.model.SalaToSend;
 import statVars.Packets;
 import transformmer.Transformer;
@@ -19,27 +26,50 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class MultiplayerSalasController extends SceneStageSetter implements Initializable {
 
+    Map<String, SalaToSend> salas;
 
-    public ScrollPane scrollPaneSalas;
+    boolean entraSala;
+
+    @FXML  private ScrollPane scrollPaneSalas;
+
     private DatagramPacket packet;
 
-    private ThreadPoolExecutor executor;
+    //HBox salasScrollBox;
+
+    @FXML Pane paneSalas;
+
+    private Executor executor;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        entraSala = false;
+
+        salas = new HashMap<>();
+
+        /*observableSalas = FXCollections.observableMap(salas);
+        observableSalas.addListener((MapChangeListener<String, SalaToSend>) change -> {
+            int height = 0;
+            //salas = Transformer.jsonToMapSalas(Transformer.packetDataToString(packet));
+            System.out.println("PEPEPPEPEPPE");
+            //////////////////ESTO SE TIENE QUE METER EN UN OBSERVABLE QUE CUANDO SE MODIFIQUE LA VARIABLE SALAS HAGA ESO:
+            for (SalaToSend sala:change.getMap().values()) {
+                salasScrollBox.getChildren().add(new Rectangle(0, height,scrollPaneSalas.getMaxWidth(),50));
+                height+=50;
+            }
+        });*/
 
     }
 
     void setPacket(DatagramPacket p) {
-        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
+        executor = Executors.newFixedThreadPool(4);
         executor.execute(() -> {
             DatagramSocket socket = null;
             DatagramPacket packetWait;
@@ -49,7 +79,9 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            showSalas(p);
+
+            Platform.runLater(()->showSalas(p));
+
             try {
                 socket = new DatagramSocket();
             } catch (SocketException e) {
@@ -71,8 +103,10 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
                         e.printStackTrace();
                     }
 
-                    showSalas(packetWait);
-                }while (true);
+                    final DatagramPacket packetToSend = packetWait;
+                    Platform.runLater(() -> showSalas(packetToSend));
+                }while (!entraSala);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -82,23 +116,32 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
     }
 
     private void showSalas(DatagramPacket packetWait) {
+
         try {
-            int height = 0;
-            Map<String, SalaToSend> salas = Transformer.jsonToMapSalas(Transformer.packetDataToString(packet));
+            salas = Transformer.jsonToMapSalas(Transformer.packetDataToString(packetWait));
+            System.out.println(Transformer.packetDataToString(packetWait));
+            //////////////////ESTO SE TIENE QUE METER EN UN OBSERVABLE QUE CUANDO SE MODIFIQUE LA VARIABLE SALAS HAGA ESO:
 
-            for (SalaToSend sala:salas.values()) {
-                scrollPaneSalas.getChildrenUnmodifiable().add(new Rectangle(0, height,scrollPaneSalas.getMaxWidth(),50));
-                height+=50;
+            paneSalas.getChildren().clear();
+
+            for (int i = 0; i < salas.size(); i++) {
+                Button button = new Button();
+                button.setPrefWidth(scrollPaneSalas.getWidth()-2);
+                button.setPrefHeight(50);
+                button.setLayoutX(0);
+                button.setLayoutY(50*i);
+                button.setText("Sala " + (i+1));
+
+                paneSalas.getChildren().add(button);
             }
-
-        } catch (UnsupportedEncodingException e) {
+        }catch (UnsupportedEncodingException e){
             e.printStackTrace();
         }
-
     }
 
     public void createRoom(ActionEvent actionEvent) {
-        executor.shutdown();
+        entraSala = true;
+
         DatagramSocket socket = null;
         DatagramPacket packetCreate;
         try {

@@ -86,7 +86,6 @@ public class Pruebas {
             //POR AQUI: EL SERVIDOR RECIBE UN ARRAY Y NO UN OBJETO.
             switch (Transformer.packetDataToString(packet)) {
                 case "Connect": case "Rooms":
-                    System.out.println("CONNECT O ROOMS");
                     return getSalas().getBytes();
                 case "Create":
                     return createSala(packet).getBytes();

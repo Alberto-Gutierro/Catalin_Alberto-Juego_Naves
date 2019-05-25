@@ -46,7 +46,10 @@
                         </ImageView>
 
                         <!--DENTRO DE ESTE SCROLL PANE VAN A IR LAS SALAS DISPONIBLES.-->
-                  <ScrollPane fx:id="scrollPaneSalas" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                  <ScrollPane fx:id="scrollPaneSalas" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                     <content>
+                        <Pane fx:id="paneSalas" />
+                     </content></ScrollPane>
                   <Button mnemonicParsing="false" onAction="#createRoom" text="Create Room" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                     </children>
                 </GridPane>
