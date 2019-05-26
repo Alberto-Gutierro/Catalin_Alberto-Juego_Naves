@@ -41,11 +41,8 @@ public abstract class GameSetter extends SceneStageSetter {
     protected String idSala;
 
     public void beforeStartGame(Stage stage, Scene scene, int idNave, String idSala, Pane pane, DatagramPacket packet) {
-        try {
-            this.idSala = Transformer.packetDataToString(packet);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        this.idSala = idSala;
+
         this.packet = packet;
 
 

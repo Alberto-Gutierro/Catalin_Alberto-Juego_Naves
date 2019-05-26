@@ -99,7 +99,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         //showNaves(packet);
         this.packet = packet;
 
-
+        System.out.println("AAAAAAAAAAAAAAAAAA " + idSala);
         executor = Executors.newFixedThreadPool(4);
         executor.execute(() -> {
             String señalServer = "";
