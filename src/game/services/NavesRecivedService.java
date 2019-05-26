@@ -72,6 +72,7 @@ public class NavesRecivedService {
                 if (!imagenOtrasNaves.containsKey(nave.getIdNave())) {
                     imagenOtrasNaves.put(nave.getIdNave(), new ImageView("game/res/img/naves/navePlayer_" + nave.getIdNave() + ".png"));
                     imagenRotadaOtrasNaves.put(nave.getIdNave(), new Image("game/res/img/naves/navePlayer_" + nave.getIdNave() + ".png"));
+
 //                        rotateNaveRecibida(nave.getIdNave(), nave.getAngle());
 //                        graphicsContext.drawImage(imagenRotadaOtrasNaves.get(nave.getIdNave()), nave.getNavePosX(), nave.getNavePosY());
 //

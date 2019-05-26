@@ -50,7 +50,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
             GameController gameController = loader.getController();
-            gameController.beforeStartGame(stage, scene, idNave, gameController.getPane(), packet);
+            //gameController.beforeStartGame(stage, scene, idNave, gameController.getPane(), packet);
             gameController.start(true);
 
             stage.setScene(scene);

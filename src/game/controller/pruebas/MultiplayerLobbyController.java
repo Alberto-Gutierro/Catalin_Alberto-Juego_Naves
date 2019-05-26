@@ -35,6 +35,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     private DatagramPacket packet;
 
     private int idNave;
+    private String idSala;
+
 
     private Executor executor;
 
@@ -52,7 +54,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
             GameController gameController = loader.getController();
-            gameController.beforeStartGame(stage, scene, idNave, gameController.getPane(), packet);
+            gameController.beforeStartGame(stage, scene, idNave, idSala, gameController.getPane(), packet);
             gameController.start(true);
 
             stage.setScene(scene);
@@ -82,24 +84,29 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         }
     }
 
-    void setPacket(DatagramPacket packetIdSala, boolean owner) {
-
+    void setPacket(DatagramPacket packet, boolean owner) {
         try {
-            System.out.println(Transformer.packetDataToString(packetIdSala));
+            if(owner){
+                idNave = 1;
+                idSala = Transformer.packetDataToString(packet);
+            }else {
+                idNave = Integer.parseInt(Transformer.packetDataToString(packet).split(":")[0]);
+                idSala = Transformer.packetDataToString(packet).split(":")[1];
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        //showNaves(packet);
+        this.packet = packet;
+
+
         executor = Executors.newFixedThreadPool(4);
         executor.execute(() -> {
             String señalServer = "";
             DatagramSocket socket = null;
             DatagramPacket packetWait;
             String message = null;
-            try {
-                message = "Waiting:" + Transformer.packetDataToString(packetIdSala);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            message = "Waiting:" + idSala;
             try {
                 socket = new DatagramSocket();
             } catch (SocketException e) {
@@ -110,8 +117,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                 try {
                     packetWait = new DatagramPacket(message.getBytes(),
                             message.getBytes().length,
-                            packetIdSala.getAddress(),
-                            packetIdSala.getPort());
+                            packet.getAddress(),
+                            packet.getPort());
                     socket.send(packetWait);
                     System.out.println("SENDED");
 
@@ -134,18 +141,6 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                 }
             }while (!señalServer.equals("Start"));
         });
-
-        if(owner){
-            idNave = 1;
-        }else {
-            try {
-                idNave = Integer.parseInt(Transformer.packetDataToString(packetIdSala));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        //showNaves(packet);
-        this.packet = packetIdSala;
     }
 
     private void showNaves(DatagramPacket packet) {

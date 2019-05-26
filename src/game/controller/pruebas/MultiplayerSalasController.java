@@ -175,6 +175,8 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
             multiplayerLobbyController.setStage(stage);
             multiplayerLobbyController.setPacket(packetEnter, false);
 
+            stage.setScene(scene);
+            stage.show();
         } catch (SocketException e) {
             e.printStackTrace();
         }catch (IOException e) {
