@@ -26,6 +26,9 @@ import java.util.concurrent.Executors;
 
 public class MultiplayerLobbyController extends SceneStageSetter implements Initializable {
 
+    boolean startedGame;
+    boolean toLobby;
+
     public ImageView img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4;
     public Text playerName1, playerName2, playerName3, playerName4;
 
@@ -42,12 +45,15 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        startedGame = false;
+        toLobby = false;
         imagesNave = new ImageView[]{img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4};
         textsNave = new Text[]{playerName1, playerName2, playerName3, playerName4};
     }
 
     public void playGameServer(ActionEvent event) {
         try {
+            startedGame = true;
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/game.fxml"));
             Parent root = loader.load();
 
@@ -139,7 +145,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }while (!señalServer.equals("Start"));
+            }while (!señalServer.equals("Start") || !startedGame || !toLobby);
         });
     }
 
@@ -160,6 +166,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     }
 
     private void exitSala(){
+        toLobby = true;
         //DatagramPacket exitPacket = new DatagramPacket();
     }
 
