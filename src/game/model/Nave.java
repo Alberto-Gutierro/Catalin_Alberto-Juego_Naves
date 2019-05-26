@@ -101,6 +101,7 @@ public class Nave {
     public ImageView getImgNave(){
         return imgNave;
     }
+
     public double getPosX() {
         return posX;
     }
@@ -112,6 +113,7 @@ public class Nave {
     public void setPosX(double pos){
         posX = pos;
     }
+
     public void setPosY(double pos){
         posY = pos;
     }
@@ -208,6 +210,7 @@ public class Nave {
     public void addScore(int score) {
         this.score += score;
     }
+
     public int getLifes() {
         return lifes;
     }

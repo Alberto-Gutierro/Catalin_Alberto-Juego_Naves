@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class MeteorService {
 
-    ArrayList<Meteorito> meteoritos = new ArrayList<>();
+    private ArrayList<Meteorito> meteoritos = new ArrayList<>();
 
-    final int NORTH = 0,EAST = 1, SOUTH = 2, WEST = 3;
+    private final int NORTH = 0,EAST = 1, SOUTH = 2, WEST = 3;
 
     private double screenWidth;
     private double screenHeight;

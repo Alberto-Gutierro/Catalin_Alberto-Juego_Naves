@@ -20,7 +20,7 @@ public class MultiplayerMenuController extends SceneStageSetter {
     private DatagramPacket packet;
     private InetAddress ipServer;
 
-    Alert alert;
+    private Alert alert;
 
     @FXML TextField et_ipServer;
 

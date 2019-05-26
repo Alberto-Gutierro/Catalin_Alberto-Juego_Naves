@@ -145,5 +145,4 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             e.printStackTrace();
         }
     }
-
 }

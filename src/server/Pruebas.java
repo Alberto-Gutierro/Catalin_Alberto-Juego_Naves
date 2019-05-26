@@ -74,7 +74,7 @@ public class Pruebas {
             e.printStackTrace();
         }
         try {
-            if(Transformer.packetDataToString(packet).matches("^Room:[1-9]+$")){
+            if(Transformer.packetDataToString(packet).matches("^Room:.+$")){
                 return getIdOfNaveClient(packet).getBytes();
             }else if(Transformer.packetDataToString(packet).matches("^Dead:.+$")){
                 return deadData(packet).getBytes();

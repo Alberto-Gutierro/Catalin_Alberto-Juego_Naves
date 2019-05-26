@@ -17,5 +17,11 @@ public class SalaToSend {
         numPlayers--;
     }
 
+    public String getIdSala() {
+        return idSala;
+    }
 
+    public int getNumPlayers() {
+        return numPlayers;
+    }
 }

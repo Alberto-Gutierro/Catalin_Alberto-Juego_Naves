@@ -3,6 +3,7 @@ package game.controller.pruebas;
 import game.SceneStageSetter;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -123,23 +124,66 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
             //////////////////ESTO SE TIENE QUE METER EN UN OBSERVABLE QUE CUANDO SE MODIFIQUE LA VARIABLE SALAS HAGA ESO:
 
             paneSalas.getChildren().clear();
-
-            for (int i = 0; i < salas.size(); i++) {
+            int i = 0;
+            for (SalaToSend sala:salas.values()) {
                 Button button = new Button();
                 button.setPrefWidth(scrollPaneSalas.getWidth()-2);
                 button.setPrefHeight(50);
                 button.setLayoutX(0);
                 button.setLayoutY(50*i);
+                button.setId(sala.getIdSala());
+                button.setOnAction(event -> {
+                    enterRoom(event);
+                });
                 button.setText("Sala " + (i+1));
 
                 paneSalas.getChildren().add(button);
+
+                i++;
             }
         }catch (UnsupportedEncodingException e){
             e.printStackTrace();
         }
     }
 
-    public void createRoom(ActionEvent actionEvent) {
+    private void enterRoom(ActionEvent actionEvent){
+        entraSala = true;
+        System.out.println(((Button)actionEvent.getSource()).getId());
+        DatagramSocket socket = null;
+        DatagramPacket packetEnter;
+        System.out.println(("Room:" + ((Button)actionEvent.getSource()).getId()));
+        try {
+            socket = new DatagramSocket();
+
+            packetEnter = new DatagramPacket(("Room:" + ((Button)actionEvent.getSource()).getId()).getBytes(),
+                    ("Room:" + ((Button)actionEvent.getSource()).getId()).getBytes().length,
+                    packet.getAddress(),
+                    packet.getPort());
+            socket.send(packetEnter);
+
+            packetEnter = new DatagramPacket(new byte[Packets.PACKET_LENGHT], Packets.PACKET_LENGHT);
+
+            socket.receive(packetEnter);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
+            Parent root = loader.load();
+
+            scene = new Scene(root, stage.getWidth(), stage.getHeight());
+
+            MultiplayerLobbyController multiplayerLobbyController = loader.getController();
+            multiplayerLobbyController.setScene(scene);
+            multiplayerLobbyController.setStage(stage);
+            multiplayerLobbyController.setPacket(packetEnter, false);
+
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void createRoom(ActionEvent actionEvent) {
         entraSala = true;
 
         DatagramSocket socket = null;

@@ -30,7 +30,7 @@ public class DataToSend {
     private ArrayList<Integer> navesTocadas;
     private ArrayList<Integer> meteoritosTocados;
 
-    private int lives;
+    private int lifes;
 
     //////FALTA: ESTA VARIABLE NO SE TIENE QUE PASAR EN EL JSON.
     private Timer timer;
@@ -46,7 +46,7 @@ public class DataToSend {
     public void setData(Nave nave, double time, String idSala) {
         this.idSala = idSala;
 
-        lives = nave.getLifes();
+        lifes = nave.getLifes();
 
         score = nave.getScore();
 
