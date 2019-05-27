@@ -1,27 +1,26 @@
 package game.controller;
 
-import game.services.NavesRecivedService;
-import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.layout.Pane;
-import statVars.Packets;
-import statVars.Resoluciones;
-
 import game.GameSetter;
 import game.model.Bala;
 import game.model.toSend.DataToSend;
 import game.services.MeteorService;
+import game.services.NavesRecivedService;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import statVars.Packets;
+import statVars.Resoluciones;
 import transformmer.Transformer;
 
 import java.awt.*;
@@ -45,9 +44,7 @@ public class GameController extends GameSetter implements Initializable {
     @FXML Text score_p1, score_p2, score_p3, score_p4, tv_ammo, tv_lives;
     @FXML AnchorPane gameOverScreen;
 
-    private double anteriorCurrentNanoTime = 0;
-    private double timingMeteor = 0;
-    private double dificulty = 1;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -77,6 +74,17 @@ public class GameController extends GameSetter implements Initializable {
 
     }
 
+    public Pane getPane(){
+        return pane;
+    }
+
+    @Override
+    public void setStage(Stage stage) {
+        super.setStage(stage);
+        canvas.setHeight(stage.getHeight());
+        canvas.setWidth(stage.getWidth());
+    }
+
     void start(boolean isMultiplayer){
         final Executor executor = Executors.newFixedThreadPool(4);
 
@@ -88,11 +96,17 @@ public class GameController extends GameSetter implements Initializable {
                 e.printStackTrace();
             }
         }else {
-            startSingle();
+            startSigle();
         }
     }
 
-    private void startSingle(){
+    private double anteriorCurrentNanoTime = 0;
+
+    private double timingMeteor = 0;
+
+    private double dificulty = 1;
+
+    private void startSigle(){
         runningGame = true;
 
         meteorService = new MeteorService(scene.getWidth(),scene.getHeight(),graphicsContext);
@@ -151,7 +165,6 @@ public class GameController extends GameSetter implements Initializable {
     //NAVE VERDE: #3cd846
     //NAVE ROJA: #d83c3c
     //NAVE ROSA: #d43cd8
-
     private void startMultiplayer() throws SocketException {
         runningGame = true;
 
@@ -221,13 +234,14 @@ public class GameController extends GameSetter implements Initializable {
     }
 
     private void multiplayerSpectatorMode(NavesRecivedService navesRecivedService, DatagramSocket socket){
+        String message = "Dead:" + idSala;
         new AnimationTimer(){
 
             @Override
             public void handle(long l) {
                 try {
-                    packet = new DatagramPacket("Dead".getBytes(),
-                            "Dead".getBytes().length,
+                    packet = new DatagramPacket(message.getBytes(),
+                            message.getBytes().length,
                             ipServer,
                             portServer);
                     socket.send(packet);
@@ -365,14 +379,4 @@ public class GameController extends GameSetter implements Initializable {
             nave.setPosY(stage.getHeight() - nave.getImgNave().getImage().getHeight() - Resoluciones.AJUSTAR_PANTALLA_Y);
         }
     }
-
-    public Pane getPane(){
-        return pane;
-    }
-
-    @Override
-    public void setStage(Stage stage) {
-        super.setStage(stage);
-        canvas.setHeight(stage.getHeight());
-        canvas.setWidth(stage.getWidth());
-    }}
+}

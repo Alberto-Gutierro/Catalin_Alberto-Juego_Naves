@@ -1,17 +1,16 @@
 package game.controller;
 
-import javafx.scene.text.Font;
-import statVars.Strings;
 import game.SceneStageSetter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import statVars.Strings;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
 
 public class GameOverController extends SceneStageSetter {
@@ -34,6 +33,7 @@ public class GameOverController extends SceneStageSetter {
             e.printStackTrace();
         }
     }
+
 
     public void exitGame(ActionEvent actionEvent) {
         try {
@@ -63,7 +63,7 @@ public class GameOverController extends SceneStageSetter {
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
             GameController gameController = loader.getController();
-            //gameController.beforeStartGame(stage,scene, 1, gameController.getPane(), null);
+            gameController.beforeStartGame(stage,scene, 1, "",  gameController.getPane(), null);
             gameController.start(false);
 
             stage.setTitle(Strings.NOMBRE_JUEGO);

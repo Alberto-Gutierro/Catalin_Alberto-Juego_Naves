@@ -1,7 +1,6 @@
 package game.controller.pruebas;
 
 import game.SceneStageSetter;
-import game.controller.pruebas.GameController;
 import game.controller.MainMenuController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;

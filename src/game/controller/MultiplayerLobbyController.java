@@ -1,14 +1,14 @@
 package game.controller;
 
-import javafx.fxml.Initializable;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.text.Text;
 import game.SceneStageSetter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import transformmer.Transformer;
 
 import java.io.IOException;
@@ -17,12 +17,14 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class MultiplayerLobbyController extends SceneStageSetter implements Initializable {
+
+    boolean startedGame;
+    boolean toLobby;
 
     public ImageView img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4;
     public Text playerName1, playerName2, playerName3, playerName4;
@@ -33,24 +35,29 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     private DatagramPacket packet;
 
     private int idNave;
+    private String idSala;
 
-    Executor executor;
+
+    private Executor executor;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        startedGame = false;
+        toLobby = false;
         imagesNave = new ImageView[]{img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4};
         textsNave = new Text[]{playerName1, playerName2, playerName3, playerName4};
     }
 
     public void playGameServer(ActionEvent event) {
         try {
+            startedGame = true;
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/game.fxml"));
             Parent root = loader.load();
 
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
             GameController gameController = loader.getController();
-            //gameController.beforeStartGame(stage, scene, idNave, gameController.getPane(), packet);
+            gameController.beforeStartGame(stage, scene, idNave, idSala, gameController.getPane(), packet);
             gameController.start(true);
 
             stage.setScene(scene);
@@ -80,22 +87,39 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         }
     }
 
-    void setPacket(DatagramPacket packet) {
+    void setPacket(DatagramPacket packet, boolean owner) {
+        try {
+            if(owner){
+                idNave = 1;
+                idSala = Transformer.packetDataToString(packet);
+            }else {
+                idNave = Integer.parseInt(Transformer.packetDataToString(packet).split(":")[0]);
+                idSala = Transformer.packetDataToString(packet).split(":")[1];
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        //showNaves(packet);
+        this.packet = packet;
+
+        System.out.println("AAAAAAAAAAAAAAAAAA " + idSala);
         executor = Executors.newFixedThreadPool(4);
         executor.execute(() -> {
             String señalServer = "";
             DatagramSocket socket = null;
             DatagramPacket packetWait;
+            String message = null;
+            message = "Waiting:" + idSala;
             try {
                 socket = new DatagramSocket();
             } catch (SocketException e) {
                 e.printStackTrace();
             }
-// 192.168.254.77:5568
+
             do{
                 try {
-                    packetWait = new DatagramPacket("Waiting".getBytes(),
-                            "Waiting".getBytes().length,
+                    packetWait = new DatagramPacket(message.getBytes(),
+                            message.getBytes().length,
                             packet.getAddress(),
                             packet.getPort());
                     socket.send(packetWait);
@@ -118,16 +142,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }while (!señalServer.equals("Start"));
+            }while (!señalServer.equals("Start") && !startedGame && !toLobby);
         });
-
-        try {
-            idNave = Integer.parseInt(Transformer.packetDataToString(packet));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        showNaves(packet);
-        this.packet = packet;
     }
 
     private void showNaves(DatagramPacket packet) {
@@ -145,4 +161,10 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             e.printStackTrace();
         }
     }
+
+    private void exitSala(){
+        toLobby = true;
+        //DatagramPacket exitPacket = new DatagramPacket();
+    }
+
 }

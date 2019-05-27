@@ -1,9 +1,12 @@
 package server;
 
+import formatClasses.DataToRecive;
+import javafx.scene.transform.Transform;
+import server.model.ClientData;
+import server.model.Sala;
+import server.model.SalaToSend;
 import statVars.AjustesNave;
 import statVars.Packets;
-import server.model.ClientData;
-import formatClasses.DataToRecive;
 import transformmer.Transformer;
 
 import java.io.IOException;
@@ -12,25 +15,22 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ServerGame {
 
     private DatagramSocket socket;
 
-    private ArrayList<DataToRecive> naves;
+    private Map<String, Sala> salas;
 
-    private Map<InetAddress, ClientData> mapIdNaves;
-
-    private boolean[] navesVivas = {false, true, true, true, true};
-    private int[] vidasNaves = {-1, AjustesNave.START_LIFES, AjustesNave.START_LIFES, AjustesNave.START_LIFES, AjustesNave.START_LIFES};
+    private Map<String, SalaToSend> salasToSend;
 
     public void init(int port) throws SocketException {
         socket = new DatagramSocket(port);
-        naves = new ArrayList<>();
-        mapIdNaves = new HashMap<>();
+        salas = new HashMap<>();
+        salasToSend = new HashMap<>();
     }
 
     public void runServer() throws IOException {
@@ -68,25 +68,29 @@ public class ServerGame {
     }
 
     private byte[] processData(DatagramPacket packet) {
-
-        /**
-         * 1. Esperar a recibir todos los JSON
-         * 2. Montar el Json para recoger los datos
-         * 3. Comparar Todos los Json
-         * 4. Montar un Json Actualizado
-         * 5. devolver un byte[]
-         */
         try {
+            System.out.println(Transformer.packetDataToString(packet));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(Transformer.packetDataToString(packet).matches("^Room:.+$")){
+                return getIdOfNaveClient(packet).getBytes();
+            }else if(Transformer.packetDataToString(packet).matches("^Dead:.+$")){
+                return deadData(packet).getBytes();
+                //////////////POR AQUI: FALLA EN LOS MATCHES
+            }else if(Transformer.packetDataToString(packet).matches("^Waiting:.+$")){
+                return waitingData(packet);
+            }
+
             //POR AQUI: EL SERVIDOR RECIBE UN ARRAY Y NO UN OBJETO.
             switch (Transformer.packetDataToString(packet)) {
-                case "Connect":
-                    return getIdOfNaveClient(packet).getBytes();
-                case "Waiting":
-                    return waitingData();
+                case "Connect": case "Rooms":
+                    return getSalas().getBytes();
+                case "Create":
+                    return createSala(packet).getBytes();
                 case "Start":
                     return signalToStart(packet).getBytes();
-                case "Dead":
-                    return deadData(packet.getAddress()).getBytes();
                 default:
                     return updateJsonGame(packet).getBytes();
 
@@ -109,99 +113,147 @@ public class ServerGame {
 //        }
     }
 
-    private byte[] waitingData(){
-        System.out.println(naves.size());
-        return String.valueOf(mapIdNaves.size()).getBytes();
+    private String getSalas() {
+        System.out.println(Transformer.classToJson(salas));
+        return Transformer.classToJson(salasToSend);
+    }
+
+    private byte[] waitingData(DatagramPacket packet){
+
+        Sala sala = null;
+        try {
+            sala = salas.get(Transformer.packetDataToString(packet).split(":")[1]);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return String.valueOf(sala.getMapIdNaves().size()).getBytes();
     }
 
     private DataToRecive naveToRemove;
-    private String deadData(InetAddress ipClient){
-        if(navesVivas[mapIdNaves.get(ipClient).getIdNave()]) {
-            naves.forEach(nave -> {
-                if (nave.getIdNave() == mapIdNaves.get(ipClient).getIdNave()) {
-                    naveToRemove = nave;
-                }
-            });
-            naves.remove(naveToRemove);
+    private String deadData(DatagramPacket packet){
+        try {
+            final Sala sala = salas.get(Transformer.packetDataToString(packet).split(":")[1]);
+
+            if(sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()]) {
+                sala.getNaves().forEach(nave -> {
+                    if (nave.getIdNave() == sala.getMapIdNaves().get(packet.getAddress()).getIdNave()) {
+                        naveToRemove = nave;
+                    }
+                });
+                sala.getNaves().remove(naveToRemove);
+            }
+
+            return Transformer.classToJson(sala.getNaves());
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
 
-        return Transformer.classToJson(naves);
+
+        return "ERROR";
     }
 
 
     private String updateJsonGame(DatagramPacket packet) throws UnsupportedEncodingException {
         DataToRecive naveRecibida = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
-        if(!naves.contains(naveRecibida)) {
-            naves.add(naveRecibida);
+        Sala sala = salas.get(naveRecibida.getIdSala());
+
+
+        if(!sala.getNaves().contains(naveRecibida)) {
+            sala.getNaves().add(naveRecibida);
         }
 
         //naveRecibida.getNaveArmaBalas().forEach(balaToSend -> System.out.println(balaToSend.getAngle()));
 
         if(naveRecibida.getNavesTocadas() != null || naveRecibida.getNavesTocadas().size() == 0) {
-            naves.forEach(nave -> {
-                nave.setLives(vidasNaves[nave.getIdNave()]);
+            sala.getNaves().forEach(nave -> {
+                nave.setLives(sala.getVidasNaves()[nave.getIdNave()]);
                 naveRecibida.getNavesTocadas().forEach(naveTocada -> {
                     if (nave.getIdNave() == naveTocada) {
                         //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
-                        nave.setLives(--vidasNaves[naveTocada]);
+                        nave.setLives(--sala.getVidasNaves()[naveTocada]);
 
                         //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
-                        if(vidasNaves[naveRecibida.getIdNave()] < AjustesNave.MAX_LIFES) {
-                            vidasNaves[naveRecibida.getIdNave()]++;
+                        if(sala.getVidasNaves()[naveRecibida.getIdNave()] < AjustesNave.MAX_LIFES) {
+                            sala.getVidasNaves()[naveRecibida.getIdNave()]++;
                         }
                     }
                 });
             });
         }
 
-        naveRecibida.setLives(vidasNaves[naveRecibida.getIdNave()]);
-        naves.set(naves.indexOf(naveRecibida), naveRecibida);
+        naveRecibida.setLives(sala.getVidasNaves()[naveRecibida.getIdNave()]);
+        sala.getNaves().set(sala.getNaves().indexOf(naveRecibida), naveRecibida);
 
         //naves.forEach(nave-> System.out.println(nave.toString()));
-        return Transformer.classToJson(naves);
+        return Transformer.classToJson(sala.getNaves());
     }
 
     private String signalToStart(DatagramPacket packet) {
-        sendAll("Start", packet);
+        //sendAll("Start", packet);
         return "Starting";
     }
 
-
+    //ESTO SE HARÁ CUANDO se conecte a una sala y tiene que devolver una sala.
     private String getIdOfNaveClient(DatagramPacket packet){
         /**
          * 1. Asignar ID a la Nave.
          * (Num 1-4)
          *
          */
+        String numSala = "";
+        try {
+            //Estoy cogiendo el numero de la sala a la que se quiera conectar el usuario. Connect:numSala
+            numSala = String.valueOf(Transformer.packetDataToString(packet).split(":")[1]);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
-        if (!mapIdNaves.containsKey(packet.getAddress()) && mapIdNaves.size() < 4) {
-            mapIdNaves.put(packet.getAddress(),new ClientData(mapIdNaves.size()+1, packet.getPort()));
+        //SI NO CONTIENE LA IP DE EL CLIENTE && El límite de naves es inferior a 4
+        if (!salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress()) && salas.get(numSala).getMapIdNaves().size() < 4) {
+            salas.get(numSala).getMapIdNaves().put(packet.getAddress(),new ClientData(salas.get(numSala).getMapIdNaves().size()+1, packet.getPort()));
 
             //sendAll(String.valueOf(mapIdNaves.size()), packet);
-
-            return String.valueOf(mapIdNaves.size());
-        } else if (mapIdNaves.containsKey(packet.getAddress())) {
-            return String.valueOf(mapIdNaves.get(packet.getAddress()).getIdNave());
+            salasToSend.get(numSala).addNumPlayers();
+            return String.valueOf(salas.get(numSala).getMapIdNaves().size() + ":" + numSala);
+        } else if (salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress())) {
+            salasToSend.get(numSala).addNumPlayers();
+            return String.valueOf(salas.get(numSala).getMapIdNaves().get(packet.getAddress()).getIdNave() + ":" + numSala);
         } else return String.valueOf(0);
     }
 
+    private String createSala(DatagramPacket packet) {
+        Sala sala = new Sala(UUID.randomUUID().toString());
 
-    private void sendAll(String signal, DatagramPacket packet) {
-        mapIdNaves.forEach((ip,clientData)-> {
-            if(ip != packet.getAddress()) {
-                System.out.println("MANDA A " + ip.getHostAddress() + ":" + clientData.getPort());
+        sala.getMapIdNaves().put(packet.getAddress(),new ClientData(sala.getMapIdNaves().size()+1, packet.getPort()));
 
-                try {
-                    //¡¡¡NO FUNCIONA!!!
-                    new DatagramSocket().send(new DatagramPacket(signal.getBytes(), signal.getBytes().length, ip, clientData.getPort()));
-                    System.out.println("asdasd");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        salas.put(sala.getIdSala(), sala);
 
+        System.out.println("SALA CREADA" + sala.getIdSala());
+
+        salasToSend.put(sala.getIdSala(), new SalaToSend(sala.getIdSala()));
+
+        return String.valueOf(sala.getIdSala());
     }
+
+
+//    private void sendAll(String signal, DatagramPacket packet) {
+//        salas.get(numSala).getMapIdNaves().forEach((ip,clientData)-> {
+//            if(ip != packet.getAddress()) {
+//                System.out.println("MANDA A " + ip.getHostAddress() + ":" + clientData.getPort());
+//
+//                try {
+//                    //¡¡¡NO FUNCIONA!!!
+//                    new DatagramSocket().send(new DatagramPacket(signal.getBytes(), signal.getBytes().length, ip, clientData.getPort()));
+//                    System.out.println("asdasd");
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//    }
 
 
 

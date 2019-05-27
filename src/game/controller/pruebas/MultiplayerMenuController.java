@@ -2,7 +2,6 @@ package game.controller.pruebas;
 
 import game.SceneStageSetter;
 import game.controller.MainMenuController;
-import game.controller.pruebas.MultiplayerSalasController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
