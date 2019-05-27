@@ -68,11 +68,11 @@ public class Arma {
             if(balasDisponibles == MAX_BALAS){
                 reloadTimer.setTime(0);
             }
-            Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundBala).play());
+            //Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundBala).play());
             balasDisponibles--;
             balas.add(new Bala(graphicsContext, x, y, cc, co, angle, addIdToBala()));
         }else {
-            Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundOutOfAmmo).play());
+            //Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundOutOfAmmo).play());
         }
     }
 
