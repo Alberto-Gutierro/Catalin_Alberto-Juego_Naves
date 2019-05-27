@@ -69,11 +69,6 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
             DatagramSocket socket = null;
             DatagramPacket packetWait;
             byte[] messageLength = new byte[Packets.PACKET_LENGHT];
-            try {
-                System.out.println(Transformer.packetDataToString(p));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
 
             Platform.runLater(()->showSalas(p));
 
@@ -114,8 +109,6 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
 
         try {
             salas = Transformer.jsonToMapSalas(Transformer.packetDataToString(packetWait));
-            System.out.println(Transformer.packetDataToString(packetWait));
-            //////////////////ESTO SE TIENE QUE METER EN UN OBSERVABLE QUE CUANDO SE MODIFIQUE LA VARIABLE SALAS HAGA ESO:
 
             paneSalas.getChildren().clear();
             int i = 0;
@@ -142,10 +135,8 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
 
     private void enterRoom(ActionEvent actionEvent){
         entraSala = true;
-        System.out.println(((Button)actionEvent.getSource()).getId());
         DatagramSocket socket = null;
         DatagramPacket packetEnter;
-        System.out.println(("Room:" + ((Button)actionEvent.getSource()).getId()));
         try {
             socket = new DatagramSocket();
 

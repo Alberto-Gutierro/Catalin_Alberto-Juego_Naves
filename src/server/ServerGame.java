@@ -69,11 +69,6 @@ public class ServerGame {
 
     private byte[] processData(DatagramPacket packet) {
         try {
-            System.out.println(Transformer.packetDataToString(packet));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        try {
             if(Transformer.packetDataToString(packet).matches("^Room:.+$")){
                 return getIdOfNaveClient(packet).getBytes();
             }else if(Transformer.packetDataToString(packet).matches("^Dead:.+$")){
@@ -114,7 +109,6 @@ public class ServerGame {
     }
 
     private String getSalas() {
-        System.out.println(Transformer.classToJson(salas));
         return Transformer.classToJson(salasToSend);
     }
 
@@ -230,7 +224,6 @@ public class ServerGame {
 
         salas.put(sala.getIdSala(), sala);
 
-        System.out.println("SALA CREADA" + sala.getIdSala());
 
         salasToSend.put(sala.getIdSala(), new SalaToSend(sala.getIdSala()));
 

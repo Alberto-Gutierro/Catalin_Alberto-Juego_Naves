@@ -35,7 +35,6 @@ public class MeteorService {
             case SOUTH: posY = screenHeight + Resoluciones.LINEA_DESTRUCCION; break;
             default: posX = 0 - Resoluciones.LINEA_DESTRUCCION;
         }
-        System.out.println(speed);
         meteoritos.add(new Meteorito(posX, posY, xNave, yNave, speed, graphicsContext));
     }
 

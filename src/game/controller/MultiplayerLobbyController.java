@@ -102,7 +102,6 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         //showNaves(packet);
         this.packet = packet;
 
-        System.out.println("AAAAAAAAAAAAAAAAAA " + idSala);
         executor = Executors.newFixedThreadPool(4);
         executor.execute(() -> {
             String señalServer = "";
@@ -123,7 +122,6 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                             packet.getAddress(),
                             packet.getPort());
                     socket.send(packetWait);
-                    System.out.println("SENDED");
 
                     socket.receive(packetWait);
                     try {
@@ -131,7 +129,6 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("RECIVED");
 
                     señalServer = Transformer.packetDataToString(packetWait);
 
