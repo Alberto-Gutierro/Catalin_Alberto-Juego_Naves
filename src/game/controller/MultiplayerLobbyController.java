@@ -54,6 +54,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/game.fxml"));
             Parent root = loader.load();
 
+            stage.setMaximized(true);
+
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
             GameController gameController = loader.getController();

@@ -20,18 +20,6 @@ public class GameOverController extends SceneStageSetter {
 
     void setScore(String string){
         tv_score.setText("Score " + string);
-
-        try {
-
-            tv_gameOver.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 80));
-
-            tv_score.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
     }
 
 

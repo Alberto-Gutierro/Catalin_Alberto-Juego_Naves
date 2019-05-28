@@ -2,13 +2,17 @@ package game.controller;
 
 import game.GameSetter;
 import game.model.Bala;
+import game.model.CollisionRectangle;
 import game.model.toSend.DataToSend;
 import game.services.MeteorService;
 import game.services.NavesRecivedService;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -44,27 +48,20 @@ public class GameController extends GameSetter implements Initializable {
     @FXML Text score_p1, score_p2, score_p3, score_p4, tv_ammo, tv_lives;
     @FXML AnchorPane gameOverScreen;
 
+    private CollisionRectangle areaObject1;
+    private CollisionRectangle areaObject2;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            //EXTERNAL FORM: file:/C:/Users/cata6/IdeaProjects/M03ProgramacioOrientadaAObjectes/M03-M09-Catalin_Alberto-Juego_Naves/out/production/M03%20-%20Juego%20Naves/game/res/fonts/arcadeClassic.TTF
-            //TO URI:        file:/C:/Users/cata6/IdeaProjects/M03ProgramacioOrientadaAObjectes/M03-M09-Catalin_Alberto-Juego_Naves/out/production/M03%20-%20Juego%20Naves/game/res/fonts/arcadeClassic.TTF
-            score_p1.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
-            score_p2.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
-            score_p3.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
-            score_p4.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 40));
+        areaObject1 = new CollisionRectangle();
+        areaObject2 = new CollisionRectangle();
 
-            tv_ammo.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 28));
-            tv_ammo.setTextAlignment(TextAlignment.RIGHT);
-            tv_lives.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 28));
+        //EXTERNAL FORM: file:/C:/Users/cata6/IdeaProjects/M03ProgramacioOrientadaAObjectes/M03-M09-Catalin_Alberto-Juego_Naves/out/production/M03%20-%20Juego%20Naves/game/res/fonts/arcadeClassic.TTF
+        //TO URI:        file:/C:/Users/cata6/IdeaProjects/M03ProgramacioOrientadaAObjectes/M03-M09-Catalin_Alberto-Juego_Naves/out/production/M03%20-%20Juego%20Naves/game/res/fonts/arcadeClassic.TTF
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        tv_ammo.setTextAlignment(TextAlignment.RIGHT);
+
         graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.scale(1,1);
 
@@ -89,9 +86,11 @@ public class GameController extends GameSetter implements Initializable {
         final Executor executor = Executors.newFixedThreadPool(4);
 
         this.isMultiplayer = isMultiplayer;
+
         if(isMultiplayer){
             try {
                 startMultiplayer();
+
             } catch (SocketException e) {
                 e.printStackTrace();
             }
@@ -205,11 +204,31 @@ public class GameController extends GameSetter implements Initializable {
                     nave.setLifes(navesRecivedService.getMyLives());
                 }
                 catch (SocketTimeoutException e){
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("ERROR");
-                    alert.setHeaderText("Connection Time Out");
-                    alert.setContentText("");
-                    alert.showAndWait();
+                    this.stop();
+
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerMenu.fxml"));
+                        Parent root = loader.load();
+
+                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
+
+                        MultiplayerMenuController multiplayerMenuController = loader.getController();
+                        multiplayerMenuController.setScene(scene);
+                        multiplayerMenuController.setStage(stage);
+
+                        stage.setScene(scene);
+                        stage.show();
+
+                    } catch (IOException ex){
+                        ex.printStackTrace();
+                    }
+                    Platform.runLater(()->{
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("ERROR");
+                        alert.setHeaderText("Connection Time Out");
+                        alert.setContentText("");
+                        alert.showAndWait();
+                    });
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -283,20 +302,23 @@ public class GameController extends GameSetter implements Initializable {
                 meteor.remove();
             }
 
-            Rectangle meteorArea = new Rectangle(
+            areaObject1.setCollisions(
                     (int) meteor.getPosX(),
                     (int) meteor.getPosY(),
                     (int) meteor.getImgMeteoritoRotada().getWidth(),
                     (int) meteor.getImgMeteoritoRotada().getHeight()
             );
-            Rectangle otherObject;
+
+
             for (Bala bala:nave.getArma().getBalas()) {
-                otherObject = new Rectangle(
+                areaObject2.setCollisions(
                         (int)bala.getPosX(),
                         (int)bala.getPosY(),
                         (int)bala.getImagenRotada().getWidth(),
-                        (int)bala.getImagenRotada().getHeight());
-                if(meteorArea.intersects(otherObject)){
+                        (int)bala.getImagenRotada().getHeight()
+                );
+
+                if(areaObject1.intersects(areaObject2)){
                     bala.remove();
                     meteor.remove();
                     score_p1.setText(String.valueOf(Integer.parseInt(score_p1.getText()) + 50));
@@ -306,11 +328,14 @@ public class GameController extends GameSetter implements Initializable {
                     dificulty += 0.5;
                 }
             }
-            if(meteorArea.intersects(new Rectangle(
+            areaObject2.setCollisions(
                     (int)nave.getPosX(),
                     (int)nave.getPosY(),
                     (int)nave.getImagenRotada().getWidth(),
-                    (int)nave.getImagenRotada().getHeight()))){
+                    (int)nave.getImagenRotada().getHeight()
+            );
+
+            if(areaObject1.intersects(areaObject2)){
                 meteor.remove();
                 nave.subsLive();
                 if(nave.getLifes() == 0){
@@ -342,18 +367,21 @@ public class GameController extends GameSetter implements Initializable {
 
             navesRecivedService.getNavesRecived().forEach(naveRecivedService -> {
                 if (naveRecivedService.getIdNave() != nave.getId()) {
-                    Rectangle naveArea = new Rectangle(
+                    areaObject1.setCollisions(
                             (int) naveRecivedService.getNavePosX(),
                             (int) naveRecivedService.getNavePosY(),
                             (int) imagenRotadaOtrasNaves.get(naveRecivedService.getIdNave()).getWidth(),
-                            (int) imagenRotadaOtrasNaves.get(naveRecivedService.getIdNave()).getHeight());
+                            (int) imagenRotadaOtrasNaves.get(naveRecivedService.getIdNave()).getHeight()
+                    );
 
                     nave.getArma().getBalas().forEach(bala -> {
-                        if (naveArea.intersects(new Rectangle(
+                        areaObject2.setCollisions(
                                 (int) bala.getPosX(),
                                 (int) bala.getPosY(),
                                 (int) bala.getImagenRotada().getWidth(),
-                                (int) bala.getImagenRotada().getHeight()))) {
+                                (int) bala.getImagenRotada().getHeight()
+                        );
+                        if (areaObject1.intersects(areaObject2)) {
                             bala.remove();
 
                             nave.addScore(50);
