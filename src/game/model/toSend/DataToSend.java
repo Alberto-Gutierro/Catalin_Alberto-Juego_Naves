@@ -21,7 +21,7 @@ public class DataToSend {
     //posiciones cursor
     private double naveCursorPosX;
     private double naveCursorPosY;
-
+    // .
     //angulo (nave y bala)
     private double angle;
 
