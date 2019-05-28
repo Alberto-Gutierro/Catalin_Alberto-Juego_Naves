@@ -11,13 +11,13 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.GameOverController">
    <children>
-      <Rectangle arcHeight="100.0" arcWidth="100.0" fill="#979797" height="400.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" width="600.0" />
+      <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#807f7f" height="400.0" stroke="BLACK" strokeMiterLimit="15.0" strokeType="INSIDE" strokeWidth="2.0" width="600.0" />
       <Text fx:id="tv_gameOver" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Over" textAlignment="CENTER" wrappingWidth="600.0">
          <font>
             <Font name="Franklin Gothic Demi Cond" size="72.0" />
          </font>
          <fill>
-            <RadialGradient centerX="0.5111111111111111" centerY="0.9285714285714286" radius="0.5">
+            <RadialGradient centerX="0.5111111111111111" centerY="0.8714285714285714" radius="0.5">
                <stops>
                   <Stop color="RED" />
                   <Stop color="BLACK" offset="1.0" />
@@ -30,12 +30,12 @@
                <Font size="36.0" />
            </font>
        </Text>
-      <Button layoutX="347.0" layoutY="260.0" mnemonicParsing="false" onAction="#exitGame" prefHeight="100.0" prefWidth="200.0" text="Exit">
+      <Button blendMode="MULTIPLY" layoutX="347.0" layoutY="260.0" mnemonicParsing="false" onAction="#exitGame" prefHeight="100.0" prefWidth="200.0" text="Exit">
          <font>
             <Font name="Arial" size="36.0" />
          </font>
       </Button>
-      <Button layoutX="53.0" layoutY="260.0" mnemonicParsing="false" onAction="#restartGame" prefHeight="100.0" prefWidth="200.0" text="Restart">
+      <Button blendMode="MULTIPLY" layoutX="53.0" layoutY="260.0" mnemonicParsing="false" onAction="#restartGame" prefHeight="100.0" prefWidth="200.0" text="Restart">
          <font>
             <Font name="Arial" size="36.0" />
          </font>

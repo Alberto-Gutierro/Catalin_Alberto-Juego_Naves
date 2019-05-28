@@ -12,18 +12,64 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.MultiplayerSalasController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.controller.MultiplayerSalasController">
     <children>
-        <ImageView fitHeight="1000.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="1080.0" fitWidth="1920.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true" scaleY="1.35">
             <image>
-                <Image url="@../res/img/fondo_menu.jpg" />
+                <Image url="@../res/img/img_fondo_espacio.png" />
             </image>
             <cursor>
                 <Cursor fx:constant="TEXT" />
             </cursor>
         </ImageView>
-        <Pane layoutX="300.0" layoutY="300.0">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="432.0" layoutY="769.0" pickOnBounds="true" preserveRatio="true" rotate="26.6">
+         <image>
+            <Image url="@../res/img/naves/navePlayer_1_x64.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="663.0" layoutY="476.0" pickOnBounds="true" preserveRatio="true" rotate="26.0" scaleX="0.5" scaleY="0.5">
+         <image>
+            <Image url="@../res/img/bala.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1462.0" layoutY="616.0" pickOnBounds="true" preserveRatio="true" rotate="-104.9">
+         <image>
+            <Image url="@../res/img/naves/navePlayer_3_x64.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="100.0" fitWidth="75.0" layoutX="939.0" layoutY="740.0" pickOnBounds="true" preserveRatio="true" rotate="-105.0" scaleX="0.5" scaleY="0.5">
+         <image>
+            <Image url="@../res/img/bala.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="100.0" layoutX="15.0" layoutY="580.0" pickOnBounds="true" preserveRatio="true" rotate="138.0">
+         <image>
+            <Image url="@../res/img/img_meteorito.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="125.0" layoutX="287.0" layoutY="158.0" pickOnBounds="true" preserveRatio="true" rotate="63.4">
+         <image>
+            <Image url="@../res/img/img_meteorito.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="100.0" layoutX="853.0" layoutY="-18.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../res/img/img_meteorito.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="75.0" fitWidth="100.0" layoutX="1381.0" layoutY="143.0" pickOnBounds="true" preserveRatio="true" rotate="56.3">
+         <image>
+            <Image url="@../res/img/img_meteorito.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="50.0" layoutX="1243.0" layoutY="993.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../res/img/img_meteorito.png" />
+         </image>
+      </ImageView>
+        <Pane layoutX="770.0" layoutY="325.0">
             <children>
                 <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#999999af" height="400.0" stroke="BLACK" strokeType="INSIDE" width="400.0" />
                 <GridPane layoutX="39.0" layoutY="32.0" prefHeight="336.0" prefWidth="323.0">
@@ -38,7 +84,7 @@
                     <children>
                         <ImageView fitHeight="70.0" fitWidth="216.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../res/img/img_titulo_apolo_x.png" />
+                                <Image url="@../res/img/apoloX.png" />
                             </image>
                             <GridPane.margin>
                                 <Insets left="52.0" />
@@ -50,7 +96,13 @@
                      <content>
                         <Pane fx:id="paneSalas" />
                      </content></ScrollPane>
-                  <Button mnemonicParsing="false" onAction="#createRoom" text="Create Room" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                  <Button blendMode="MULTIPLY" mnemonicParsing="false" onAction="#createRoom" text="Create Room" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Rockwell" size="18.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets top="12.0" />
+                     </GridPane.margin></Button>
                     </children>
                 </GridPane>
             </children>

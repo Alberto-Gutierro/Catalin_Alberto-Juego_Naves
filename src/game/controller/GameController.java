@@ -355,9 +355,7 @@ public class GameController extends GameSetter implements Initializable {
                                 (int) bala.getImagenRotada().getWidth(),
                                 (int) bala.getImagenRotada().getHeight()))) {
                             bala.remove();
-                            //HACER QUE SE GUARDE EL ID DE LA NAVE QUE HA SIDO TOCADA EN LOS DATOS QUE VAMOS A MANDAR AL SERVIDOR.
 
-                            // Añadimos la las id de las naves que han sido tocadas por tus balas
                             nave.addScore(50);
                             dataToSend.addIdNaveTocada(naveRecivedService.getIdNave());
                         }
@@ -366,7 +364,9 @@ public class GameController extends GameSetter implements Initializable {
             });
         }
     }
+//HACER QUE SE GUARDE EL ID DE LA NAVE QUE HA SIDO TOCADA EN LOS DATOS QUE VAMOS A MANDAR AL SERVIDOR.
 
+    // Añadimos la las id de las naves que han sido tocadas por tus balas
     private void checkNaveInScreen() {
         if(nave.getPosX() < 0){
             nave.setPosX(0);
