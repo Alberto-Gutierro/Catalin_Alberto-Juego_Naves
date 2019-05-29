@@ -8,19 +8,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import server.model.SalaToSend;
+import statVars.MensajesServer;
 import statVars.Packets;
 import transformmer.Transformer;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.net.URL;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -29,23 +28,27 @@ import java.util.concurrent.Executors;
 
 public class MultiplayerSalasController extends SceneStageSetter implements Initializable {
 
-    Map<String, SalaToSend> salas;
+    private Map<String, SalaToSend> salas;
 
-    boolean entraSala;
+    private boolean entraSala;
+
+    private boolean saleSala;
+
 
     @FXML  private ScrollPane scrollPaneSalas;
 
     private DatagramPacket packet;
 
-    //HBox salasScrollBox;
-
-    @FXML Pane paneSalas;
+    @FXML private Pane paneSalas;
 
     private Executor executor;
+
+    private Alert alert;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         entraSala = false;
+        saleSala = false;
 
         salas = new HashMap<>();
 
@@ -70,8 +73,6 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
             DatagramPacket packetWait;
             byte[] messageLength = new byte[Packets.PACKET_LENGHT];
 
-            Platform.runLater(()->showSalas(p));
-
             try {
                 socket = new DatagramSocket();
             } catch (SocketException e) {
@@ -85,6 +86,8 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
                             packet.getPort());
                     socket.send(packetWait);
 
+                    socket.setSoTimeout(1000);
+
                     packetWait = new DatagramPacket(messageLength, Packets.PACKET_LENGHT);
                     socket.receive(packetWait);
                     try {
@@ -95,8 +98,32 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
 
                     final DatagramPacket packetToSend = packetWait;
                     Platform.runLater(() -> showSalas(packetToSend));
-                }while (!entraSala);
+                }while (!entraSala && !saleSala);
 
+            } catch (SocketTimeoutException e) {
+                Platform.runLater(()->{
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerMenu.fxml"));
+                        Parent root = loader.load();
+
+                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
+
+                        MultiplayerMenuController multiplayerMenuController = loader.getController();
+                        multiplayerMenuController.setScene(scene);
+                        multiplayerMenuController.setStage(stage);
+
+                        stage.setScene(scene);
+                        stage.show();
+
+                    } catch (IOException ex){
+                        ex.printStackTrace();
+                    }
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("ERROR");
+                    alert.setHeaderText("Connection Time Out");
+                    alert.showAndWait();
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -119,9 +146,7 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
                 button.setLayoutX(0);
                 button.setLayoutY(50*i);
                 button.setId(sala.getIdSala());
-                button.setOnAction(event -> {
-                    enterRoom(event);
-                });
+                button.setOnAction(this::enterRoom);
                 button.setText("Sala " + (i+1));
 
                 paneSalas.getChildren().add(button);
@@ -135,6 +160,7 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
 
     private void enterRoom(ActionEvent actionEvent){
         entraSala = true;
+
         DatagramSocket socket = null;
         DatagramPacket packetEnter;
         try {
@@ -150,18 +176,38 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
 
             socket.receive(packetEnter);
 
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
-            Parent root = loader.load();
+            if(Transformer.packetDataToString(packetEnter).equals(MensajesServer.SALA_LLENA)){
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("Sala llena");
+                alert.setContentText("No caben más jugadores en la sala");
+                alert.showAndWait();
+            }else if(Transformer.packetDataToString(packetEnter).equals(MensajesServer.YA_DENTRO)){
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("Ya dentro");
+                alert.setContentText("Solo puedes entrar una vez en una sala");
+                alert.showAndWait();
+            }else if(Transformer.packetDataToString(packetEnter).equals(MensajesServer.SALA_NO_EXISTE)){
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("Sala no existe");
+                alert.setContentText("La sala en la que intentas entrar ya no existe");
+                alert.showAndWait();
+            }else{
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
+                Parent root = loader.load();
 
-            scene = new Scene(root, stage.getWidth(), stage.getHeight());
+                scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
-            MultiplayerLobbyController multiplayerLobbyController = loader.getController();
-            multiplayerLobbyController.setScene(scene);
-            multiplayerLobbyController.setStage(stage);
-            multiplayerLobbyController.setPacket(packetEnter, false);
+                MultiplayerLobbyController multiplayerLobbyController = loader.getController();
+                multiplayerLobbyController.setScene(scene);
+                multiplayerLobbyController.setStage(stage);
+                multiplayerLobbyController.setPacket(packetEnter, false);
 
-            stage.setScene(scene);
-            stage.show();
+                stage.setScene(scene);
+                stage.show();
+            }
         } catch (SocketException e) {
             e.printStackTrace();
         }catch (IOException e) {
@@ -207,4 +253,25 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
 
 
     }
+
+    public void exitMultiplayerSalas(ActionEvent actionEvent) {
+        saleSala = true;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/mainMenu.fxml"));
+            Parent root = loader.load();
+
+            scene = new Scene(root, stage.getWidth(), stage.getHeight());
+
+            MainMenuController mainMenuController = loader.getController();
+            mainMenuController.setScene(scene);
+            mainMenuController.setStage(stage);
+
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -27,17 +27,17 @@
       </Text>
        <Text fx:id="tv_score" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score: 00000" textAlignment="CENTER" wrappingWidth="600.0">
            <font>
-               <Font size="36.0" />
+               <Font name="Rockwell" size="36.0" />
            </font>
        </Text>
-      <Button blendMode="MULTIPLY" layoutX="347.0" layoutY="260.0" mnemonicParsing="false" onAction="#exitGame" prefHeight="100.0" prefWidth="200.0" text="Exit">
+      <Button blendMode="MULTIPLY" layoutX="347.0" layoutY="260.0" mnemonicParsing="false" onAction="#exitGame" prefHeight="100.0" prefWidth="200.0" text="EXIT">
          <font>
-            <Font name="Arial" size="36.0" />
+            <Font name="Rockwell" size="36.0" />
          </font>
       </Button>
-      <Button blendMode="MULTIPLY" layoutX="53.0" layoutY="260.0" mnemonicParsing="false" onAction="#restartGame" prefHeight="100.0" prefWidth="200.0" text="Restart">
+      <Button blendMode="MULTIPLY" layoutX="53.0" layoutY="260.0" mnemonicParsing="false" onAction="#restartGame" prefHeight="100.0" prefWidth="200.0" text="RESTART">
          <font>
-            <Font name="Arial" size="36.0" />
+            <Font name="Rockwell" size="36.0" />
          </font>
       </Button>
    </children>

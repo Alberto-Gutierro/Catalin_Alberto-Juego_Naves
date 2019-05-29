@@ -186,6 +186,7 @@ public class GameController extends GameSetter implements Initializable {
                 //dataToSend.getNaveArmaBalas().forEach(balaToSend -> System.out.println(balaToSend.getAngle()));
 
                 String sendData = Transformer.classToJson(dataToSend);
+                System.out.println(sendData.length());
                 packet = new DatagramPacket(sendData.getBytes(),
                         sendData.getBytes().length,
                         ipServer,
@@ -226,7 +227,6 @@ public class GameController extends GameSetter implements Initializable {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("ERROR");
                         alert.setHeaderText("Connection Time Out");
-                        alert.setContentText("");
                         alert.showAndWait();
                     });
                 }
@@ -278,7 +278,8 @@ public class GameController extends GameSetter implements Initializable {
                 navesRecivedService.renderNavesRecibidas();
 
             }
-        }.start();}
+        }.start();
+    }
 
     private void checkCollisions() {
         checkNaveInScreen();

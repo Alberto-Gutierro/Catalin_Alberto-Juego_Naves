@@ -35,7 +35,7 @@ public abstract class Transformer {
         return new Gson().fromJson(json, new TypeToken<Map<String, SalaToSend>>(){}.getType());
     }
 
-    public static Sala jsonToSala(String json){
-        return new Gson().fromJson(json, Sala.class);
+    public static boolean[] jsonToBooleanArray(String json){
+        return new Gson().fromJson(json, boolean[].class);
     }
 }

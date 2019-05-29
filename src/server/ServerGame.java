@@ -6,6 +6,7 @@ import server.model.ClientData;
 import server.model.Sala;
 import server.model.SalaToSend;
 import statVars.AjustesNave;
+import statVars.MensajesServer;
 import statVars.Packets;
 import transformmer.Transformer;
 
@@ -73,12 +74,12 @@ public class ServerGame {
                 return getIdOfNaveClient(packet).getBytes();
             }else if(Transformer.packetDataToString(packet).matches("^Dead:.+$")){
                 return deadData(packet).getBytes();
-                //////////////POR AQUI: FALLA EN LOS MATCHES
             }else if(Transformer.packetDataToString(packet).matches("^Waiting:.+$")){
                 return waitingData(packet);
+            }else if(Transformer.packetDataToString(packet).matches("^Exit:.+$")){
+                return exitingData(packet);
             }
 
-            //POR AQUI: EL SERVIDOR RECIBE UN ARRAY Y NO UN OBJETO.
             switch (Transformer.packetDataToString(packet)) {
                 case "Connect": case "Rooms":
                     return getSalas().getBytes();
@@ -108,6 +109,26 @@ public class ServerGame {
 //        }
     }
 
+    private byte[] exitingData(DatagramPacket packet) {
+        try {
+            Sala sala = salas.get(Transformer.packetDataToString(packet).split(":")[1]);
+
+            sala.subsAConnectedPerson(sala.getMapIdNaves().get(packet.getAddress()).getIdNave());
+
+            sala.getMapIdNaves().remove(packet.getAddress());
+
+
+            if(sala.getMapIdNaves().size() == 0) {
+                salasToSend.remove(Transformer.packetDataToString(packet).split(":")[1]);
+                salas.remove(Transformer.packetDataToString(packet).split(":")[1]);
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "ExitSuccessful".getBytes();
+    }
+
     private String getSalas() {
         return Transformer.classToJson(salasToSend);
     }
@@ -121,7 +142,7 @@ public class ServerGame {
             e.printStackTrace();
         }
 
-        return String.valueOf(sala.getMapIdNaves().size()).getBytes();
+        return Transformer.classToJson(sala.getConnectedPersons()).getBytes();
     }
 
     private DataToRecive naveToRemove;
@@ -203,18 +224,31 @@ public class ServerGame {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        if(salas.containsKey(numSala)) {
+            //SI NO CONTIENE LA IP DE EL CLIENTE && El límite de naves es inferior a 4
+            if (!salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress()) && salas.get(numSala).getMapIdNaves().size() < 4) {
+                salas.get(numSala).getMapIdNaves().put(packet.getAddress(), new ClientData(salas.get(numSala).getMapIdNaves().size() + 1, packet.getPort()));
 
-        //SI NO CONTIENE LA IP DE EL CLIENTE && El límite de naves es inferior a 4
-        if (!salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress()) && salas.get(numSala).getMapIdNaves().size() < 4) {
-            salas.get(numSala).getMapIdNaves().put(packet.getAddress(),new ClientData(salas.get(numSala).getMapIdNaves().size()+1, packet.getPort()));
+                salasToSend.get(numSala).addNumPlayers();
 
-            //sendAll(String.valueOf(mapIdNaves.size()), packet);
-            salasToSend.get(numSala).addNumPlayers();
-            return String.valueOf(salas.get(numSala).getMapIdNaves().size() + ":" + numSala);
-        } else if (salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress())) {
-            salasToSend.get(numSala).addNumPlayers();
-            return String.valueOf(salas.get(numSala).getMapIdNaves().get(packet.getAddress()).getIdNave() + ":" + numSala);
-        } else return String.valueOf(0);
+                int id;
+                for (id = 1; id <= 4; id++) {
+                    if (!salas.get(numSala).getConnectedPersons()[id]) {
+                        salas.get(numSala).addAConnectedPerson(id);
+                    }
+                }
+
+                return String.valueOf(id + ":" + numSala);
+
+                //CAMBIAR: Este else if dejará de existir ya que cuando te salgas de la sala se borrarán todos los datos.
+            } else if(salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress())){
+                return MensajesServer.YA_DENTRO;
+            } else {
+                return MensajesServer.SALA_LLENA;
+            }
+        }else {
+            return MensajesServer.SALA_NO_EXISTE;
+        }
     }
 
     private String createSala(DatagramPacket packet) {
@@ -224,8 +258,9 @@ public class ServerGame {
 
         salas.put(sala.getIdSala(), sala);
 
-
         salasToSend.put(sala.getIdSala(), new SalaToSend(sala.getIdSala()));
+
+        sala.addAConnectedPerson(sala.getMapIdNaves().get(packet.getAddress()).getIdNave());
 
         return String.valueOf(sala.getIdSala());
     }

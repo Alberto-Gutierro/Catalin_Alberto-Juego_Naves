@@ -15,12 +15,14 @@ public class Sala {
 
     private Map<InetAddress, ClientData> mapIdNaves;
 
-    private boolean[] navesVivas = {false, true, true, true, true};
+    private boolean[] navesVivas;
     private int[] vidasNaves = {-1, AjustesNave.START_LIFES, AjustesNave.START_LIFES, AjustesNave.START_LIFES, AjustesNave.START_LIFES};
 
-    private int connectedPersons;
+    private boolean[] connectedPersons;
 
     public Sala(String id) {
+        connectedPersons = new boolean[]{false, false, false, false, false};
+        navesVivas = new boolean[]{false, true, true, true, true};
         idSala = id;
         naves = new ArrayList<>();
         mapIdNaves = new HashMap<>();
@@ -51,10 +53,14 @@ public class Sala {
         return ((Sala)obj).getIdSala().equals(idSala);
     }
 
-    public void addAConnectedPerson(){
-
+    public boolean[] getConnectedPersons() {
+        return connectedPersons;
     }
-    public void subsAConnectedPerson(){
 
+    public void addAConnectedPerson(int pos){
+        connectedPersons[pos] = true;
+    }
+    public void subsAConnectedPerson(int pos){
+        connectedPersons[pos] = false;
     }
 }

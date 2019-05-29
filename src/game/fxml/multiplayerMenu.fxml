@@ -111,14 +111,14 @@
                         <Insets left="6.0" />
                      </GridPane.margin>
                   </Text>
-                  <Button fx:id="bt_back" blendMode="COLOR_BURN" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="50.0" prefWidth="102.0" text="Back" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <Button fx:id="bt_back" blendMode="COLOR_BURN" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="50.0" prefWidth="102.0" text="BACK" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets left="35.0" />
                      </GridPane.margin>
                      <font>
                         <Font name="Rockwell" size="21.0" />
                      </font></Button>
-                  <Button fx:id="bt_connect" blendMode="COLOR_BURN" mnemonicParsing="false" onAction="#connectToServer" prefHeight="50.0" prefWidth="102.0" text="Conect" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                  <Button fx:id="bt_connect" blendMode="COLOR_BURN" mnemonicParsing="false" onAction="#connectToServer" prefHeight="50.0" text="CONNECT" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>

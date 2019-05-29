@@ -1,5 +1,7 @@
 package game.controller;
 
+import javafx.fxml.Initializable;
+import javafx.scene.layout.Pane;
 import statVars.Strings;
 import game.SceneStageSetter;
 import javafx.application.Platform;
@@ -9,8 +11,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainMenuController extends SceneStageSetter {
+public class MainMenuController extends SceneStageSetter{
+
     @FXML public void playGame() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/game.fxml"));
@@ -52,5 +57,7 @@ public class MainMenuController extends SceneStageSetter {
 
     @FXML public void closeGame() {
         Platform.exit();
+        System.exit(0);
     }
+
 }

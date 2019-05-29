@@ -34,7 +34,6 @@ public class GameOverController extends SceneStageSetter {
             mainMenuController.setScene(scene);
             mainMenuController.setStage(stage);
 
-            stage.setTitle(Strings.NOMBRE_JUEGO);
             stage.setScene(scene);
             stage.show();
         }
@@ -54,7 +53,6 @@ public class GameOverController extends SceneStageSetter {
             gameController.beforeStartGame(stage,scene, 1, "",  gameController.getPane(), null);
             gameController.start(false);
 
-            stage.setTitle(Strings.NOMBRE_JUEGO);
             stage.setScene(scene);
             //stage.setMaximized(true);
             stage.show();

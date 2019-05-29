@@ -114,7 +114,7 @@
                   <Image url="@../res/img/apoloX.png" />
                </image>
             </ImageView>
-            <Button fx:id="tv_loobytomain" blendMode="MULTIPLY" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="51.0" prefWidth="92.0" text="EXIT">
+            <Button fx:id="tv_loobytomain" blendMode="MULTIPLY" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#exitSala" prefHeight="51.0" prefWidth="92.0" text="EXIT">
                <font>
                   <Font name="Rockwell" size="25.0" />
                </font></Button>
