@@ -1,6 +1,10 @@
 package server;
 
 import formatClasses.DataToRecive;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import server.model.ClientData;
 import server.model.Sala;
@@ -12,15 +16,17 @@ import transformmer.Transformer;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
+import java.net.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
-public class ServerGame {
+public class ServerGameController {
+
+    @FXML private Text ipServer;
 
     private DatagramSocket socket;
 
@@ -28,42 +34,84 @@ public class ServerGame {
 
     private Map<String, SalaToSend> salasToSend;
 
+    private boolean serverOn;
+
+    private ThreadPoolExecutor server;
+
+    public boolean isServerOn() {
+        return serverOn;
+    }
+
     public void init(int port) throws SocketException {
+        serverOn = false;
+
+        server = (ThreadPoolExecutor) Executors.newFixedThreadPool(12);
+
         socket = new DatagramSocket(port);
         salas = new HashMap<>();
         salasToSend = new HashMap<>();
+
     }
 
-    public void runServer() throws IOException {
+
+    public void startStop(ActionEvent actionEvent) {
+        if(serverOn){
+            serverOn = false;
+            ((Button) actionEvent.getSource()).setText("START");
+            server.shutdown();
+            ipServer.setText("DISCONNECTED");
+
+        }else {
+
+            serverOn = true;
+            server = (ThreadPoolExecutor) Executors.newFixedThreadPool(12);
+            try {
+                ipServer.setText(InetAddress.getLocalHost().getHostAddress() + ":5568");
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+            server.execute(() -> {
+                try {
+                    runServer();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            ((Button) actionEvent.getSource()).setText("STOP");
+        }
+    }
+
+    private void runServer() throws IOException {
         byte [] receivingData = new byte[Packets.PACKET_LENGHT];
         byte [] sendingData;
         InetAddress clientIP;
         int clientPort;
 
         //el servidor atén el port indefinidament
-        while(true/* No esten todos los jugadores */){
+        while(serverOn/* No esten todos los jugadores */){
 
             DatagramPacket packet = new DatagramPacket(receivingData, Packets.PACKET_LENGHT);
             //espera de les dades
-
             socket.receive(packet);
-            //System.out.println(Transformer.packetDataToString(packet));
-            //obtenció de l'adreça del client
-            clientIP = packet.getAddress();
-            //obtenció del port del client
-            clientPort = packet.getPort();
+            if(serverOn) {
+                //System.out.println(Transformer.packetDataToString(packet));
+                //obtenció de l'adreça del client
+                clientIP = packet.getAddress();
+                //obtenció del port del client
+                clientPort = packet.getPort();
 
-            //processament de les dades rebudes i obtenció de la resposta
-            sendingData = processData(packet);
-            //System.out.println(sendingData.length);
+                //processament de les dades rebudes i obtenció de la resposta
+                sendingData = processData(packet);
+                //System.out.println(sendingData.length);
 
-            if (!new String(sendingData).equals("Starting")) {
-                //creació del paquet per enviar la resposta
-                packet = new DatagramPacket(sendingData, sendingData.length, clientIP, clientPort);
-                //System.out.println(new String(respuesta, Charset.defaultCharset()));
+                if (!new String(sendingData).equals("Starting")) {
+                    //creació del paquet per enviar la resposta
+                    packet = new DatagramPacket(sendingData, sendingData.length, clientIP, clientPort);
+                    //System.out.println(new String(respuesta, Charset.defaultCharset()));
 
-                //enviament de la resposta
-                socket.send(packet);
+                    //enviament de la resposta
+                    socket.send(packet);
+                }
             }
         }
     }
@@ -227,7 +275,6 @@ public class ServerGame {
         if(salas.containsKey(numSala)) {
             //SI NO CONTIENE LA IP DE EL CLIENTE && El límite de naves es inferior a 4
             if (!salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress()) && salas.get(numSala).getMapIdNaves().size() < 4) {
-                salas.get(numSala).getMapIdNaves().put(packet.getAddress(), new ClientData(salas.get(numSala).getMapIdNaves().size() + 1, packet.getPort()));
 
                 salasToSend.get(numSala).addNumPlayers();
 
@@ -238,6 +285,8 @@ public class ServerGame {
                         break;
                     }
                 }
+
+                salas.get(numSala).getMapIdNaves().put(packet.getAddress(), new ClientData(id, packet.getPort()));
 
                 return String.valueOf(id + ":" + numSala);
 
@@ -265,7 +314,6 @@ public class ServerGame {
 
         return String.valueOf(sala.getIdSala());
     }
-
 
 //    private void sendAll(String signal, DatagramPacket packet) {
 //        salas.get(numSala).getMapIdNaves().forEach((ip,clientData)-> {

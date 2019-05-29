@@ -159,7 +159,6 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
     }
 
     private void enterRoom(ActionEvent actionEvent){
-        entraSala = true;
 
         DatagramSocket socket = null;
         DatagramPacket packetEnter;
@@ -195,6 +194,8 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
                 alert.setContentText("La sala en la que intentas entrar ya no existe");
                 alert.showAndWait();
             }else{
+                entraSala = true;
+
                 FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
                 Parent root = loader.load();
 

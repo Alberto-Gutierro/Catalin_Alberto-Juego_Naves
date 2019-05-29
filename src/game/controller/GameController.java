@@ -203,8 +203,7 @@ public class GameController extends GameSetter implements Initializable {
                     navesRecivedService.renderNavesRecibidas();
 
                     nave.setLifes(navesRecivedService.getMyLives());
-                }
-                catch (SocketTimeoutException e){
+                } catch (SocketTimeoutException e){
                     this.stop();
 
                     try {
@@ -272,6 +271,31 @@ public class GameController extends GameSetter implements Initializable {
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
 
 
+                } catch (SocketTimeoutException e){
+                    this.stop();
+
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerMenu.fxml"));
+                        Parent root = loader.load();
+
+                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
+
+                        MultiplayerMenuController multiplayerMenuController = loader.getController();
+                        multiplayerMenuController.setScene(scene);
+                        multiplayerMenuController.setStage(stage);
+
+                        stage.setScene(scene);
+                        stage.show();
+
+                    } catch (IOException ex){
+                        ex.printStackTrace();
+                    }
+                    Platform.runLater(()->{
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("ERROR");
+                        alert.setHeaderText("Connection Time Out");
+                        alert.showAndWait();
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

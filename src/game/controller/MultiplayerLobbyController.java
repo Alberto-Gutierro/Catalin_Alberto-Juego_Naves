@@ -160,6 +160,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             for (int i = 1; i < connectedPersons.length; i++) {
                 System.out.print(connectedPersons[i] + ",");
             }
+            System.out.println();
             for (int i = 1; i < connectedPersons.length; i++) {
                 if(connectedPersons[i] && i == idNave){
                     textsNave[i].setText("You");
