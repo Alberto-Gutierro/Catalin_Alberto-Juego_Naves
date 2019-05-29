@@ -235,6 +235,7 @@ public class ServerGame {
                 for (id = 1; id <= 4; id++) {
                     if (!salas.get(numSala).getConnectedPersons()[id]) {
                         salas.get(numSala).addAConnectedPerson(id);
+                        break;
                     }
                 }
 

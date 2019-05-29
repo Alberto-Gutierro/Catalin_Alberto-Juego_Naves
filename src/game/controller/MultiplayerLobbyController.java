@@ -157,13 +157,15 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     private void showNaves(DatagramPacket packet) {
         try {
             boolean[] connectedPersons = Transformer.jsonToBooleanArray(Transformer.packetDataToString(packet));
-
+            for (int i = 1; i < connectedPersons.length; i++) {
+                System.out.print(connectedPersons[i] + ",");
+            }
             for (int i = 1; i < connectedPersons.length; i++) {
                 if(connectedPersons[i] && i == idNave){
                     textsNave[i].setText("You");
                     imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + i + ".png"));
                 }else if(connectedPersons[i]){
-                    textsNave[i].setText("Player " + (i + 1));
+                    textsNave[i].setText("Player " + i);
                     imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + i + ".png"));
                 }else {
                     textsNave[i].setText("Waiting...");
