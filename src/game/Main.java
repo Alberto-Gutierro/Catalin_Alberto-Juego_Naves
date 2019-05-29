@@ -26,7 +26,6 @@ public class Main extends Application {
             MainMenuController controller = loader.getController();
             controller.setStage(primaryStage);
             controller.setScene(scene);
-            controller.setMenuPane();
 
             //CUANDO SE CIERRE LA ULTIMA VENTANA ABIERTA CERRARÁ EL SUBPROCESO DE LA APP DE JAVAFX
             Platform.setImplicitExit(true);
