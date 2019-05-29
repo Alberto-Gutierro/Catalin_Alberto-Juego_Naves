@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import statVars.Enums;
 import transformmer.Transformer;
 
 import java.io.UnsupportedEncodingException;
@@ -91,7 +92,7 @@ public abstract class GameSetter extends SceneStageSetter {
 
     private void setControls() {
         scene.setOnMouseReleased(event->{
-            if(runningGame) {
+            if(runningGame && nave.getState() != Enums.NaveState.DYING) { // La nave no puede disparar si se esta muriendo
                 nave.shoot(event.getX(), event.getY());
             }
         });

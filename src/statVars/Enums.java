@@ -10,7 +10,7 @@ public class Enums {
     }
 
     public enum NaveState {
-        ALIVE, DYING,DEATH
+        ALIVE, DYING,DEATH,SHOOTING
     }
 
 }

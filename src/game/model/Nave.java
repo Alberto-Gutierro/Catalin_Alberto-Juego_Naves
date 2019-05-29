@@ -168,8 +168,7 @@ public class Nave {
     }
 
     public void shoot(double cursorX, double cursorY) {
-
-        //mediaPlayer.setOnEndOfMedia(()->mediaPlayer.stop());
+        state = Enums.NaveState.SHOOTING;
 
         arma.shoot(
                 (posX + imgNave.getImage().getWidth()/2),
@@ -177,6 +176,8 @@ public class Nave {
                 (posX + imgNave.getImage().getWidth()/2) - cursorX,
                 (posY + imgNave.getImage().getHeight()/2) - cursorY,
                 getAngle());
+
+
     }
 
     public void update(double time){
@@ -191,6 +192,14 @@ public class Nave {
             else {
                 animacion.finalAnimacion();
                 state=Enums.NaveState.DEATH;
+            }
+        } else if (state.equals(Enums.NaveState.SHOOTING)) {
+            if (animacion.getFrame() < Ajustes.NAVESHOOT_LENGHT) {
+                imgNave = animacion.naveDisparo(id);
+            }
+            else {
+                animacion.finalAnimacion();
+                state=Enums.NaveState.ALIVE;
             }
         }
 
