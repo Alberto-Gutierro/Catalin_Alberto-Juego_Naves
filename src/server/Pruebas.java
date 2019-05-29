@@ -1,11 +1,10 @@
 package server;
 
 import formatClasses.DataToRecive;
-import javafx.scene.transform.Transform;
 import server.model.ClientData;
 import server.model.Sala;
 import server.model.SalaToSend;
-import statVars.AjustesNave;
+import statVars.Ajustes;
 import statVars.Packets;
 import transformmer.Transformer;
 
@@ -168,7 +167,7 @@ public class Pruebas {
                         nave.setLives(--sala.getVidasNaves()[naveTocada]);
 
                         //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
-                        if(sala.getVidasNaves()[naveRecibida.getIdNave()] < AjustesNave.MAX_LIFES) {
+                        if(sala.getVidasNaves()[naveRecibida.getIdNave()] < Ajustes.MAX_LIFES) {
                             sala.getVidasNaves()[naveRecibida.getIdNave()]++;
                         }
                     }

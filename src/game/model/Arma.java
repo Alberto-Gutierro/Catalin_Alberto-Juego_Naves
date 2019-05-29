@@ -1,18 +1,14 @@
 package game.model;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import statVars.AjustesNave;
+import statVars.Ajustes;
 import statVars.Enums;
 import javafx.scene.canvas.GraphicsContext;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
 
 public class Arma {
     ///////UTILIZAR UN ARRAY DE BALAS Y QUE SE QUITEN CUANDO HAYAN SALIDO DE LA PANTALLA
@@ -26,7 +22,7 @@ public class Arma {
     private int idBalaActual;
 
     private int balasDisponibles;
-    private final int MAX_BALAS = AjustesNave.MAX_AMMO;
+    private final int MAX_BALAS = Ajustes.MAX_AMMO;
 
     private Media soundBala;
     private Media soundOutOfAmmo;

@@ -1,7 +1,7 @@
 package server.model;
 
 import formatClasses.DataToRecive;
-import statVars.AjustesNave;
+import statVars.Ajustes;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class Sala {
     private Map<InetAddress, ClientData> mapIdNaves;
 
     private boolean[] navesVivas;
-    private int[] vidasNaves = {-1, AjustesNave.START_LIFES, AjustesNave.START_LIFES, AjustesNave.START_LIFES, AjustesNave.START_LIFES};
+    private int[] vidasNaves = {-1, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES};
 
     private boolean[] connectedPersons;
 

@@ -9,7 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import statVars.AjustesNave;
+import statVars.Ajustes;
+import statVars.Enums;
 
 public class Nave {
     private int id;
@@ -23,7 +24,7 @@ public class Nave {
 
     private final int SPEED = 5;
     private int lifes;
-    private final int MAX_LIFES = AjustesNave.MAX_LIFES;
+    private final int MAX_LIFES = Ajustes.MAX_LIFES;
 
     private BooleanProperty upPressed, downPressed, rightPressed, leftPressed;
     private BooleanBinding anyPressed;
@@ -39,7 +40,11 @@ public class Nave {
 
     private ImageView[] imgVidas;
 
+    private Enums.NaveState state;
+    private Animacion animacion;
+
     public Nave(GraphicsContext graphicsContext, Pane pane, int posX, int posY, int idNave, ImageView imgNave, BooleanProperty upPressed, BooleanProperty downPressed, BooleanProperty rightPressed, BooleanProperty leftPressed, BooleanBinding anyPressed) {
+        animacion=new Animacion();
         imgVidas = new ImageView[MAX_LIFES];
         ///IMAGENES A LAS VIDAS
         for (int i = 0; i<MAX_LIFES; i++) {
@@ -52,7 +57,7 @@ public class Nave {
 
         score = 0;
 
-        lifes = AjustesNave.START_LIFES;
+        lifes = Ajustes.START_LIFES;
 
         this.id = idNave;
 
@@ -74,6 +79,8 @@ public class Nave {
 
         this.snapshotParameters = new SnapshotParameters();
         snapshotParameters.setFill(Color.TRANSPARENT);
+
+        state = Enums.NaveState.ALIVE;
 
     }
 
@@ -177,6 +184,16 @@ public class Nave {
         if(anyPressed.get()) {
             mover();
         }
+        if(state.equals(Enums.NaveState.DYING)) {
+            if (animacion.getFrame() < Ajustes.NAVEDESTRUIR_LENGHT) {
+                imgNave = animacion.naveDestruir(id);
+            }
+            else {
+                animacion.finalAnimacion();
+                state=Enums.NaveState.DEATH;
+            }
+        }
+
         rotate();
     }
 
@@ -219,4 +236,11 @@ public class Nave {
         this.lifes = lifes;
     }
 
+    public void setState(Enums.NaveState state) {
+        this.state = state;
+    }
+
+    public Enums.NaveState getState() {
+        return state;
+    }
 }

@@ -9,7 +9,7 @@ import javafx.scene.transform.Transform;
 import server.model.ClientData;
 import server.model.Sala;
 import server.model.SalaToSend;
-import statVars.AjustesNave;
+import statVars.Ajustes;
 import statVars.MensajesServer;
 import statVars.Packets;
 import transformmer.Transformer;
@@ -238,7 +238,7 @@ public class ServerGameController {
                         nave.setLives(--sala.getVidasNaves()[naveTocada]);
 
                         //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
-                        if(sala.getVidasNaves()[naveRecibida.getIdNave()] < AjustesNave.MAX_LIFES) {
+                        if(sala.getVidasNaves()[naveRecibida.getIdNave()] < Ajustes.MAX_LIFES) {
                             sala.getVidasNaves()[naveRecibida.getIdNave()]++;
                         }
                     }
@@ -275,6 +275,7 @@ public class ServerGameController {
         if(salas.containsKey(numSala)) {
             //SI NO CONTIENE LA IP DE EL CLIENTE && El límite de naves es inferior a 4
             if (!salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress()) && salas.get(numSala).getMapIdNaves().size() < 4) {
+                salas.get(numSala).getMapIdNaves().put(packet.getAddress(), new ClientData(salas.get(numSala).getMapIdNaves().size() + 1, packet.getPort()));
 
                 salasToSend.get(numSala).addNumPlayers();
 
@@ -285,8 +286,6 @@ public class ServerGameController {
                         break;
                     }
                 }
-
-                salas.get(numSala).getMapIdNaves().put(packet.getAddress(), new ClientData(id, packet.getPort()));
 
                 return String.valueOf(id + ":" + numSala);
 
@@ -314,6 +313,7 @@ public class ServerGameController {
 
         return String.valueOf(sala.getIdSala());
     }
+
 
 //    private void sendAll(String signal, DatagramPacket packet) {
 //        salas.get(numSala).getMapIdNaves().forEach((ip,clientData)-> {

@@ -8,6 +8,7 @@ import game.services.MeteorService;
 import game.services.NavesRecivedService;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,12 +18,14 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import statVars.Enums;
 import statVars.Packets;
 import statVars.Resoluciones;
 import transformmer.Transformer;
@@ -83,6 +86,7 @@ public class GameController extends GameSetter implements Initializable {
     }
 
     void start(boolean isMultiplayer){
+
         final Executor executor = Executors.newFixedThreadPool(4);
 
         this.isMultiplayer = isMultiplayer;
@@ -115,6 +119,9 @@ public class GameController extends GameSetter implements Initializable {
         new AnimationTimer() {
             public void handle(long currentNanoTime)
             {
+                // Si la nave esta muerta acaba la partida
+                if (nave.getState().equals(Enums.NaveState.DEATH)) runningGame=false;
+
                 double timing = (currentNanoTime-anteriorCurrentNanoTime)*Math.pow(10, -9);
                 if(anteriorCurrentNanoTime == 0){
                     anteriorCurrentNanoTime = currentNanoTime;
@@ -359,12 +366,14 @@ public class GameController extends GameSetter implements Initializable {
                     (int)nave.getImagenRotada().getWidth(),
                     (int)nave.getImagenRotada().getHeight()
             );
+            if (meteor.getState().equals(Enums.MeteorState.MOVING)) {
+                if(areaObject1.intersects(areaObject2)){
+                    meteor.remove();
+                    nave.subsLive();
+                    if(nave.getLifes() == 0){
+                        nave.setState(Enums.NaveState.DYING);
 
-            if(areaObject1.intersects(areaObject2)){
-                meteor.remove();
-                nave.subsLive();
-                if(nave.getLifes() == 0){
-                    runningGame = false;
+                    }
                 }
             }
         });

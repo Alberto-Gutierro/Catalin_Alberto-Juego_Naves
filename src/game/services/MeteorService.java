@@ -1,5 +1,7 @@
 package game.services;
 
+import game.model.Animacion;
+import statVars.Ajustes;
 import statVars.Enums;
 import statVars.Resoluciones;
 import game.model.Meteorito;
@@ -17,10 +19,13 @@ public class MeteorService {
     private double screenHeight;
     private GraphicsContext graphicsContext;
 
+    private Animacion animacion;
+
     public MeteorService(double screenWidth, double screenHeight, GraphicsContext graphicsContext){
         this.graphicsContext=graphicsContext;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
+        animacion = new Animacion();
     }
 
     public void create(double xNave, double yNave, double speed) {
@@ -54,6 +59,15 @@ public class MeteorService {
         ArrayList<Meteorito> meteorToRemove = new ArrayList<>();
         meteoritos.forEach(meteorito -> {
             if(meteorito.getState() == Enums.MeteorState.TO_REMOVE) {
+                if (animacion.getFrame() < Ajustes.METEORITODESTRUIR_LENGHT){
+                    meteorito.setImgMeteoritoRotada(animacion.meteoritoDestruido());
+                }else {
+                    animacion.finalAnimacion();
+                    meteorito.setState(Enums.MeteorState.DEATH);
+                }
+            }
+
+            if (meteorito.getState() == Enums.MeteorState.DEATH) {
                 if(!meteorToRemove.contains(meteorito)) {
                     meteorToRemove.add(meteorito);
                 }
