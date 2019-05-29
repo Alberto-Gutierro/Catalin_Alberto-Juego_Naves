@@ -148,7 +148,6 @@ public class Pruebas {
         return "ERROR";
     }
 
-
     private String updateJsonGame(DatagramPacket packet) throws UnsupportedEncodingException {
         DataToRecive naveRecibida = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
         Sala sala = salas.get(naveRecibida.getIdSala());
