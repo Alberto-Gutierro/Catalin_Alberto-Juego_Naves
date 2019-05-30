@@ -209,6 +209,8 @@ public class GameController extends GameSetter implements Initializable {
 
                     navesRecivedService.renderNavesRecibidas();
 
+                    /////añadir las cosas que se necesitan para la nave
+
                     nave.setLifes(navesRecivedService.getMyLives());
                 } catch (SocketTimeoutException e){
                     this.stop();
@@ -350,7 +352,7 @@ public class GameController extends GameSetter implements Initializable {
                         (int)bala.getImagenRotada().getHeight()
                 );
 
-                if(areaObject1.intersects(areaObject2)){
+                if(areaObject1.intersects(areaObject2) && meteor.getState().equals(Enums.MeteorState.MOVING)){
                     bala.remove();
                     meteor.remove();
                     score_p1.setText(String.valueOf(Integer.parseInt(score_p1.getText()) + 50));
@@ -366,14 +368,12 @@ public class GameController extends GameSetter implements Initializable {
                     (int)nave.getImagenRotada().getWidth(),
                     (int)nave.getImagenRotada().getHeight()
             );
-            if (meteor.getState().equals(Enums.MeteorState.MOVING)) {
-                if(areaObject1.intersects(areaObject2)){
-                    meteor.remove();
-                    nave.subsLive();
-                    if(nave.getLifes() == 0){
-                        nave.setState(Enums.NaveState.DYING);
+            if(areaObject1.intersects(areaObject2) && meteor.getState().equals(Enums.MeteorState.MOVING)){
+                meteor.remove();
+                nave.subsLive();
+                if(nave.getLifes() <= 0){
+                    nave.setState(Enums.NaveState.DYING);
 
-                    }
                 }
             }
         });

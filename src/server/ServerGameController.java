@@ -275,7 +275,6 @@ public class ServerGameController {
         if(salas.containsKey(numSala)) {
             //SI NO CONTIENE LA IP DE EL CLIENTE && El límite de naves es inferior a 4
             if (!salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress()) && salas.get(numSala).getMapIdNaves().size() < 4) {
-                salas.get(numSala).getMapIdNaves().put(packet.getAddress(), new ClientData(salas.get(numSala).getMapIdNaves().size() + 1, packet.getPort()));
 
                 salasToSend.get(numSala).addNumPlayers();
 
@@ -286,6 +285,7 @@ public class ServerGameController {
                         break;
                     }
                 }
+                salas.get(numSala).getMapIdNaves().put(packet.getAddress(), new ClientData(id, packet.getPort()));
 
                 return String.valueOf(id + ":" + numSala);
 

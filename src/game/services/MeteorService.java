@@ -1,6 +1,7 @@
 package game.services;
 
 import game.model.Animacion;
+import javafx.scene.image.ImageView;
 import statVars.Ajustes;
 import statVars.Enums;
 import statVars.Resoluciones;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 public class MeteorService {
 
     private ArrayList<Meteorito> meteoritos = new ArrayList<>();
+
+    private ImageView imgMeteorito;
 
     private final int NORTH = 0,EAST = 1, SOUTH = 2, WEST = 3;
 
@@ -26,6 +29,7 @@ public class MeteorService {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         animacion = new Animacion();
+        imgMeteorito = new ImageView("game/res/img/img_meteorito.png");
     }
 
     public void create(double xNave, double yNave, double speed) {
@@ -40,7 +44,7 @@ public class MeteorService {
             case SOUTH: posY = screenHeight + Resoluciones.LINEA_DESTRUCCION; break;
             default: posX = 0 - Resoluciones.LINEA_DESTRUCCION;
         }
-        meteoritos.add(new Meteorito(posX, posY, xNave, yNave, speed, graphicsContext));
+        meteoritos.add(new Meteorito(posX, posY, xNave, yNave, speed, graphicsContext, imgMeteorito));
     }
 
     public void update() {

@@ -21,15 +21,13 @@ public class Meteorito {
 
     private Enums.MeteorState state;
 
-    private ImageView imgMeteorito;
-
     private double angulo;
 
     private SnapshotParameters snapshotParameters;
 
 
 
-    public Meteorito(double posX, double posY, double xNave, double yNave, double speed, GraphicsContext graphicsContext) {
+    public Meteorito(double posX, double posY, double xNave, double yNave, double speed, GraphicsContext graphicsContext, ImageView imgMeteorito) {
         this.posX = posX;
         this.posY = posY;
 
@@ -37,8 +35,6 @@ public class Meteorito {
 
         snapshotParameters= new SnapshotParameters();
         snapshotParameters.setFill(Color.TRANSPARENT);
-
-        imgMeteorito = new ImageView("game/res/img/img_meteorito.png");
 
         angulo = Math.random()*360;
 
