@@ -240,7 +240,7 @@ public class GameController extends GameSetter implements Initializable {
                     e.printStackTrace();
                 }
 
-                if(nave.getState() == Enums.NaveState.ALIVE || nave.getState() == Enums.NaveState.DYING) {
+                if(nave.getState() != Enums.NaveState.DEATH) {
                     nave.update(timing);
 
                     checkCollisions();
