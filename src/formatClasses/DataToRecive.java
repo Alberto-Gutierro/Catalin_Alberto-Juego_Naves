@@ -28,7 +28,7 @@ public class DataToRecive {
     //angulo (nave y bala)
     private double angle;
 
-    private int lives;
+    private int lifes;
 
     //balas
     private ArrayList<BalaToSend> naveArmaBalas;
@@ -69,12 +69,12 @@ public class DataToRecive {
         return naveArmaBalas;
     }
 
-    public int getLives() {
-        return lives;
+    public int getLifes() {
+        return lifes;
     }
 
-    public void setLives(int lives){
-        this.lives = lives;
+    public void setLifes(int lifes){
+        this.lifes = lifes;
     }
 
     public ArrayList<Integer> getNavesTocadas() {

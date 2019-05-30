@@ -160,11 +160,11 @@ public class Pruebas {
         
         if(naveRecibida.getNavesTocadas() != null || naveRecibida.getNavesTocadas().size() == 0) {
             sala.getNaves().forEach(nave -> {
-                nave.setLives(sala.getVidasNaves()[nave.getIdNave()]);
+                nave.setLifes(sala.getVidasNaves()[nave.getIdNave()]);
                 naveRecibida.getNavesTocadas().forEach(naveTocada -> {
                     if (nave.getIdNave() == naveTocada) {
                         //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
-                        nave.setLives(--sala.getVidasNaves()[naveTocada]);
+                        nave.setLifes(--sala.getVidasNaves()[naveTocada]);
 
                         //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
                         if(sala.getVidasNaves()[naveRecibida.getIdNave()] < Ajustes.MAX_LIFES) {
@@ -175,7 +175,7 @@ public class Pruebas {
             });
         }
 
-        naveRecibida.setLives(sala.getVidasNaves()[naveRecibida.getIdNave()]);
+        naveRecibida.setLifes(sala.getVidasNaves()[naveRecibida.getIdNave()]);
         sala.getNaves().set(sala.getNaves().indexOf(naveRecibida), naveRecibida);
 
         //naves.forEach(nave-> System.out.println(nave.toString()));

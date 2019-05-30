@@ -48,7 +48,7 @@ public class GameController extends GameSetter implements Initializable {
     private MeteorService meteorService;
 
     @FXML Canvas canvas;
-    @FXML Text score_p1, score_p2, score_p3, score_p4, tv_ammo, tv_lives;
+    @FXML Text score_p1, score_p2, score_p3, score_p4, tv_ammo, tv_lifes;
     @FXML AnchorPane gameOverScreen;
 
     private CollisionRectangle areaObject1;
@@ -60,13 +60,10 @@ public class GameController extends GameSetter implements Initializable {
         areaObject1 = new CollisionRectangle();
         areaObject2 = new CollisionRectangle();
 
-        //EXTERNAL FORM: file:/C:/Users/cata6/IdeaProjects/M03ProgramacioOrientadaAObjectes/M03-M09-Catalin_Alberto-Juego_Naves/out/production/M03%20-%20Juego%20Naves/game/res/fonts/arcadeClassic.TTF
-        //TO URI:        file:/C:/Users/cata6/IdeaProjects/M03ProgramacioOrientadaAObjectes/M03-M09-Catalin_Alberto-Juego_Naves/out/production/M03%20-%20Juego%20Naves/game/res/fonts/arcadeClassic.TTF
-
         tv_ammo.setTextAlignment(TextAlignment.RIGHT);
 
         graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.scale(1,1);
+        //graphicsContext.scale(1,1);
 
         dataToSend = new DataToSend();
 
@@ -211,7 +208,8 @@ public class GameController extends GameSetter implements Initializable {
 
                     /////añadir las cosas que se necesitan para la nave
 
-                    nave.setLifes(navesRecivedService.getMyLives());
+                    //nave.setState(navesRecivedService.getMyState());
+                    nave.setLifes(navesRecivedService.getMyLifes());
                 } catch (SocketTimeoutException e){
                     this.stop();
 
@@ -242,7 +240,7 @@ public class GameController extends GameSetter implements Initializable {
                     e.printStackTrace();
                 }
 
-                if(navesRecivedService.getMyLives() > 0) {
+                if(nave.getState() == Enums.NaveState.ALIVE || nave.getState() == Enums.NaveState.DYING) {
                     nave.update(timing);
 
                     checkCollisions();

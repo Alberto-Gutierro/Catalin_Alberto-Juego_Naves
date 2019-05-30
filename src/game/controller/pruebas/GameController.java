@@ -41,7 +41,7 @@ public class GameController extends GameSetter implements Initializable {
     private MeteorService meteorService;
 
     @FXML Canvas canvas;
-    @FXML Text score_p1, score_p2, score_p3, score_p4, tv_ammo, tv_lives;
+    @FXML Text score_p1, score_p2, score_p3, score_p4, tv_ammo, tv_lifes;
     @FXML AnchorPane gameOverScreen;
 
 
@@ -58,7 +58,7 @@ public class GameController extends GameSetter implements Initializable {
 
             tv_ammo.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 28));
             tv_ammo.setTextAlignment(TextAlignment.RIGHT);
-            tv_lives.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 28));
+            tv_lifes.setFont(Font.loadFont(new FileInputStream(new File(URLDecoder.decode(getClass().getClassLoader().getResource("game/res/fonts/arcadeClassic.TTF").getFile(), "UTF-8"))), 28));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -202,7 +202,7 @@ public class GameController extends GameSetter implements Initializable {
 
                     navesRecivedService.renderNavesRecibidas();
 
-                    nave.setLifes(navesRecivedService.getMyLives());
+                    nave.setLifes(navesRecivedService.getMyLifes());
                 }
                 catch (SocketTimeoutException e){
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -215,7 +215,7 @@ public class GameController extends GameSetter implements Initializable {
                     e.printStackTrace();
                 }
 
-                if(navesRecivedService.getMyLives() > 0) {
+                if(navesRecivedService.getMyLifes() > 0) {
                     nave.update(timing);
 
                     checkCollisions();

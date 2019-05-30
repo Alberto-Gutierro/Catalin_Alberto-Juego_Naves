@@ -9,7 +9,7 @@ public class ClientData {
 
     private final int idNave;
     private final int port;
-    private int lives;
+    private int lifes;
 
     public int getIdNave() {
         return idNave;
@@ -19,8 +19,8 @@ public class ClientData {
         return port;
     }
 
-    public int getLives() {
-        return lives;
+    public int getLifes() {
+        return lifes;
     }
 
 }

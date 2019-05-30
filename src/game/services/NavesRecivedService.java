@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import statVars.Ajustes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,12 +29,16 @@ public class NavesRecivedService {
 
     private int myNaveId;
 
+    private int myLifes;
+
     public NavesRecivedService(GraphicsContext graphicsContext, int myNaveId, Text score_p1, Text score_p2, Text score_p3, Text score_p4) {
         this.scores = new Text[]{score_p1, score_p2, score_p3, score_p4};
 //        this.score_p1 = score_p1;
 //        this.score_p2 = score_p2;
 //        this.score_p3 = score_p3;
 //        this.score_p4 = score_p4;
+
+        myLifes = Ajustes.START_LIFES;
 
         this.myNaveId = myNaveId;
 
@@ -54,14 +59,8 @@ public class NavesRecivedService {
         this.navesRecived = navesRecived;
     }
 
-    public int getMyLives(){
-
-        for (DataToRecive naveToRecive : navesRecived) {
-            if(myNaveId == naveToRecive.getIdNave()){
-                return naveToRecive.getLives();
-            }
-        }
-        return -1;
+    public int getMyLifes(){
+        return myLifes;
     }
 
     public void renderNavesRecibidas(){
@@ -86,6 +85,8 @@ public class NavesRecivedService {
                 }else {
                     renderRecivedData(nave);
                 }
+            }else {
+                myLifes = nave.getLifes();
             }
         });
 
