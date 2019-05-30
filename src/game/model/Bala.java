@@ -30,7 +30,7 @@ public class Bala {
 
     private double angle;
 
-    public Bala(GraphicsContext graphicsContext, double x, double y, double cc, double co, double angle, int idBala){
+    public Bala(GraphicsContext graphicsContext, double x, double y, double cc, double co, double angle, int idBala, ImageView imgBala){
         //Para saber si la he añadido dentro del JSON.
         this.angle = angle;
 
@@ -42,8 +42,6 @@ public class Bala {
 
         SnapshotParameters snapshotParameters = new SnapshotParameters();
         snapshotParameters.setFill(Color.TRANSPARENT);
-
-        ImageView imgBala = new ImageView("game/res/img/bala.png");
 
         imgBala.setRotate(angle);
         imagenRotada = imgBala.snapshot(snapshotParameters, null);

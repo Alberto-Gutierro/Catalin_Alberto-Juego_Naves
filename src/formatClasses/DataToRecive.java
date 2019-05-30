@@ -1,6 +1,7 @@
 package formatClasses;
 
 import game.model.toSend.BalaToSend;
+import statVars.Enums;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,8 @@ public class DataToRecive {
     private double angle;
 
     private int lifes;
+
+    private Enums.NaveState state;
 
     //balas
     private ArrayList<BalaToSend> naveArmaBalas;
@@ -83,6 +86,14 @@ public class DataToRecive {
 
     public ArrayList<Integer> getMeteoritosTocados() {
         return meteoritosTocados;
+    }
+
+    public Enums.NaveState getState() {
+        return state;
+    }
+
+    public void setState(Enums.NaveState state) {
+        this.state = state;
     }
 
     @Override

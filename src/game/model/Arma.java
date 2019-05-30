@@ -29,13 +29,17 @@ public class Arma {
 
     private Timer reloadTimer;
 
+    ImageView imgBala;
 
     private ImageView[] imgAmmoBalas;
 
 
     public Arma(GraphicsContext graphicsContext, Pane pane){
         imgAmmoBalas = new ImageView[MAX_BALAS];
-        ///IMAGENES A LAS VIDAS
+
+        imgBala = new ImageView("game/res/img/bala.png");
+
+        ///IMAGENES A LAS BALAS
         for (int i = 0; i<MAX_BALAS; i++) {
             ImageView imagen = new ImageView("game/res/img/bala.png");
             imagen.setX(125 + (imagen.getImage().getWidth() + 20) * i+1);
@@ -66,7 +70,7 @@ public class Arma {
             }
             //Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundBala).play());
             balasDisponibles--;
-            balas.add(new Bala(graphicsContext, x, y, cc, co, angle, addIdToBala()));
+            balas.add(new Bala(graphicsContext, x, y, cc, co, angle, addIdToBala(), imgBala));
         }else {
             //Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundOutOfAmmo).play());
         }

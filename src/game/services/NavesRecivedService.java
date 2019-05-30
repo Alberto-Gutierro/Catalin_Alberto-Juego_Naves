@@ -8,14 +8,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import statVars.Ajustes;
+import statVars.Enums;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class NavesRecivedService {
-    private Map<Integer, Image> imagenRotadaOtrasNaves;
-    private Map<Integer, ImageView> imagenOtrasNaves;
     private SnapshotParameters snapshotParameters;
     private SnapshotParameters snapshotParametersBalas;
 
@@ -31,6 +30,12 @@ public class NavesRecivedService {
 
     private int myLifes;
 
+    private Enums.NaveState myState;
+
+    private ImageView[] imagenOtrasNaves;
+    private Image[] imagenRotadaOtrasNaves;
+
+
     public NavesRecivedService(GraphicsContext graphicsContext, int myNaveId, Text score_p1, Text score_p2, Text score_p3, Text score_p4) {
         this.scores = new Text[]{score_p1, score_p2, score_p3, score_p4};
 //        this.score_p1 = score_p1;
@@ -38,14 +43,20 @@ public class NavesRecivedService {
 //        this.score_p3 = score_p3;
 //        this.score_p4 = score_p4;
 
+        imagenOtrasNaves = new ImageView[Ajustes.NUM_NAVES+1];
+        imagenRotadaOtrasNaves = new Image[Ajustes.NUM_NAVES+1];
+
+        for (int i = 1; i <= Ajustes.NUM_NAVES; i++) {
+            imagenOtrasNaves[i] = new ImageView("game/res/img/naves/navePlayer_" + i + ".png");
+            imagenRotadaOtrasNaves[i] = new Image("game/res/img/naves/navePlayer_" + i + ".png");
+
+        }
         myLifes = Ajustes.START_LIFES;
 
         this.myNaveId = myNaveId;
 
         this.graphicsContext = graphicsContext;
 
-        imagenOtrasNaves = new HashMap<>();
-        imagenRotadaOtrasNaves = new HashMap<>();
         snapshotParameters = new SnapshotParameters();
         snapshotParameters.setFill(Color.TRANSPARENT);
 
@@ -67,26 +78,10 @@ public class NavesRecivedService {
         navesRecived.forEach(nave->{
             scores[nave.getIdNave()-1].setText(String.valueOf(nave.getScore()));
             if(myNaveId != nave.getIdNave()) {
-                if (!imagenOtrasNaves.containsKey(nave.getIdNave())) {
-                    imagenOtrasNaves.put(nave.getIdNave(), new ImageView("game/res/img/naves/navePlayer_" + nave.getIdNave() + ".png"));
-                    imagenRotadaOtrasNaves.put(nave.getIdNave(), new Image("game/res/img/naves/navePlayer_" + nave.getIdNave() + ".png"));
-
-//                        rotateNaveRecibida(nave.getIdNave(), nave.getAngle());
-//                        graphicsContext.drawImage(imagenRotadaOtrasNaves.get(nave.getIdNave()), nave.getNavePosX(), nave.getNavePosY());
-//
-//                        nave.getNaveArmaBalas().forEach(bala -> {
-//                            graphicsContext.drawImage(rotateBalaRecibida(bala.getAngle()), bala.getPosX(), bala.getPosY());
-//
-//                            System.out.println(bala.getPosX() + "  " + bala.getPosY());
-//                            System.out.println(bala.getAngle());
-//                        });
-
-                    renderRecivedData(nave);
-                }else {
-                    renderRecivedData(nave);
-                }
+                renderRecivedData(nave);
             }else {
                 myLifes = nave.getLifes();
+                myState = nave.getState();
             }
         });
 
@@ -94,15 +89,15 @@ public class NavesRecivedService {
 
     private void renderRecivedData(DataToRecive nave) {
         rotateNaveRecibida(nave.getIdNave(), nave.getAngle());
-        graphicsContext.drawImage(imagenRotadaOtrasNaves.get(nave.getIdNave()), nave.getNavePosX(), nave.getNavePosY());
+        graphicsContext.drawImage(imagenRotadaOtrasNaves[nave.getIdNave()], nave.getNavePosX(), nave.getNavePosY());
         nave.getNaveArmaBalas().forEach(bala -> {
             graphicsContext.drawImage(rotateBalaRecibida(bala.getAngle()), bala.getPosX(), bala.getPosY());
         });
     }
 
     private void rotateNaveRecibida(int id, double angle){
-        imagenOtrasNaves.get(id).setRotate(angle);
-        imagenRotadaOtrasNaves.put(id, imagenOtrasNaves.get(id).snapshot(snapshotParameters, null));
+        imagenOtrasNaves[id].setRotate(angle);
+        imagenRotadaOtrasNaves[id] = imagenOtrasNaves[id].snapshot(snapshotParameters, null);
     }
 
     private Image rotateBalaRecibida(double angle){
@@ -114,11 +109,15 @@ public class NavesRecivedService {
         return navesRecived;
     }
 
-    public Map<Integer, Image> getImagenRotadaOtrasNaves() {
+    public Image[] getImagenRotadaOtrasNaves() {
         return imagenRotadaOtrasNaves;
     }
 
-    public Map<Integer, ImageView> getImagenOtrasNaves() {
+    public ImageView[] getImagenOtrasNaves() {
         return imagenOtrasNaves;
+    }
+
+    public Enums.NaveState getMyState() {
+        return myState;
     }
 }

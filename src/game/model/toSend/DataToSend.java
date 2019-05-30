@@ -2,6 +2,7 @@ package game.model.toSend;
 
 import game.model.Nave;
 import game.model.Timer;
+import statVars.Enums;
 
 import java.util.ArrayList;
 
@@ -32,7 +33,8 @@ public class DataToSend {
 
     private int lifes;
 
-    //////FALTA: ESTA VARIABLE NO SE TIENE QUE PASAR EN EL JSON.
+    private Enums.NaveState state;
+
     private Timer timer;
 
     public DataToSend(){
@@ -48,11 +50,13 @@ public class DataToSend {
 
         lifes = nave.getLifes();
 
+        state = nave.getState();
+
         score = nave.getScore();
 
         timer.update(time);
 
-        //Sin han pasado 10 segundos se borran todas las balas de dentro del array.
+        //Si han pasado 10 segundos se borran todas las balas de dentro del array.
         if(timer.check()){
             naveArmaBalas.clear();
             nave.getArma().getBalas().forEach(bala->bala.setAdded(false));

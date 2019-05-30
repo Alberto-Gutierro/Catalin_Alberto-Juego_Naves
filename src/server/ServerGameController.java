@@ -10,6 +10,7 @@ import server.model.ClientData;
 import server.model.Sala;
 import server.model.SalaToSend;
 import statVars.Ajustes;
+import statVars.Enums;
 import statVars.MensajesServer;
 import statVars.Packets;
 import transformmer.Transformer;
@@ -219,35 +220,39 @@ public class ServerGameController {
 
 
     private String updateJsonGame(DatagramPacket packet) throws UnsupportedEncodingException {
-        DataToRecive naveRecibida = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
-        Sala sala = salas.get(naveRecibida.getIdSala());
+        DataToRecive receivedData = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
+        Sala sala = salas.get(receivedData.getIdSala());
 
 
-        if(!sala.getNaves().contains(naveRecibida)) {
-            sala.getNaves().add(naveRecibida);
+        if(!sala.getNaves().contains(receivedData)) {
+            sala.getNaves().add(receivedData);
         }
 
-        //naveRecibida.getNaveArmaBalas().forEach(balaToSend -> System.out.println(balaToSend.getAngle()));
+        //receivedData.getNaveArmaBalas().forEach(balaToSend -> System.out.println(balaToSend.getAngle()));
 
-        if(naveRecibida.getNavesTocadas() != null || naveRecibida.getNavesTocadas().size() == 0) {
+        if(receivedData.getNavesTocadas() != null || receivedData.getNavesTocadas().size() != 0) {
             sala.getNaves().forEach(nave -> {
                 nave.setLifes(sala.getVidasNaves()[nave.getIdNave()]);
-                naveRecibida.getNavesTocadas().forEach(naveTocada -> {
+                receivedData.getNavesTocadas().forEach(naveTocada -> {
                     if (nave.getIdNave() == naveTocada) {
                         //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
                         nave.setLifes(--sala.getVidasNaves()[naveTocada]);
 
+                        if(nave.getLifes() <= 0){
+                            nave.setState(Enums.NaveState.DYING);
+                        }
+
                         //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
-                        if(sala.getVidasNaves()[naveRecibida.getIdNave()] < Ajustes.MAX_LIFES) {
-                            sala.getVidasNaves()[naveRecibida.getIdNave()]++;
+                        if(sala.getVidasNaves()[receivedData.getIdNave()] < Ajustes.MAX_LIFES) {
+                            sala.getVidasNaves()[receivedData.getIdNave()]++;
                         }
                     }
                 });
             });
         }
 
-        naveRecibida.setLifes(sala.getVidasNaves()[naveRecibida.getIdNave()]);
-        sala.getNaves().set(sala.getNaves().indexOf(naveRecibida), naveRecibida);
+        receivedData.setLifes(sala.getVidasNaves()[receivedData.getIdNave()]);
+        sala.getNaves().set(sala.getNaves().indexOf(receivedData), receivedData);
 
         //naves.forEach(nave-> System.out.println(nave.toString()));
         return Transformer.classToJson(sala.getNaves());

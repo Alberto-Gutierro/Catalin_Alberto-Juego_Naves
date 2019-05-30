@@ -35,8 +35,6 @@ import java.io.*;
 import java.net.*;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class GameController extends GameSetter implements Initializable {
     @FXML private Pane pane;
@@ -83,9 +81,6 @@ public class GameController extends GameSetter implements Initializable {
     }
 
     void start(boolean isMultiplayer){
-
-        final Executor executor = Executors.newFixedThreadPool(4);
-
         this.isMultiplayer = isMultiplayer;
 
         if(isMultiplayer){
@@ -208,7 +203,7 @@ public class GameController extends GameSetter implements Initializable {
 
                     /////añadir las cosas que se necesitan para la nave
 
-                    //nave.setState(navesRecivedService.getMyState());
+                    nave.setState(navesRecivedService.getMyState());
                     nave.setLifes(navesRecivedService.getMyLifes());
                 } catch (SocketTimeoutException e){
                     this.stop();
@@ -393,35 +388,34 @@ public class GameController extends GameSetter implements Initializable {
         });
 
         if(isMultiplayer) {
-            Map<Integer, Image> imagenRotadaOtrasNaves = navesRecivedService.getImagenRotadaOtrasNaves();
-
-            Map<Integer, ImageView> imagenOtrasNaves = navesRecivedService.getImagenOtrasNaves();
-
-            navesRecivedService.getNavesRecived().forEach(naveRecivedService -> {
-                if (naveRecivedService.getIdNave() != nave.getId()) {
-                    areaObject1.setCollisions(
-                            (int) naveRecivedService.getNavePosX(),
-                            (int) naveRecivedService.getNavePosY(),
-                            (int) imagenRotadaOtrasNaves.get(naveRecivedService.getIdNave()).getWidth(),
-                            (int) imagenRotadaOtrasNaves.get(naveRecivedService.getIdNave()).getHeight()
-                    );
-
-                    nave.getArma().getBalas().forEach(bala -> {
-                        areaObject2.setCollisions(
-                                (int) bala.getPosX(),
-                                (int) bala.getPosY(),
-                                (int) bala.getImagenRotada().getWidth(),
-                                (int) bala.getImagenRotada().getHeight()
+            Image[] imagenRotadaOtrasNaves = navesRecivedService.getImagenRotadaOtrasNaves();
+            for (int i = 1; i < imagenRotadaOtrasNaves.length; i++) {
+                navesRecivedService.getNavesRecived().forEach(naveRecivedService -> {
+                    if (naveRecivedService.getIdNave() != nave.getId()) {
+                        areaObject1.setCollisions(
+                                (int) naveRecivedService.getNavePosX(),
+                                (int) naveRecivedService.getNavePosY(),
+                                (int) imagenRotadaOtrasNaves[naveRecivedService.getIdNave()].getWidth(),
+                                (int) imagenRotadaOtrasNaves[naveRecivedService.getIdNave()].getHeight()
                         );
-                        if (areaObject1.intersects(areaObject2)) {
-                            bala.remove();
 
-                            nave.addScore(50);
-                            dataToSend.addIdNaveTocada(naveRecivedService.getIdNave());
-                        }
-                    });
-                }
-            });
+                        nave.getArma().getBalas().forEach(bala -> {
+                            areaObject2.setCollisions(
+                                    (int) bala.getPosX(),
+                                    (int) bala.getPosY(),
+                                    (int) bala.getImagenRotada().getWidth(),
+                                    (int) bala.getImagenRotada().getHeight()
+                            );
+                            if (areaObject1.intersects(areaObject2)) {
+                                bala.remove();
+
+                                nave.addScore(50);
+                                dataToSend.addIdNaveTocada(naveRecivedService.getIdNave());
+                            }
+                        });
+                    }
+                });
+            }
         }
     }
 //HACER QUE SE GUARDE EL ID DE LA NAVE QUE HA SIDO TOCADA EN LOS DATOS QUE VAMOS A MANDAR AL SERVIDOR.
