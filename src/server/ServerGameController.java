@@ -238,7 +238,7 @@ public class ServerGameController {
                         //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
                         nave.setLifes(--sala.getVidasNaves()[naveTocada]);
 
-                        if(nave.getLifes() <= 0){
+                        if(nave.getLifes() <= 0 && nave.getState() == Enums.NaveState.ALIVE){
                             nave.setState(Enums.NaveState.DYING);
                         }
 

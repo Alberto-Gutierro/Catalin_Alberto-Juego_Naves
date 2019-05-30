@@ -200,8 +200,6 @@ public class GameController extends GameSetter implements Initializable {
 
                     navesRecivedService.renderNavesRecibidas();
 
-                    /////añadir las cosas que se necesitan para la nave
-
                     nave.setState(navesRecivedService.getMyState());
                     nave.setLifes(navesRecivedService.getMyLifes());
                 } catch (SocketTimeoutException e){
@@ -406,7 +404,6 @@ public class GameController extends GameSetter implements Initializable {
                         );
                         if (areaObject1.intersects(areaObject2)) {
                             bala.remove();
-                            System.out.println("AAA");
                             nave.addScore(50);
                             dataToSend.addIdNaveTocada(naveRecivedService.getIdNave());
                         }
