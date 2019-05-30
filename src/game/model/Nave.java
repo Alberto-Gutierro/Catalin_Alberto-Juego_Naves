@@ -43,7 +43,7 @@ public class Nave {
     private Enums.NaveState state;
     private Animacion animacion;
 
-    public Nave(GraphicsContext graphicsContext, Pane pane, int posX, int posY, int idNave, ImageView imgNave, BooleanProperty upPressed, BooleanProperty downPressed, BooleanProperty rightPressed, BooleanProperty leftPressed, BooleanBinding anyPressed) {
+    public Nave(GraphicsContext graphicsContext, Pane pane, int idNave, ImageView imgNave, BooleanProperty upPressed, BooleanProperty downPressed, BooleanProperty rightPressed, BooleanProperty leftPressed, BooleanBinding anyPressed) {
         animacion=new Animacion();
         imgVidas = new ImageView[MAX_LIFES];
         ///IMAGENES A LAS VIDAS
@@ -66,8 +66,19 @@ public class Nave {
 
         this.graphicsContext = graphicsContext;
 
-        this.posX = posX;
-        this.posY = posY;
+        if(idNave == 1){
+            this.posX = 250;
+            this.posY = 250;
+        }else if(idNave == 2){
+            this.posX = pane.getWidth()-250;
+            this.posY = 250;
+        }else if(idNave == 3){
+            this.posX = 250;
+            this.posY = pane.getHeight()-250;
+        }else {
+            this.posX = pane.getWidth()-250;
+            this.posY = pane.getHeight()-250;
+        }
 
         this.upPressed = upPressed;
         this.downPressed = downPressed;

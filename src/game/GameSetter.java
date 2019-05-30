@@ -63,7 +63,7 @@ public abstract class GameSetter extends SceneStageSetter {
 
         initControlPress();
 
-        setNave(new Nave(graphicsContext, pane,500,500, idNave, new ImageView("game/res/img/naves/navePlayer_" + idNave + ".png"), this.upPressed, this.downPressed, this.rightPressed, this.leftPressed, this.anyPressed));
+        setNave(new Nave(graphicsContext, pane,idNave, new ImageView("game/res/img/naves/navePlayer_" + idNave + ".png"), this.upPressed, this.downPressed, this.rightPressed, this.leftPressed, this.anyPressed));
 
         setControls();
 
