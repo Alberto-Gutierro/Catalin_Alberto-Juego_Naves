@@ -51,7 +51,7 @@
                <Font name="Arial Bold" size="27.0" />
             </font>
          </Text>
-         <Text fx:id="tv_lifes" fill="WHITE" layoutX="25.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LIVES:">
+         <Text fx:id="tv_lifes" fill="WHITE" layoutX="25.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LIFES:">
             <font>
                <Font name="Arial Bold" size="27.0" />
             </font>
