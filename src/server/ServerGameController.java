@@ -117,6 +117,7 @@ public class ServerGameController {
 
     private byte[] processData(DatagramPacket packet) {
         try {
+
             if(Transformer.packetDataToString(packet).matches("^Room:.+$")){
                 return getIdOfNaveClient(packet).getBytes();
             }else if(Transformer.packetDataToString(packet).matches("^Dead:.+$")){
@@ -201,17 +202,16 @@ public class ServerGameController {
                 sala.getNaves().forEach(nave -> {
                     if (nave.getIdNave() == sala.getMapIdNaves().get(packet.getAddress()).getIdNave()) {
                         naveToRemove = nave;
+                        // Aqui cogemos de la array de naves vivas y la que tiene tu Id la pasas a false
+                        sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()] = false;
                     }
                 });
                 sala.getNaves().remove(naveToRemove);
             }
-
             return Transformer.classToJson(sala.getNaves());
-
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
 
         return "ERROR";
     }

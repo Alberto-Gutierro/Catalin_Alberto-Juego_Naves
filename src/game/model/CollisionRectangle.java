@@ -1,5 +1,6 @@
 package game.model;
 
+
 import java.awt.*;
 
 public class CollisionRectangle extends Rectangle {

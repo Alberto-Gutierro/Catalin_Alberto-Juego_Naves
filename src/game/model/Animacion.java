@@ -38,7 +38,6 @@ public class Animacion {
                 naveShootAnimation[i][j] = new ImageView("game/res/img/navesDisparo/navePlayer_" + (i+1) + "/nave"+(i+1)+"_disparo_"+ j +".png");
             }
         }
-
     }
 
     public ImageView naveDisparo(int id) {

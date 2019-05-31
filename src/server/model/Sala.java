@@ -23,6 +23,7 @@ public class Sala {
 
     private Enums.NaveState[] navesState;
 
+    private boolean terminada;
 
     public Sala(String id) {
         navesState = new Enums.NaveState[]{Enums.NaveState.DEAD,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE};
@@ -31,6 +32,7 @@ public class Sala {
         idSala = id;
         naves = new ArrayList<>();
         mapIdNaves = new HashMap<>();
+        terminada=false;
     }
 
     public String getIdSala() {

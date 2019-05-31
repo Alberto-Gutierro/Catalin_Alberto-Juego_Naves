@@ -72,8 +72,6 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         }
     }
 
-
-
     void setPacket(DatagramPacket packet, boolean owner) {
         try {
             if(owner){

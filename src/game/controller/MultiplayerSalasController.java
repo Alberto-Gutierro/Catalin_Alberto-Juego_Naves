@@ -248,7 +248,7 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
 
         } catch (SocketException e) {
             e.printStackTrace();
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
