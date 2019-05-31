@@ -98,6 +98,8 @@ public class NavesRecivedService {
             graphicsContext.drawImage(imagenRotadaOtrasNaves[nave.getIdNave()], nave.getNavePosX(), nave.getNavePosY());
         }else if(nave.getState() == Enums.NaveState.DYING) {
             imagenOtrasNaves[nave.getIdNave()] = animations.naveDestruir(nave.getIdNave());
+            rotateNaveRecibida(nave.getIdNave(), nave.getAngle());
+            graphicsContext.drawImage(imagenRotadaOtrasNaves[nave.getIdNave()], nave.getNavePosX(), nave.getNavePosY());
         }
         nave.getNaveArmaBalas().forEach(bala -> {
             graphicsContext.drawImage(rotateBalaRecibida(bala.getAngle()), bala.getPosX(), bala.getPosY());
