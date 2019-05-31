@@ -204,7 +204,7 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
                 MultiplayerLobbyController multiplayerLobbyController = loader.getController();
                 multiplayerLobbyController.setScene(scene);
                 multiplayerLobbyController.setStage(stage);
-                multiplayerLobbyController.setPacket(packetEnter, false);
+                multiplayerLobbyController.setPacket(packetEnter);
 
                 stage.setScene(scene);
                 stage.show();
@@ -241,7 +241,7 @@ public class MultiplayerSalasController extends SceneStageSetter implements Init
             MultiplayerLobbyController multiplayerLobbyController = loader.getController();
             multiplayerLobbyController.setScene(scene);
             multiplayerLobbyController.setStage(stage);
-            multiplayerLobbyController.setPacket(packetCreate, true);
+            multiplayerLobbyController.setPacket(packetCreate);
 
             stage.setScene(scene);
             stage.show();

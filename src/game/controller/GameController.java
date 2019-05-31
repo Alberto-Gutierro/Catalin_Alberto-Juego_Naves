@@ -192,8 +192,20 @@ public class GameController extends GameSetter implements Initializable {
 
 
                     if(Transformer.packetDataToString(packet).equals("FinishGame")){
-                        System.out.println("SACABO");
-                    }
+
+                        //POR AQUI: Hacer que cambie de sala al acabar
+                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
+                        Parent root = loader.load();
+
+                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
+
+                        MultiplayerLobbyController multiplayerLobbyController = loader.getController();
+                        multiplayerLobbyController.setScene(scene);
+                        multiplayerLobbyController.setStage(stage);
+                        multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + idSala).getBytes(), (nave.getId() + idSala).getBytes().length));
+
+                        stage.setScene(scene);
+                        stage.show();                                      }
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
 
                     navesRecivedService.renderNavesRecibidas();
@@ -265,7 +277,20 @@ public class GameController extends GameSetter implements Initializable {
                     packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
                     socket.receive(packet);
                     if(Transformer.packetDataToString(packet).equals("FinishGame")){
-                        System.out.println("SACABO");
+
+                        //POR AQUI: Hacer que cambie de sala al acabar
+                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
+                        Parent root = loader.load();
+
+                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
+
+                        MultiplayerLobbyController multiplayerLobbyController = loader.getController();
+                        multiplayerLobbyController.setScene(scene);
+                        multiplayerLobbyController.setStage(stage);
+                        multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + idSala).getBytes(), (nave.getId() + idSala).getBytes().length));
+
+                        stage.setScene(scene);
+                        stage.show();
                     }
                     graphicsContext.clearRect(0,0, stage.getWidth(), stage.getHeight());
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));

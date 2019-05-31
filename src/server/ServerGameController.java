@@ -193,7 +193,6 @@ public class ServerGameController {
         return Transformer.classToJson(sala.getConnectedPersons()).getBytes();
     }
 
-    private DataToRecive naveToRemove;
     private String deadData(DatagramPacket packet){
         try {
             final Sala sala = salas.get(Transformer.packetDataToString(packet).split(":")[1]);
@@ -231,6 +230,7 @@ public class ServerGameController {
         if(!sala.getNaves().contains(receivedData)) {
             sala.getNaves().add(receivedData);
             sala.addNumNavesVivas();
+            sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()] = true;
         }
 
         //receivedData.getNaveArmaBalas().forEach(balaToSend -> System.out.println(balaToSend.getAngle()));
@@ -330,7 +330,7 @@ public class ServerGameController {
 
         sala.addAConnectedPerson(sala.getMapIdNaves().get(packet.getAddress()).getIdNave());
 
-        return String.valueOf(sala.getIdSala());
+        return String.valueOf(1 + sala.getIdSala());
     }
 
 

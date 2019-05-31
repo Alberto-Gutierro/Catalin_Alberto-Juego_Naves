@@ -72,15 +72,10 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         }
     }
 
-    void setPacket(DatagramPacket packet, boolean owner) {
+    void setPacket(DatagramPacket packet) {
         try {
-            if(owner){
-                idNave = 1;
-                idSala = Transformer.packetDataToString(packet);
-            }else {
-                idNave = Integer.parseInt(Transformer.packetDataToString(packet).split(":")[0]);
-                idSala = Transformer.packetDataToString(packet).split(":")[1];
-            }
+            idNave = Integer.parseInt(Transformer.packetDataToString(packet).split(":")[0]);
+            idSala = Transformer.packetDataToString(packet).split(":")[1];
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
