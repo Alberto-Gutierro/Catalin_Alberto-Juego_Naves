@@ -223,10 +223,6 @@ public class ServerGameController {
         DataToRecive receivedData = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
         Sala sala = salas.get(receivedData.getIdSala());
 
-        if(receivedData.getState() == Enums.NaveState.SHOOTING && sala.getNavesState()[receivedData.getIdNave()] != Enums.NaveState.DYING){
-            sala.getNavesState()[receivedData.getIdNave()] = Enums.NaveState.SHOOTING;
-        }
-
         if(!sala.getNaves().contains(receivedData)) {
             sala.getNaves().add(receivedData);
         }
