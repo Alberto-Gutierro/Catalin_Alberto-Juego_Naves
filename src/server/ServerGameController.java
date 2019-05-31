@@ -190,7 +190,7 @@ public class ServerGameController {
             sala = salas.get(Transformer.packetDataToString(packet).split(":")[1]);
 
             if(sala.isTerminada()){
-                salas.put(sala.getIdSala(), new Sala(sala.getIdSala()));
+                sala.resetSala();
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

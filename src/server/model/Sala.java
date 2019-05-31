@@ -19,7 +19,7 @@ public class Sala {
     private boolean[] navesVivas;
     private int numNavesVivas;
 
-    private int[] vidasNaves = {-1, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES};
+    private int[] vidasNaves;
 
     private boolean[] connectedPersons;
 
@@ -27,11 +27,21 @@ public class Sala {
 
     private boolean terminada;
 
+    public void resetSala(){
+        terminada = false;
+        vidasNaves = new int[]{-1, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES};
+        navesState = new Enums.NaveState[]{Enums.NaveState.DEAD,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE};
+        navesVivas = new boolean[]{false, false, false, false, false};
+        naves = new ArrayList<>();
+
+    }
+
     public Sala(String id) {
         navesState = new Enums.NaveState[]{Enums.NaveState.DEAD,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE};
         connectedPersons = new boolean[]{false, false, false, false, false};
         navesVivas = new boolean[]{false, false, false, false, false};
         idSala = id;
+        vidasNaves = new int[]{-1, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES};
         naves = new ArrayList<>();
         mapIdNaves = new HashMap<>();
         terminada=false;
