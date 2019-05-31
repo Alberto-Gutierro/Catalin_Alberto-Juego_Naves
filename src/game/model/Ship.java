@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 import statVars.Ajustes;
 import statVars.Enums;
 
-public class Nave {
+public class Ship {
     private int id;
 
     private Cursor orientation;
@@ -29,50 +29,50 @@ public class Nave {
     private BooleanProperty upPressed, downPressed, rightPressed, leftPressed;
     private BooleanBinding anyPressed;
 
-    private ImageView imgNave;
+    private ImageView imgShip;
     private Image imagenRotada;
 
-    private Arma arma;
+    private Weapon weapon;
 
     private SnapshotParameters snapshotParameters;
 
     private GraphicsContext graphicsContext;
 
-    private ImageView[] imgVidas;
+    private ImageView[] imgLifes;
 
-    private Enums.NaveState state;
+    private Enums.ShipState state;
     private Animacion animacion;
 
-    public Nave(GraphicsContext graphicsContext, Pane pane, int idNave, ImageView imgNave, BooleanProperty upPressed, BooleanProperty downPressed, BooleanProperty rightPressed, BooleanProperty leftPressed, BooleanBinding anyPressed) {
+    public Ship(GraphicsContext graphicsContext, Pane pane, int idShip, ImageView imgShip, BooleanProperty upPressed, BooleanProperty downPressed, BooleanProperty rightPressed, BooleanProperty leftPressed, BooleanBinding anyPressed) {
         animacion=new Animacion();
-        imgVidas = new ImageView[MAX_LIFES];
+        imgLifes = new ImageView[MAX_LIFES];
         ///IMAGENES A LAS VIDAS
         for (int i = 0; i<MAX_LIFES; i++) {
             ImageView imagen = new ImageView("game/res/img/life.png");
             imagen.setX(120 + (imagen.getImage().getWidth() + 5) * i+1);
             imagen.setY(110);
             pane.getChildren().add(imagen);
-            imgVidas[i] = imagen;
+            imgLifes[i] = imagen;
         }
 
         score = 0;
 
         lifes = Ajustes.START_LIFES;
 
-        this.id = idNave;
+        this.id = idShip;
 
-        arma = new Arma(graphicsContext, pane);
+        weapon = new Weapon(graphicsContext, pane);
         orientation = new Cursor();
 
         this.graphicsContext = graphicsContext;
 
-        if(idNave == 1){
+        if(idShip == 1){
             this.posX = 250;
             this.posY = 250;
-        }else if(idNave == 2){
+        }else if(idShip == 2){
             this.posX = pane.getWidth()-250;
             this.posY = 250;
-        }else if(idNave == 3){
+        }else if(idShip == 3){
             this.posX = 250;
             this.posY = pane.getHeight()-250;
         }else {
@@ -86,17 +86,17 @@ public class Nave {
         this.leftPressed = leftPressed;
         this.anyPressed = anyPressed;
 
-        this.imgNave = imgNave;
+        this.imgShip = imgShip;
 
         this.snapshotParameters = new SnapshotParameters();
         snapshotParameters.setFill(Color.TRANSPARENT);
 
-        state = Enums.NaveState.ALIVE;
+        state = Enums.ShipState.ALIVE;
 
     }
 
-    public Arma getArma(){
-        return arma;
+    public Weapon getWeapon(){
+        return weapon;
     }
 
     public Cursor getOrientation() {
@@ -116,8 +116,8 @@ public class Nave {
         return imagenRotada;
     }
 
-    public ImageView getImgNave(){
-        return imgNave;
+    public ImageView getImgShip(){
+        return imgShip;
     }
 
     public double getPosX() {
@@ -156,8 +156,8 @@ public class Nave {
     }
 
     public double getAngle(){
-//        double centerX = posX + imgNave.getHeight()/2;
-//        double centerY = posY + imgNave.getWidth()/2;
+//        double centerX = posX + imgShip.getHeight()/2;
+//        double centerY = posY + imgShip.getWidth()/2;
 //
 //
 //        double cc = (centerX - orientation.getPosX());
@@ -173,44 +173,44 @@ public class Nave {
     }
 
     private void rotate(){
-        imgNave.setRotate(getAngle());
+        imgShip.setRotate(getAngle());
 
-        imagenRotada = imgNave.snapshot(snapshotParameters, null);
+        imagenRotada = imgShip.snapshot(snapshotParameters, null);
     }
 
     public void shoot(double cursorX, double cursorY) {
-        state = Enums.NaveState.SHOOTING;
+        state = Enums.ShipState.SHOOTING;
 
-        arma.shoot(
-                (posX + imgNave.getImage().getWidth()/2),
-                (posY + imgNave.getImage().getHeight()/2),
-                (posX + imgNave.getImage().getWidth()/2) - cursorX,
-                (posY + imgNave.getImage().getHeight()/2) - cursorY,
+        weapon.shoot(
+                (posX + imgShip.getImage().getWidth()/2),
+                (posY + imgShip.getImage().getHeight()/2),
+                (posX + imgShip.getImage().getWidth()/2) - cursorX,
+                (posY + imgShip.getImage().getHeight()/2) - cursorY,
                 getAngle());
 
 
     }
 
     public void update(double time){
-        arma.update(time);
+        weapon.update(time);
         if(anyPressed.get()) {
             mover();
         }
-        if(state.equals(Enums.NaveState.DYING)) {
+        if(state.equals(Enums.ShipState.DYING)) {
             if (animacion.getFrame() < Ajustes.NAVEDESTRUIR_LENGHT) {
-                imgNave = animacion.naveDestruir(id);
+                imgShip = animacion.shipDestruir(id);
             }
             else {
                 animacion.finalAnimacion();
-                state=Enums.NaveState.DEAD;
+                state=Enums.ShipState.DEAD;
             }
-        } else if (state.equals(Enums.NaveState.SHOOTING)) {
+        } else if (state.equals(Enums.ShipState.SHOOTING)) {
             if (animacion.getFrame() < Ajustes.NAVESHOOT_LENGHT) {
-                imgNave = animacion.naveDisparo(id);
+                imgShip = animacion.shipShoot(id);
             }
             else {
                 animacion.finalAnimacion();
-                state=Enums.NaveState.ALIVE;
+                state=Enums.ShipState.ALIVE;
             }
         }
 
@@ -220,12 +220,12 @@ public class Nave {
     public void render(){
         graphicsContext.drawImage(imagenRotada, posX, posY);
 
-        arma.render();
+        weapon.render();
         for (int i = 0; i < MAX_LIFES; i++) {
             if(i< lifes) {
-                imgVidas[i].setOpacity(1);
+                imgLifes[i].setOpacity(1);
             }else{
-                imgVidas[i].setOpacity(0.5);
+                imgLifes[i].setOpacity(0.5);
             }
         }
     }
@@ -256,11 +256,11 @@ public class Nave {
         this.lifes = lifes;
     }
 
-    public void setState(Enums.NaveState state) {
+    public void setState(Enums.ShipState state) {
         this.state = state;
     }
 
-    public Enums.NaveState getState() {
+    public Enums.ShipState getState() {
         return state;
     }
 }

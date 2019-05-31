@@ -1,19 +1,19 @@
 package game.model.toSend;
 
-public class BalaToSend {
+public class BulletToSend {
 
-    private final int idBala;
-    private int idNave;
+    private final int idBullet;
+    private int idShip;
 
     private double posX;
     private double posY;
     private double angle;
 
-    public BalaToSend(double posX, double posY, int idNave, int idBala, double angle){
+    public BulletToSend(double posX, double posY, int idShip, int idBullet, double angle){
         this.posX = posX;
         this.posY = posY;
-        this.idBala = idBala;
-        this.idNave = idNave;
+        this.idBullet = idBullet;
+        this.idShip = idShip;
         this.angle = angle;
     }
 
@@ -30,12 +30,12 @@ public class BalaToSend {
         this.posY = posY;
     }
 
-    public int getIdBala() {
-        return idBala;
+    public int getIdBullet() {
+        return idBullet;
     }
 
-    public int getIdNave() {
-        return idNave;
+    public int getIdShip() {
+        return idShip;
     }
 
     public double getAngle() {

@@ -1,6 +1,6 @@
 package game.model.toSend;
 
-import game.model.Nave;
+import game.model.Ship;
 import game.model.Timer;
 import statVars.Enums;
 
@@ -9,77 +9,77 @@ import java.util.ArrayList;
 //Se pondrán las variables que se necesite para mandar al servidor.
 public class DataToSend {
 
-    private int idNave;
+    private int idShip;
 
     private String idSala;
 
     private int score;
 
-    //posicion nave
-    private double navePosX;
-    private double navePosY;
+    //posicion ship
+    private double shipPosX;
+    private double shipPosY;
 
     //posiciones cursor
-    private double naveCursorPosX;
-    private double naveCursorPosY;
+    private double shipCursorPosX;
+    private double shipCursorPosY;
     // .
-    //angulo (nave y bala)
+    //angulo (ship y bullet)
     private double angle;
 
-    //balas
-    private ArrayList<BalaToSend> naveArmaBalas;
-    private ArrayList<Integer> navesTocadas;
-    private ArrayList<Integer> meteoritosTocados;
+    //bullets
+    private ArrayList<BulletToSend> shipWeaponBullets;
+    private ArrayList<Integer> shipsTocadas;
+    private ArrayList<Integer> meteorsTocados;
 
     private int lifes;
 
-    private Enums.NaveState state;
+    private Enums.ShipState state;
 
     private Timer timer;
 
     public DataToSend(){
-        naveArmaBalas = new ArrayList<>();
+        shipWeaponBullets = new ArrayList<>();
         timer = new Timer(3);
-        navesTocadas = new ArrayList<>();
-        meteoritosTocados = new ArrayList<>();
+        shipsTocadas = new ArrayList<>();
+        meteorsTocados = new ArrayList<>();
     }
     //change
 
-    public void setData(Nave nave, double time, String idSala) {
+    public void setData(Ship ship, double time, String idSala) {
         this.idSala = idSala;
 
-        lifes = nave.getLifes();
+        lifes = ship.getLifes();
 
-        state = nave.getState();
+        state = ship.getState();
 
-        score = nave.getScore();
+        score = ship.getScore();
 
         timer.update(time);
 
-        //Si han pasado 10 segundos se borran todas las balas de dentro del array.
+        //Si han pasado 10 segundos se borran todas las bullets de dentro del array.
         if(timer.check()){
-            naveArmaBalas.clear();
-            nave.getArma().getBalas().forEach(bala->bala.setAdded(false));
+            shipWeaponBullets.clear();
+            ship.getWeapon().getBullets().forEach(bullet->bullet.setAdded(false));
         }
 
-        this.idNave = nave.getId();
-        navePosX = nave.getPosX();
-        navePosY = nave.getPosY();
+        this.idShip = ship.getId();
+        shipPosX = ship.getPosX();
+        shipPosY = ship.getPosY();
 
-        angle = nave.getAngle();
+        angle = ship.getAngle();
 
-        naveCursorPosX = nave.getOrientation().getPosX();
-        naveCursorPosY = nave.getOrientation().getPosY();
+        shipCursorPosX = ship.getOrientation().getPosX();
+        shipCursorPosY = ship.getOrientation().getPosY();
 
-        if(!nave.getArma().getBalas().isEmpty()) {
-            nave.getArma().getBalas().forEach(bala -> {
-                if(!bala.getAdded()) {
-                    naveArmaBalas.add(new BalaToSend(bala.getPosX(), bala.getPosY(), nave.getId(), bala.getIdBala(), bala.getAngle()));
-                    bala.setAdded(true);
+        if(!ship.getWeapon().getBullets().isEmpty()) {
+            ship.getWeapon().getBullets().forEach(bullet -> {
+                if(!bullet.getAdded()) {
+                    shipWeaponBullets.add(new BulletToSend(bullet.getPosX(), bullet.getPosY(), ship.getId(), bullet.getIdBullet(), bullet.getAngle()));
+                    bullet.setAdded(true);
                 } else{
-                    naveArmaBalas.forEach(balaToSend -> {
-                        if (balaToSend.getIdBala() == bala.getIdBala()) {
-                            balaToSend.setPos(bala.getPosX(),bala.getPosY());
+                    shipWeaponBullets.forEach(bulletToSend -> {
+                        if (bulletToSend.getIdBullet() == bullet.getIdBullet()) {
+                            bulletToSend.setPos(bullet.getPosX(),bullet.getPosY());
                         }
                     });
 
@@ -87,38 +87,38 @@ public class DataToSend {
             });
         }
 
-//        System.out.println("////////////////////" + naveArmaBalas.size());
+//        System.out.println("////////////////////" + shipWeaponBullets.size());
     }
 
-    public double getNavePosX() {
-        return navePosX;
+    public double getShipPosX() {
+        return shipPosX;
     }
 
-    public double getNavePosY() {
-        return navePosY;
+    public double getShipPosY() {
+        return shipPosY;
     }
 
-    public double getNaveCursorPosX() {
-        return naveCursorPosX;
+    public double getShipCursorPosX() {
+        return shipCursorPosX;
     }
 
-    public double getNaveCursorPosY() {
-        return naveCursorPosY;
+    public double getShipCursorPosY() {
+        return shipCursorPosY;
     }
 
     public double getAngle(){
         return angle;
     }
 
-    public ArrayList<BalaToSend> getNaveArmaBalas() {
-        return naveArmaBalas;
+    public ArrayList<BulletToSend> getShipWeaponBullets() {
+        return shipWeaponBullets;
     }
 
-    public void addIdNaveTocada(int id){
-        navesTocadas.add(id);
+    public void addIdShipTocada(int id){
+        shipsTocadas.add(id);
     }
 
-    public void clearIdNaveTocada() {
-        navesTocadas.clear();
+    public void clearIdShipTocada() {
+        shipsTocadas.clear();
     }
 }

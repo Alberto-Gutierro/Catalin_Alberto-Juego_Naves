@@ -1,13 +1,13 @@
 package formatClasses;
 
-import game.model.toSend.BalaToSend;
+import game.model.toSend.BulletToSend;
 import statVars.Enums;
 
 import java.util.ArrayList;
 
 public class DataToRecive {
-    // Identificador de la nave
-    private int idNave;
+    // Identificador de la ship
+    private int idShip;
 
     // Identificador de la sala.
     private String idSala;
@@ -15,61 +15,61 @@ public class DataToRecive {
     // puntuación
     private int score;
 
-    //posicion nave
-    private double navePosX;
-    private double navePosY;
+    //posicion ship
+    private double shipPosX;
+    private double shipPosY;
 
     //posiciones cursor
-    private double naveCursorPosX;
-    private double naveCursorPosY;
+    private double shipCursorPosX;
+    private double shipCursorPosY;
 
-    private ArrayList<Integer> navesTocadas;
-    private ArrayList<Integer> meteoritosTocados;
+    private ArrayList<Integer> shipsTocadas;
+    private ArrayList<Integer> meteorsTocados;
 
-    //angulo (nave y bala)
+    //angulo (ship y bullet)
     private double angle;
 
     private int lifes;
 
-    private Enums.NaveState state;
+    private Enums.ShipState state;
 
-    //balas
-    private ArrayList<BalaToSend> naveArmaBalas;
+    //bullets
+    private ArrayList<BulletToSend> shipWeaponBullets;
 
     public int getScore() {
         return score;
     }
 
-    public int getIdNave() {
-        return idNave;
+    public int getIdShip() {
+        return idShip;
     }
 
     public String getIdSala(){
         return idSala;
     }
 
-    public double getNavePosX() {
-        return navePosX;
+    public double getShipPosX() {
+        return shipPosX;
     }
 
-    public double getNavePosY() {
-        return navePosY;
+    public double getShipPosY() {
+        return shipPosY;
     }
 
-    public double getNaveCursorPosX() {
-        return naveCursorPosX;
+    public double getShipCursorPosX() {
+        return shipCursorPosX;
     }
 
-    public double getNaveCursorPosY() {
-        return naveCursorPosY;
+    public double getShipCursorPosY() {
+        return shipCursorPosY;
     }
 
     public double getAngle() {
         return angle;
     }
 
-    public ArrayList<BalaToSend> getNaveArmaBalas() {
-        return naveArmaBalas;
+    public ArrayList<BulletToSend> getShipWeaponBullets() {
+        return shipWeaponBullets;
     }
 
     public int getLifes() {
@@ -80,30 +80,30 @@ public class DataToRecive {
         this.lifes = lifes;
     }
 
-    public ArrayList<Integer> getNavesTocadas() {
-        return navesTocadas;
+    public ArrayList<Integer> getShipsTocadas() {
+        return shipsTocadas;
     }
 
-    public ArrayList<Integer> getMeteoritosTocados() {
-        return meteoritosTocados;
+    public ArrayList<Integer> getMeteorsTocados() {
+        return meteorsTocados;
     }
 
-    public Enums.NaveState getState() {
+    public Enums.ShipState getState() {
         return state;
     }
 
-    public void setState(Enums.NaveState state) {
+    public void setState(Enums.ShipState state) {
         this.state = state;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return idNave == ((DataToRecive) obj).getIdNave();
+        return idShip == ((DataToRecive) obj).getIdShip();
     }
 
 
     @Override
     public String toString() {
-        return "ID: " + idNave + "\nAngulo: " + angle;
+        return "ID: " + idShip + "\nAngulo: " + angle;
     }
 }

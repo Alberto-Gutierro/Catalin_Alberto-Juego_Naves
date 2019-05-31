@@ -1,11 +1,11 @@
 package game.controller;
 
 import game.GameSetter;
-import game.model.Bala;
+import game.model.Bullet;
 import game.model.CollisionRectangle;
 import game.model.toSend.DataToSend;
 import game.services.MeteorService;
-import game.services.NavesRecivedService;
+import game.services.ShipsRecivedService;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -35,7 +35,7 @@ public class GameController extends GameSetter implements Initializable {
 
     //Datos que se mandan al servidor
     private DataToSend dataToSend;
-    private NavesRecivedService navesRecivedService;
+    private ShipsRecivedService shipsRecivedService;
     private byte[] recivingData;
     private MeteorService meteorService;
 
@@ -105,8 +105,8 @@ public class GameController extends GameSetter implements Initializable {
         new AnimationTimer() {
             public void handle(long currentNanoTime)
             {
-                // Si la nave esta muerta acaba la partida
-                if (nave.getState().equals(Enums.NaveState.DEAD)) runningGame=false;
+                // Si la ship esta muerta acaba la partida
+                if (ship.getState().equals(Enums.ShipState.DEAD)) runningGame=false;
 
                 double timing = (currentNanoTime-anteriorCurrentNanoTime)*Math.pow(10, -9);
                 if(anteriorCurrentNanoTime == 0){
@@ -116,18 +116,18 @@ public class GameController extends GameSetter implements Initializable {
                 anteriorCurrentNanoTime = currentNanoTime;
 
                 if( timingMeteor*(dificulty/6+1) >= 1) {
-                    meteorService.create(nave.getPosX()+(nave.getImagenRotada().getWidth())/2, nave.getPosY()+(nave.getImagenRotada().getHeight())/2, 2+(dificulty));
+                    meteorService.create(ship.getPosX()+(ship.getImagenRotada().getWidth())/2, ship.getPosY()+(ship.getImagenRotada().getHeight())/2, 2+(dificulty));
                     timingMeteor = 0;
                 }
 
-                nave.update(timing);
+                ship.update(timing);
                 meteorService.update();
 
                 checkCollisions();
 
                 graphicsContext.clearRect(0,0, stage.getWidth(), stage.getHeight());
 
-                nave.render();
+                ship.render();
                 meteorService.render();
 
 
@@ -161,7 +161,7 @@ public class GameController extends GameSetter implements Initializable {
         runningGame = true;
 
         DatagramSocket socket = new DatagramSocket();
-        navesRecivedService = new NavesRecivedService(graphicsContext, nave.getId(), score_p1, score_p2, score_p3, score_p4);
+        shipsRecivedService = new ShipsRecivedService(graphicsContext, ship.getId(), score_p1, score_p2, score_p3, score_p4);
 
         //POR AQUI: AL COMENZAR EL JUEGO EN LINEA QUE HAGA ALL LO QUE TENGA QUE HACER
         new AnimationTimer() {
@@ -175,8 +175,8 @@ public class GameController extends GameSetter implements Initializable {
 
                 graphicsContext.clearRect(0,0, stage.getWidth(), stage.getHeight());
 
-                dataToSend.setData(nave, timing, idSala);
-                //dataToSend.getNaveArmaBalas().forEach(balaToSend -> System.out.println(balaToSend.getAngle()));
+                dataToSend.setData(ship, timing, idSala);
+                //dataToSend.getShipWeaponBullets().forEach(bulletToSend -> System.out.println(bulletToSend.getAngle()));
 
                 String sendData = Transformer.classToJson(dataToSend);
                 packet = new DatagramPacket(sendData.getBytes(),
@@ -203,30 +203,30 @@ public class GameController extends GameSetter implements Initializable {
                         MultiplayerLobbyController multiplayerLobbyController = loader.getController();
                         multiplayerLobbyController.setScene(scene);
                         multiplayerLobbyController.setStage(stage);
-                        multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + ":" + idSala).getBytes(), (nave.getId() + ":" + idSala).getBytes().length,ipServer,portServer));
+                        multiplayerLobbyController.setPacket(new DatagramPacket((ship.getId() + ":" + idSala).getBytes(), (ship.getId() + ":" + idSala).getBytes().length,ipServer,portServer));
 
                         stage.setScene(scene);
                         stage.show();
                     }else {
-                        navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
+                        shipsRecivedService.setShipsRecived(Transformer.jsonToArrayListShips(Transformer.packetDataToString(packet)));
 
-                        navesRecivedService.renderNavesRecibidas();
+                        shipsRecivedService.renderShipsRecibidas();
 
-                        nave.setState(navesRecivedService.getMyState());
-                        System.out.println(nave.getState());
-                        nave.setLifes(navesRecivedService.getMyLifes());
+                        ship.setState(shipsRecivedService.getMyState());
+                        System.out.println(ship.getState());
+                        ship.setLifes(shipsRecivedService.getMyLifes());
 
 
-                        if(nave.getState() != Enums.NaveState.DEAD) {
-                            nave.update(timing);
+                        if(ship.getState() != Enums.ShipState.DEAD) {
+                            ship.update(timing);
 
                             checkCollisions();
 
-                            nave.render();
+                            ship.render();
                         }else {
-                            nave.render();
+                            ship.render();
                             runningGame = false;
-                            multiplayerSpectatorMode(navesRecivedService, socket);
+                            multiplayerSpectatorMode(shipsRecivedService, socket);
                             this.stop();
                         }
 
@@ -264,7 +264,7 @@ public class GameController extends GameSetter implements Initializable {
         }.start();
     }
 
-    private void multiplayerSpectatorMode(NavesRecivedService navesRecivedService, DatagramSocket socket){
+    private void multiplayerSpectatorMode(ShipsRecivedService shipsRecivedService, DatagramSocket socket){
         String message = "Dead:" + idSala;
         new AnimationTimer(){
 
@@ -279,7 +279,6 @@ public class GameController extends GameSetter implements Initializable {
                     socket.setSoTimeout(1000);
                     packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
                     socket.receive(packet);
-                    System.out.println(Transformer.packetDataToString(packet));
                     if(Transformer.packetDataToString(packet).equals("FinishGame")){
                         this.stop();
 
@@ -292,15 +291,15 @@ public class GameController extends GameSetter implements Initializable {
                         MultiplayerLobbyController multiplayerLobbyController = loader.getController();
                         multiplayerLobbyController.setScene(scene);
                         multiplayerLobbyController.setStage(stage);
-                        multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + ":" + idSala).getBytes(), (nave.getId() + ":" + idSala).getBytes().length,ipServer,portServer));
+                        multiplayerLobbyController.setPacket(new DatagramPacket((ship.getId() + ":" + idSala).getBytes(), (ship.getId() + ":" + idSala).getBytes().length,ipServer,portServer));
 
                         stage.setScene(scene);
                         stage.show();
                     }else {
                         graphicsContext.clearRect(0, 0, stage.getWidth(), stage.getHeight());
-                        navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
+                        shipsRecivedService.setShipsRecived(Transformer.jsonToArrayListShips(Transformer.packetDataToString(packet)));
 
-                        navesRecivedService.renderNavesRecibidas();
+                        shipsRecivedService.renderShipsRecibidas();
 
                     }
 
@@ -337,16 +336,16 @@ public class GameController extends GameSetter implements Initializable {
     }
 
     private void checkCollisions() {
-        checkNaveInScreen();
-        checkCollisionBala();
+        checkShipInScreen();
+        checkCollisionBullet();
         if (!isMultiplayer) {
             checkCollisionMeteor();
         }
     }
 
     private void checkCollisionMeteor() {
-        //Se puede juntar el contenido de este método y el de checkCollisionBala
-        meteorService.getMeteoritos().forEach(meteor -> {
+        //Se puede juntar el contenido de este método y el de checkCollisionBullet
+        meteorService.getMeteors().forEach(meteor -> {
             if(meteor.getPosX() < 0 - Resoluciones.LINEA_DESTRUCCION){
                 meteor.remove();
             }else if(meteor.getPosX() > stage.getWidth() + Resoluciones.LINEA_DESTRUCCION){
@@ -361,83 +360,83 @@ public class GameController extends GameSetter implements Initializable {
             areaObject1.setCollisions(
                     (int) meteor.getPosX(),
                     (int) meteor.getPosY(),
-                    (int) meteor.getImgMeteoritoRotada().getWidth(),
-                    (int) meteor.getImgMeteoritoRotada().getHeight()
+                    (int) meteor.getImgMeteorRotada().getWidth(),
+                    (int) meteor.getImgMeteorRotada().getHeight()
             );
 
 
-            for (Bala bala:nave.getArma().getBalas()) {
+            for (Bullet bullet:ship.getWeapon().getBullets()) {
                 areaObject2.setCollisions(
-                        (int)bala.getPosX(),
-                        (int)bala.getPosY(),
-                        (int)bala.getImagenRotada().getWidth(),
-                        (int)bala.getImagenRotada().getHeight()
+                        (int)bullet.getPosX(),
+                        (int)bullet.getPosY(),
+                        (int)bullet.getImagenRotada().getWidth(),
+                        (int)bullet.getImagenRotada().getHeight()
                 );
 
                 if(areaObject1.intersects(areaObject2) && meteor.getState().equals(Enums.MeteorState.MOVING)){
-                    bala.remove();
+                    bullet.remove();
                     meteor.remove();
                     score_p1.setText(String.valueOf(Integer.parseInt(score_p1.getText()) + 50));
-                    if(Integer.parseInt(score_p1.getText())%500 == 0 && nave.getLifes() != 5){
-                        nave.addLive();
+                    if(Integer.parseInt(score_p1.getText())%500 == 0 && ship.getLifes() != 5){
+                        ship.addLive();
                     }
                     dificulty += 0.5;
                 }
             }
             areaObject2.setCollisions(
-                    (int)nave.getPosX(),
-                    (int)nave.getPosY(),
-                    (int)nave.getImagenRotada().getWidth(),
-                    (int)nave.getImagenRotada().getHeight()
+                    (int)ship.getPosX(),
+                    (int)ship.getPosY(),
+                    (int)ship.getImagenRotada().getWidth(),
+                    (int)ship.getImagenRotada().getHeight()
             );
             if(areaObject1.intersects(areaObject2) && meteor.getState().equals(Enums.MeteorState.MOVING)){
                 meteor.remove();
-                nave.subsLive();
-                if(nave.getLifes() <= 0){
-                    nave.setState(Enums.NaveState.DYING);
+                ship.subsLive();
+                if(ship.getLifes() <= 0){
+                    ship.setState(Enums.ShipState.DYING);
 
                 }
             }
         });
     }
 
-    private void checkCollisionBala() {
-        dataToSend.clearIdNaveTocada();
-        nave.getArma().getBalas().forEach(bala -> {
-            if(bala.getPosX() < 0){
-                bala.remove();
-            }else if(bala.getPosX() > stage.getWidth()){
-                bala.remove();
+    private void checkCollisionBullet() {
+        dataToSend.clearIdShipTocada();
+        ship.getWeapon().getBullets().forEach(bullet -> {
+            if(bullet.getPosX() < 0){
+                bullet.remove();
+            }else if(bullet.getPosX() > stage.getWidth()){
+                bullet.remove();
             }
-            if(bala.getPosY() < 0){
-                bala.remove();
-            }else if(bala.getPosY() > stage.getHeight()){
-                bala.remove();
+            if(bullet.getPosY() < 0){
+                bullet.remove();
+            }else if(bullet.getPosY() > stage.getHeight()){
+                bullet.remove();
             }
         });
 
         if(isMultiplayer) {
-            Image[] imagenRotadaOtrasNaves = navesRecivedService.getImagenRotadaOtrasNaves();
-            navesRecivedService.getNavesRecived().forEach(naveRecivedService -> {
-                if (naveRecivedService.getIdNave() != nave.getId() && (naveRecivedService.getState() != Enums.NaveState.DEAD && naveRecivedService.getState() != Enums.NaveState.DYING)) {
+            Image[] imagenRotadaOtrasShips = shipsRecivedService.getImagenRotadaOtrasShips();
+            shipsRecivedService.getShipsRecived().forEach(shipRecivedService -> {
+                if (shipRecivedService.getIdShip() != ship.getId() && (shipRecivedService.getState() != Enums.ShipState.DEAD && shipRecivedService.getState() != Enums.ShipState.DYING)) {
                     areaObject1.setCollisions(
-                            (int) naveRecivedService.getNavePosX(),
-                            (int) naveRecivedService.getNavePosY(),
-                            (int) imagenRotadaOtrasNaves[naveRecivedService.getIdNave()].getWidth(),
-                            (int) imagenRotadaOtrasNaves[naveRecivedService.getIdNave()].getHeight()
+                            (int) shipRecivedService.getShipPosX(),
+                            (int) shipRecivedService.getShipPosY(),
+                            (int) imagenRotadaOtrasShips[shipRecivedService.getIdShip()].getWidth(),
+                            (int) imagenRotadaOtrasShips[shipRecivedService.getIdShip()].getHeight()
                     );
 
-                    nave.getArma().getBalas().forEach(bala -> {
+                    ship.getWeapon().getBullets().forEach(bullet -> {
                         areaObject2.setCollisions(
-                                (int) bala.getPosX(),
-                                (int) bala.getPosY(),
-                                (int) bala.getImagenRotada().getWidth(),
-                                (int) bala.getImagenRotada().getHeight()
+                                (int) bullet.getPosX(),
+                                (int) bullet.getPosY(),
+                                (int) bullet.getImagenRotada().getWidth(),
+                                (int) bullet.getImagenRotada().getHeight()
                         );
                         if (areaObject1.intersects(areaObject2)) {
-                            bala.remove();
-                            nave.addScore(50);
-                            dataToSend.addIdNaveTocada(naveRecivedService.getIdNave());
+                            bullet.remove();
+                            ship.addScore(50);
+                            dataToSend.addIdShipTocada(shipRecivedService.getIdShip());
                         }
                     });
                 }
@@ -446,17 +445,17 @@ public class GameController extends GameSetter implements Initializable {
     }
 //HACER QUE SE GUARDE EL ID DE LA NAVE QUE HA SIDO TOCADA EN LOS DATOS QUE VAMOS A MANDAR AL SERVIDOR.
 
-    // Añadimos la las id de las ships que han sido tocadas por tus balas
-    private void checkNaveInScreen() {
-        if(nave.getPosX() < 0){
-            nave.setPosX(0);
-        }else if(nave.getPosX() + nave.getImgNave().getImage().getWidth() + Resoluciones.AJUSTAR_PANTALLA_X > stage.getWidth()){
-            nave.setPosX(stage.getWidth() - nave.getImgNave().getImage().getWidth() - Resoluciones.AJUSTAR_PANTALLA_X);
+    // Añadimos la las id de las ships que han sido tocadas por tus bullets
+    private void checkShipInScreen() {
+        if(ship.getPosX() < 0){
+            ship.setPosX(0);
+        }else if(ship.getPosX() + ship.getImgShip().getImage().getWidth() + Resoluciones.AJUSTAR_PANTALLA_X > stage.getWidth()){
+            ship.setPosX(stage.getWidth() - ship.getImgShip().getImage().getWidth() - Resoluciones.AJUSTAR_PANTALLA_X);
         }
-        if(nave.getPosY() < 0){
-            nave.setPosY(0);
-        }else if(nave.getPosY() + nave.getImgNave().getImage().getHeight() + Resoluciones.AJUSTAR_PANTALLA_Y > stage.getHeight()){
-            nave.setPosY(stage.getHeight() - nave.getImgNave().getImage().getHeight() - Resoluciones.AJUSTAR_PANTALLA_Y);
+        if(ship.getPosY() < 0){
+            ship.setPosY(0);
+        }else if(ship.getPosY() + ship.getImgShip().getImage().getHeight() + Resoluciones.AJUSTAR_PANTALLA_Y > stage.getHeight()){
+            ship.setPosY(stage.getHeight() - ship.getImgShip().getImage().getHeight() - Resoluciones.AJUSTAR_PANTALLA_Y);
         }
     }
 }

@@ -6,8 +6,8 @@ import statVars.Ajustes;
 public class Animacion {
 
     private ImageView[] meteorAnimation;
-    private ImageView[][] naveDeathAnimation;
-    private ImageView[][] naveShootAnimation;
+    private ImageView[][] shipDeathAnimation;
+    private ImageView[][] shipShootAnimation;
 
     private int frames;
 
@@ -23,38 +23,38 @@ public class Animacion {
         frame = 0;
 
         meteorAnimation= new ImageView[Ajustes.METEORITODESTRUIR_LENGHT];
-        naveDeathAnimation = new ImageView[Ajustes.NUM_NAVES][Ajustes.NAVEDESTRUIR_LENGHT];
-        naveShootAnimation = new ImageView[Ajustes.NUM_NAVES][Ajustes.NAVESHOOT_LENGHT];
+        shipDeathAnimation = new ImageView[Ajustes.NUM_NAVES][Ajustes.NAVEDESTRUIR_LENGHT];
+        shipShootAnimation = new ImageView[Ajustes.NUM_NAVES][Ajustes.NAVESHOOT_LENGHT];
 
         for (int i = 0; i < Ajustes.METEORITODESTRUIR_LENGHT; i++) {
             meteorAnimation[i] = new ImageView("game/res/img/meteorDestroy/meteor_animation_"+ (i+1) +".png");
         }
 
-        for (int i = 0; i < Ajustes.NUM_NAVES ; i++) { // i = id Nave - 1
+        for (int i = 0; i < Ajustes.NUM_NAVES ; i++) { // i = id Ship - 1
             for (int j = 0; j < Ajustes.NAVEDESTRUIR_LENGHT; j++) { // j = num de la imagen
-                naveDeathAnimation[i][j] = new ImageView("game/res/img/shipsDestroy/navePlayer_" + (i+1) + "/nave"+(i+1)+"_destroy_"+ j +".png");
+                shipDeathAnimation[i][j] = new ImageView("game/res/img/shipsDestroy/shipPlayer_" + (i+1) + "/ship"+(i+1)+"_destroy_"+ j +".png");
             }
             for (int j = 0; j < Ajustes.NAVESHOOT_LENGHT; j++) {
-                naveShootAnimation[i][j] = new ImageView("game/res/img/shipsDisparo/navePlayer_" + (i+1) + "/nave"+(i+1)+"_disparo_"+ j +".png");
+                shipShootAnimation[i][j] = new ImageView("game/res/img/shipsShoot/shipPlayer_" + (i+1) + "/ship"+(i+1)+"_disparo_"+ j +".png");
             }
         }
     }
 
-    public ImageView naveDisparo(int id) {
+    public ImageView shipShoot(int id) {
 //        if(frames>=nFrames){
 //            frames = 0;
 //        }
 //        frames++;
-        return naveShootAnimation[id-1][frame++];
+        return shipShootAnimation[id-1][frame++];
 
-        //return naveShootAnimation[id-1][frames>nFrames?frame++:frame];
+        //return shipShootAnimation[id-1][frames>nFrames?frame++:frame];
     }
 
-    public ImageView naveDestruir(int id){
-        return naveDeathAnimation[id-1][frame++];
+    public ImageView shipDestruir(int id){
+        return shipDeathAnimation[id-1][frame++];
     }
 
-    public ImageView meteoritoDestruido(){
+    public ImageView meteorDestruido(){
         return meteorAnimation[frame++];
     }
 

@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
-public class Meteorito {
+public class Meteor {
     private double cos;
     private double sin;
 
@@ -16,7 +16,7 @@ public class Meteorito {
 
     private GraphicsContext graphicsContext;
 
-    private Image imgMeteoritoRotada;
+    private Image imgMeteorRotada;
     private double speed = 10;
 
     private Enums.MeteorState state;
@@ -27,7 +27,7 @@ public class Meteorito {
 
 
 
-    public Meteorito(double posX, double posY, double xNave, double yNave, double speed, GraphicsContext graphicsContext, ImageView imgMeteorito) {
+    public Meteor(double posX, double posY, double xShip, double yShip, double speed, GraphicsContext graphicsContext, ImageView imgMeteor) {
         this.posX = posX;
         this.posY = posY;
 
@@ -38,11 +38,11 @@ public class Meteorito {
 
         angulo = Math.random()*360;
 
-        imgMeteorito.setRotate(angulo);
-        imgMeteoritoRotada = imgMeteorito.snapshot(snapshotParameters, null);
+        imgMeteor.setRotate(angulo);
+        imgMeteorRotada = imgMeteor.snapshot(snapshotParameters, null);
 
-        double cc = posX + imgMeteoritoRotada.getWidth()/2 - xNave;
-        double co = posY + imgMeteoritoRotada.getHeight()/2 - yNave;
+        double cc = posX + imgMeteorRotada.getWidth()/2 - xShip;
+        double co = posY + imgMeteorRotada.getHeight()/2 - yShip;
 
         cos = cc / Math.hypot(cc, co);
         sin = co / Math.hypot(cc, co);
@@ -75,7 +75,7 @@ public class Meteorito {
     }
 
     public void render(){
-        graphicsContext.drawImage(imgMeteoritoRotada, posX, posY);
+        graphicsContext.drawImage(imgMeteorRotada, posX, posY);
     }
 
     public Enums.MeteorState getState() {
@@ -86,13 +86,13 @@ public class Meteorito {
         this.state = state;
     }
 
-    public Image getImgMeteoritoRotada() {
-        return imgMeteoritoRotada;
+    public Image getImgMeteorRotada() {
+        return imgMeteorRotada;
     }
 
-    public void setImgMeteoritoRotada(ImageView imgMeteorito) {
-        imgMeteorito.setRotate(angulo);
-        imgMeteoritoRotada = imgMeteorito.snapshot(snapshotParameters, null);
+    public void setImgMeteorRotada(ImageView imgMeteor) {
+        imgMeteor.setRotate(angulo);
+        imgMeteorRotada = imgMeteor.snapshot(snapshotParameters, null);
     }
 
     public double getAngulo() {

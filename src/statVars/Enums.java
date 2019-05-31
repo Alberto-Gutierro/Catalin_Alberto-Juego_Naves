@@ -9,7 +9,7 @@ public class Enums {
         MOVING, TO_REMOVE, DEAD
     }
 
-    public enum NaveState {
+    public enum ShipState {
         ALIVE, DYING, DEAD, SHOOTING
     }
 

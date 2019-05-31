@@ -43,7 +43,7 @@ public class Main extends Application {
             });
 
             primaryStage.setTitle(Strings.NOMBRE_JUEGO);
-            primaryStage.getIcons().add(new Image("game/res/img/ships/navePlayerOriginal.png"));
+            primaryStage.getIcons().add(new Image("game/res/img/ships/shipPlayerOriginal.png"));
             primaryStage.setMaximized(true);
             primaryStage.setScene(scene);
             primaryStage.show();

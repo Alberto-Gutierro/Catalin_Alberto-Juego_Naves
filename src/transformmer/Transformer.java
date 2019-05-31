@@ -16,7 +16,7 @@ public abstract class Transformer {
         return new Gson().toJson(object);
     }
 
-    public static ArrayList<DataToRecive> jsonToArrayListNaves(String json) {
+    public static ArrayList<DataToRecive> jsonToArrayListShips(String json) {
         return new Gson().fromJson(json, new TypeToken<ArrayList<DataToRecive>>(){}.getType());
     }
 
@@ -27,7 +27,7 @@ public abstract class Transformer {
                 packet.getLength(), "UTF-8");
     }
 
-    public static DataToRecive jsonToNaveToRecive(String json) {
+    public static DataToRecive jsonToShipToRecive(String json) {
         return new Gson().fromJson(json, DataToRecive.class);
     }
 

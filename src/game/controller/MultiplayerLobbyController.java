@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import statVars.Packets;
 import transformmer.Transformer;
@@ -27,15 +28,15 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     private boolean startedGame;
     private boolean exitSala;
 
-    public ImageView img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4;
+    public ImageView img_playerShip1, img_playerShip2, img_playerShip3, img_playerShip4;
     public Text playerName1, playerName2, playerName3, playerName4;
 
-    private ImageView[] imagesNave;
-    private Text[] textsNave;
+    private ImageView[] imagesShip;
+    private Text[] textsShip;
 
     private DatagramPacket packet;
 
-    private int idNave;
+    private int idShip;
     private String idSala;
 
 
@@ -45,8 +46,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     public void initialize(URL url, ResourceBundle resourceBundle) {
         startedGame = false;
         exitSala = false;
-        imagesNave = new ImageView[]{null, img_playerNave1, img_playerNave2, img_playerNave3, img_playerNave4};
-        textsNave = new Text[]{null, playerName1, playerName2, playerName3, playerName4};
+        imagesShip = new ImageView[]{null, img_playerShip1, img_playerShip2, img_playerShip3, img_playerShip4};
+        textsShip = new Text[]{null, playerName1, playerName2, playerName3, playerName4};
     }
 
     public void playGameServer(ActionEvent event) {
@@ -60,7 +61,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
             GameController gameController = loader.getController();
-            gameController.beforeStartGame(stage, scene, idNave, idSala, gameController.getPane(), packet);
+            gameController.beforeStartGame(stage, scene, idShip, idSala, gameController.getPane(), packet);
             gameController.start(true);
 
             stage.setScene(scene);
@@ -73,12 +74,12 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
     void setPacket(DatagramPacket packet) {
         try {
-            idNave = Integer.parseInt(Transformer.packetDataToString(packet).split(":")[0]);
+            idShip = Integer.parseInt(Transformer.packetDataToString(packet).split(":")[0]);
             idSala = Transformer.packetDataToString(packet).split(":")[1];
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        //showNaves(packet);
+        //showShips(packet);
         this.packet = packet;
 
         executor = Executors.newFixedThreadPool(4);
@@ -113,7 +114,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                     señalServer = Transformer.packetDataToString(packetWait);
 
                     if(!señalServer.equals("Start")) {
-                        showNaves(packetWait);
+                        showShips(packetWait);
                     }
                 }while (!señalServer.equals("Start") && !startedGame && !exitSala);
             } catch (SocketTimeoutException e) {
@@ -146,30 +147,30 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         });
     }
 
-    private void showNaves(DatagramPacket packet) {
+    private void showShips(DatagramPacket packet) {
         try {
             boolean[] connectedPersons = Transformer.jsonToBooleanArray(Transformer.packetDataToString(packet));
 
             for (int i = 1; i < connectedPersons.length; i++) {
-                if(connectedPersons[i] && i == idNave){
-                    textsNave[i].setText("You");
-                    imagesNave[i].setImage(new Image("game/res/img/ships/navePlayer_" + i + ".png"));
+                if(connectedPersons[i] && i == idShip){
+                    textsShip[i].setText("You");
+                    imagesShip[i].setImage(new Image("game/res/img/ships/shipPlayer_" + i + ".png"));
                 }else if(connectedPersons[i]){
-                    textsNave[i].setText("Player " + i);
-                    imagesNave[i].setImage(new Image("game/res/img/ships/navePlayer_" + i + ".png"));
+                    textsShip[i].setText("Player " + i);
+                    imagesShip[i].setImage(new Image("game/res/img/ships/shipPlayer_" + i + ".png"));
                 }else {
-                    textsNave[i].setText("Waiting...");
-                    imagesNave[i].setImage(new Image("game/res/img/ships/shipPlayerWaiting.png"));
+                    textsShip[i].setText("Waiting...");
+                    imagesShip[i].setImage(new Image("game/res/img/ships/shipPlayerWaiting.png"));
                 }
             }
 
 //            for (int i = 0; i < Integer.parseInt(Transformer.packetDataToString(packet)); i++) {
-//                if (i + 1 != idNave) {
-//                    textsNave[i].setText("Player " + (i + 1));
-//                    imagesNave[i].setImage(new Image("game/res/img/ships/navePlayer_" + (i + 1) + ".png"));
+//                if (i + 1 != idShip) {
+//                    textsShip[i].setText("Player " + (i + 1));
+//                    imagesShip[i].setImage(new Image("game/res/img/ships/shipPlayer_" + (i + 1) + ".png"));
 //                } else {
-//                    textsNave[i].setText("You");
-//                    imagesNave[i].setImage(new Image("game/res/img/ships/navePlayer_" + (i + 1) + ".png"));
+//                    textsShip[i].setText("You");
+//                    imagesShip[i].setImage(new Image("game/res/img/ships/shipPlayer_" + (i + 1) + ".png"));
 //                }
 //            }
         }catch (UnsupportedEncodingException e){

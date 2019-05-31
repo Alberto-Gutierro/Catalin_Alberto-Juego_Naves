@@ -2,17 +2,17 @@ package server.model;
 
 public class ClientData {
 
-    public ClientData(int idNave, int port) {
-        this.idNave = idNave;
+    public ClientData(int idShip, int port) {
+        this.idShip = idShip;
         this.port = port;
     }
 
-    private final int idNave;
+    private final int idShip;
     private final int port;
     private int lifes;
 
-    public int getIdNave() {
-        return idNave;
+    public int getIdShip() {
+        return idShip;
     }
 
     public int getPort() {

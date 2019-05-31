@@ -121,7 +121,7 @@ public class ServerGameController {
         try {
 
             if(Transformer.packetDataToString(packet).matches("^Room:.+$")){
-                return getIdOfNaveClient(packet).getBytes();
+                return getIdOfShipClient(packet).getBytes();
             }else if(Transformer.packetDataToString(packet).matches("^Dead:.+$")){
                 return deadData(packet).getBytes();
             }else if(Transformer.packetDataToString(packet).matches("^Waiting:.+$")){
@@ -163,12 +163,12 @@ public class ServerGameController {
         try {
             Sala sala = salas.get(Transformer.packetDataToString(packet).split(":")[1]);
 
-            sala.subsAConnectedPerson(sala.getMapIdNaves().get(packet.getAddress()).getIdNave());
+            sala.subsAConnectedPerson(sala.getMapIdShips().get(packet.getAddress()).getIdShip());
 
-            sala.getMapIdNaves().remove(packet.getAddress());
+            sala.getMapIdShips().remove(packet.getAddress());
 
 
-            if(sala.getMapIdNaves().size() == 0) {
+            if(sala.getMapIdShips().size() == 0) {
                 salasToSend.remove(Transformer.packetDataToString(packet).split(":")[1]);
                 salas.remove(Transformer.packetDataToString(packet).split(":")[1]);
             }
@@ -203,26 +203,26 @@ public class ServerGameController {
         try {
             final Sala sala = salas.get(Transformer.packetDataToString(packet).split(":")[1]);
 
-            if(sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()]) {
-                sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()] = false;
-                sala.subsNumNavesVivas();
+            if(sala.getShipsVivas()[sala.getMapIdShips().get(packet.getAddress()).getIdShip()]) {
+                sala.getShipsVivas()[sala.getMapIdShips().get(packet.getAddress()).getIdShip()] = false;
+                sala.subsNumShipsVivas();
             }
 
-            if(sala.getNumNavesVivas() == 1){
+            if(sala.getNumShipsVivas() == 1){
                 sala.setTerminada(true);
                 return "FinishGame";
             }
-//            if(sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()]) {
-//                sala.getNaves().forEach(nave -> {
-//                    if (nave.getIdNave() == sala.getMapIdNaves().get(packet.getAddress()).getIdNave()) {
-//                        naveToRemove = nave;
+//            if(sala.getShipsVivas()[sala.getMapIdShips().get(packet.getAddress()).getIdShip()]) {
+//                sala.getShips().forEach(ship -> {
+//                    if (ship.getIdShip() == sala.getMapIdShips().get(packet.getAddress()).getIdShip()) {
+//                        shipToRemove = ship;
 //                        // Aqui cogemos de la array de ships vivas y la que tiene tu Id la pasas a false
-//                        sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()] = false;
+//                        sala.getShipsVivas()[sala.getMapIdShips().get(packet.getAddress()).getIdShip()] = false;
 //                    }
 //                });
-//                sala.getNaves().remove(naveToRemove);
+//                sala.getShips().remove(shipToRemove);
 //            }
-            return Transformer.classToJson(sala.getNaves());
+            return Transformer.classToJson(sala.getShips());
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -234,57 +234,57 @@ public class ServerGameController {
 
     private String updateJsonGame(DatagramPacket packet) throws UnsupportedEncodingException {
 
-        DataToRecive receivedData = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
+        DataToRecive receivedData = Transformer.jsonToShipToRecive(Transformer.packetDataToString(packet));
         Sala sala = salas.get(receivedData.getIdSala());
 
-        if(sala.getNumNavesVivas() == 1 && sala.isTerminada()){
+        if(sala.getNumShipsVivas() == 1 && sala.isTerminada()){
             System.out.println("ASDASD");
             return "FinishGame";
         }
 
-        if(!sala.getNaves().contains(receivedData)) {
-            sala.getNaves().add(receivedData);
-            sala.addNumNavesVivas();
-            sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()] = true;
+        if(!sala.getShips().contains(receivedData)) {
+            sala.getShips().add(receivedData);
+            sala.addNumShipsVivas();
+            sala.getShipsVivas()[sala.getMapIdShips().get(packet.getAddress()).getIdShip()] = true;
         }
 
-        //receivedData.getNaveArmaBalas().forEach(balaToSend -> System.out.println(balaToSend.getAngle()));
+        //receivedData.getShipWeaponBullets().forEach(bulletToSend -> System.out.println(bulletToSend.getAngle()));
 
 
-        if(receivedData.getNavesTocadas() != null || receivedData.getNavesTocadas().size() != 0) {
-            sala.getNaves().forEach(nave -> {
+        if(receivedData.getShipsTocadas() != null || receivedData.getShipsTocadas().size() != 0) {
+            sala.getShips().forEach(ship -> {
 
-                nave.setLifes(sala.getVidasNaves()[nave.getIdNave()]);
-                receivedData.getNavesTocadas().forEach(naveTocada -> {
+                ship.setLifes(sala.getLifesShips()[ship.getIdShip()]);
+                receivedData.getShipsTocadas().forEach(shipTocada -> {
 
-                    if (nave.getIdNave() == naveTocada && nave.getState() != Enums.NaveState.DEAD && nave.getState() != Enums.NaveState.DYING) {
+                    if (ship.getIdShip() == shipTocada && ship.getState() != Enums.ShipState.DEAD && ship.getState() != Enums.ShipState.DYING) {
                         //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
-                        nave.setLifes(--sala.getVidasNaves()[naveTocada]);
+                        ship.setLifes(--sala.getLifesShips()[shipTocada]);
 
-                        if(nave.getLifes() <= 0 && nave.getState() != Enums.NaveState.DYING){
-                            sala.getNavesState()[nave.getIdNave()] = Enums.NaveState.DYING;
+                        if(ship.getLifes() <= 0 && ship.getState() != Enums.ShipState.DYING){
+                            sala.getShipsState()[ship.getIdShip()] = Enums.ShipState.DYING;
                         }
 
                         //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
-                        if(sala.getVidasNaves()[receivedData.getIdNave()] < Ajustes.MAX_LIFES) {
-                            sala.getVidasNaves()[receivedData.getIdNave()]++;
+                        if(sala.getLifesShips()[receivedData.getIdShip()] < Ajustes.MAX_LIFES) {
+                            sala.getLifesShips()[receivedData.getIdShip()]++;
                         }
                     }
                 });
             });
         }
 
-        if(receivedData.getState() != Enums.NaveState.DEAD) {
-            receivedData.setState(sala.getNavesState()[receivedData.getIdNave()]);
+        if(receivedData.getState() != Enums.ShipState.DEAD) {
+            receivedData.setState(sala.getShipsState()[receivedData.getIdShip()]);
         }else {
-            sala.getNavesState()[receivedData.getIdNave()] = Enums.NaveState.DEAD;
+            sala.getShipsState()[receivedData.getIdShip()] = Enums.ShipState.DEAD;
         }
 
-        receivedData.setLifes(sala.getVidasNaves()[receivedData.getIdNave()]);
-        sala.getNaves().set(sala.getNaves().indexOf(receivedData), receivedData);
+        receivedData.setLifes(sala.getLifesShips()[receivedData.getIdShip()]);
+        sala.getShips().set(sala.getShips().indexOf(receivedData), receivedData);
 
-        //ships.forEach(nave-> System.out.println(nave.toString()));
-        return Transformer.classToJson(sala.getNaves());
+        //ships.forEach(ship-> System.out.println(ship.toString()));
+        return Transformer.classToJson(sala.getShips());
     }
 
     private String signalToStart(DatagramPacket packet) {
@@ -294,9 +294,9 @@ public class ServerGameController {
     }
 
     //ESTO SE HARÁ CUANDO se conecte a una sala y tiene que devolver una sala.
-    private String getIdOfNaveClient(DatagramPacket packet){
+    private String getIdOfShipClient(DatagramPacket packet){
         /**
-         * 1. Asignar ID a la Nave.
+         * 1. Asignar ID a la Ship.
          * (Num 1-4)
          *
          */
@@ -309,7 +309,7 @@ public class ServerGameController {
         }
         if(salas.containsKey(numSala)) {
             //SI NO CONTIENE LA IP DE EL CLIENTE && El límite de ships es inferior a 4
-            if (!salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress()) && salas.get(numSala).getMapIdNaves().size() < 4) {
+            if (!salas.get(numSala).getMapIdShips().containsKey(packet.getAddress()) && salas.get(numSala).getMapIdShips().size() < 4) {
 
                 salasToSend.get(numSala).addNumPlayers();
 
@@ -320,12 +320,12 @@ public class ServerGameController {
                         break;
                     }
                 }
-                salas.get(numSala).getMapIdNaves().put(packet.getAddress(), new ClientData(id, packet.getPort()));
+                salas.get(numSala).getMapIdShips().put(packet.getAddress(), new ClientData(id, packet.getPort()));
 
                 return String.valueOf(id + ":" + numSala);
 
                 //CAMBIAR: Este else if dejará de existir ya que cuando te salgas de la sala se borrarán todos los datos.
-            } else if(salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress())){
+            } else if(salas.get(numSala).getMapIdShips().containsKey(packet.getAddress())){
                 return MensajesServer.YA_DENTRO;
             } else {
                 return MensajesServer.SALA_LLENA;
@@ -338,20 +338,20 @@ public class ServerGameController {
     private String createSala(DatagramPacket packet) {
         Sala sala = new Sala(UUID.randomUUID().toString());
 
-        sala.getMapIdNaves().put(packet.getAddress(),new ClientData(sala.getMapIdNaves().size()+1, packet.getPort()));
+        sala.getMapIdShips().put(packet.getAddress(),new ClientData(sala.getMapIdShips().size()+1, packet.getPort()));
 
         salas.put(sala.getIdSala(), sala);
 
         salasToSend.put(sala.getIdSala(), new SalaToSend(sala.getIdSala()));
 
-        sala.addAConnectedPerson(sala.getMapIdNaves().get(packet.getAddress()).getIdNave());
+        sala.addAConnectedPerson(sala.getMapIdShips().get(packet.getAddress()).getIdShip());
 
         return String.valueOf(1 + ":" + sala.getIdSala());
     }
 
 
 //    private void sendAll(String signal, DatagramPacket packet) {
-//        salas.get(numSala).getMapIdNaves().forEach((ip,clientData)-> {
+//        salas.get(numSala).getMapIdShips().forEach((ip,clientData)-> {
 //            if(ip != packet.getAddress()) {
 //                System.out.println("MANDA A " + ip.getHostAddress() + ":" + clientData.getPort());
 //
@@ -370,8 +370,8 @@ public class ServerGameController {
 
 
     //     public void checkJsonCecived(){
-    //        System.out.println(updateJsonGame("{\"idNave\":1,\"navePosX\":500.0,\"navePosY\":500.0,\"naveCursorPosX\":1381.6,\"naveCursorPosY\":17.6,\"angle\":59.0,\"naveArmaBalas\":[{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idNave\":1},{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idNave\":1},{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idNave\":1}],\"timer\":{\"max\":10.0,\"time\":2.299999999079997},\"prueba\":0}\n".getBytes()));
-    //        System.out.println(updateJsonGame("{\"idNave\":2,\"navePosX\":500.0,\"navePosY\":500.0,\"naveCursorPosX\":1381.6,\"naveCursorPosY\":17.6,\"angle\":59.0,\"naveArmaBalas\":[{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idNave\":1},{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idNave\":1},{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idNave\":1}],\"timer\":{\"max\":10.0,\"time\":2.299999999079997},\"prueba\":0}\n".getBytes()));
+    //        System.out.println(updateJsonGame("{\"idShip\":1,\"shipPosX\":500.0,\"shipPosY\":500.0,\"shipCursorPosX\":1381.6,\"shipCursorPosY\":17.6,\"angle\":59.0,\"shipWeaponBullets\":[{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idShip\":1},{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idShip\":1},{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idShip\":1}],\"timer\":{\"max\":10.0,\"time\":2.299999999079997},\"prueba\":0}\n".getBytes()));
+    //        System.out.println(updateJsonGame("{\"idShip\":2,\"shipPosX\":500.0,\"shipPosY\":500.0,\"shipCursorPosX\":1381.6,\"shipCursorPosY\":17.6,\"angle\":59.0,\"shipWeaponBullets\":[{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idShip\":1},{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idShip\":1},{\"posX\":535.9119184743529,\"posY\":516.6606853405079,\"idShip\":1}],\"timer\":{\"max\":10.0,\"time\":2.299999999079997},\"prueba\":0}\n".getBytes()));
     //
     //    }
 }

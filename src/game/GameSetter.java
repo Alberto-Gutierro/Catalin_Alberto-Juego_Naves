@@ -1,6 +1,6 @@
 package game;
 
-import game.model.Nave;
+import game.model.Ship;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -11,7 +11,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import statVars.Enums;
+import transformmer.Transformer;
 
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 
@@ -27,7 +29,7 @@ public abstract class GameSetter extends SceneStageSetter {
     //Teclas a pulsar
     protected BooleanProperty leftPressed, rightPressed, upPressed, downPressed;
 
-    protected Nave nave;
+    protected Ship ship;
 
     protected InetAddress ipServer;
 
@@ -39,17 +41,17 @@ public abstract class GameSetter extends SceneStageSetter {
 
     protected String idSala;
 
-    public void beforeStartGame(Stage stage, Scene scene, int idNave, String idSala, Pane pane, DatagramPacket packet) {
+    public void beforeStartGame(Stage stage, Scene scene, int idShip, String idSala, Pane pane, DatagramPacket packet) {
         this.idSala = idSala;
 
         this.packet = packet;
 
 
-        /*int idNave = 1;
+        /*int idShip = 1;
         if(packet != null) {
             try {
-                idNave = Integer.parseInt(Transformer.packetDataToString(packet));
-                System.out.println(idNave);
+                idShip = Integer.parseInt(Transformer.packetDataToString(packet));
+                System.out.println(idShip);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -61,7 +63,7 @@ public abstract class GameSetter extends SceneStageSetter {
 
         initControlPress();
 
-        setNave(new Nave(graphicsContext, pane,idNave, new ImageView("game/res/img/ships/navePlayer_" + idNave + ".png"), this.upPressed, this.downPressed, this.rightPressed, this.leftPressed, this.anyPressed));
+        setShip(new Ship(graphicsContext, pane,idShip, new ImageView("game/res/img/ships/shipPlayer_" + idShip + ".png"), this.upPressed, this.downPressed, this.rightPressed, this.leftPressed, this.anyPressed));
 
         setControls();
 
@@ -78,9 +80,9 @@ public abstract class GameSetter extends SceneStageSetter {
         anyPressed = upPressed.or(downPressed).or(leftPressed).or(rightPressed);
     }
 
-    private void setNave(Nave nave){
-        this.nave = nave;
-        nave.setImagenRotada(nave.getImgNave().getImage());
+    private void setShip(Ship ship){
+        this.ship = ship;
+        ship.setImagenRotada(ship.getImgShip().getImage());
     }
 
     private void setIpServer(DatagramPacket packet) {
@@ -90,19 +92,19 @@ public abstract class GameSetter extends SceneStageSetter {
 
     private void setControls() {
         scene.setOnMouseReleased(event->{
-            if(runningGame && nave.getState() != Enums.NaveState.DYING) { // La nave no puede disparar si se esta muriendo
-                nave.shoot(event.getX(), event.getY());
+            if(runningGame && ship.getState() != Enums.ShipState.DYING) { // La ship no puede disparar si se esta muriendo
+                ship.shoot(event.getX(), event.getY());
             }
         });
 
         scene.setOnMouseDragged(event->{
             if(runningGame) {
-                nave.setOrientation(event.getX(), event.getY());
+                ship.setOrientation(event.getX(), event.getY());
             }
         });
         scene.setOnMouseMoved(event->{
             if(runningGame) {
-                nave.setOrientation(event.getX(), event.getY());
+                ship.setOrientation(event.getX(), event.getY());
             }
         });
         scene.setOnKeyPressed(key -> {

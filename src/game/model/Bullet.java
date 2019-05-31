@@ -8,11 +8,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
-public class Bala {
+public class Bullet {
 
     private Enums.BulletState state;
 
-    private int idBala;
+    private int idBullet;
 
     private double posX;
     private double posY;
@@ -30,21 +30,21 @@ public class Bala {
 
     private double angle;
 
-    public Bala(GraphicsContext graphicsContext, double x, double y, double cc, double co, double angle, int idBala, ImageView imgBala){
+    public Bullet(GraphicsContext graphicsContext, double x, double y, double cc, double co, double angle, int idBullet, ImageView imgBullet){
         //Para saber si la he añadido dentro del JSON.
         this.angle = angle;
 
         added = false;
 
-        this.idBala = idBala;
+        this.idBullet = idBullet;
 
         state = Enums.BulletState.SHOOTING;
 
         SnapshotParameters snapshotParameters = new SnapshotParameters();
         snapshotParameters.setFill(Color.TRANSPARENT);
 
-        imgBala.setRotate(angle);
-        imagenRotada = imgBala.snapshot(snapshotParameters, null);
+        imgBullet.setRotate(angle);
+        imagenRotada = imgBullet.snapshot(snapshotParameters, null);
 
         this.graphicsContext = graphicsContext;
 
@@ -103,8 +103,8 @@ public class Bala {
         this.added = added;
     }
 
-    public int getIdBala() {
-        return idBala;
+    public int getIdBullet() {
+        return idBullet;
     }
 
     public double getAngle() {

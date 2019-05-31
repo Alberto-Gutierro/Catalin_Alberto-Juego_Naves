@@ -12,38 +12,40 @@ import java.util.Map;
 public class Sala {
     private String idSala;
 
-    private ArrayList<DataToRecive> naves;
+    private ArrayList<DataToRecive> ships;
 
-    private Map<InetAddress, ClientData> mapIdNaves;
+    private Map<InetAddress, ClientData> mapIdShips;
 
-    private boolean[] navesVivas;
-    private int numNavesVivas;
+    private boolean[] shipsVivas;
+    private int numShipsVivas;
 
-    private int[] vidasNaves;
+    private int[] lifesShips;
 
     private boolean[] connectedPersons;
 
-    private Enums.NaveState[] navesState;
+    private Enums.ShipState[] shipsState;
 
     private boolean terminada;
 
     public void resetSala(){
+        numShipsVivas = 0;
         terminada = false;
-        vidasNaves = new int[]{-1, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES};
-        navesState = new Enums.NaveState[]{Enums.NaveState.DEAD,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE};
-        navesVivas = new boolean[]{false, false, false, false, false};
-        naves = new ArrayList<>();
+        lifesShips = new int[]{-1, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES};
+        shipsState = new Enums.ShipState[]{Enums.ShipState.DEAD,Enums.ShipState.ALIVE,Enums.ShipState.ALIVE,Enums.ShipState.ALIVE,Enums.ShipState.ALIVE};
+        shipsVivas = new boolean[]{false, false, false, false, false};
+        //connectedPersons = new boolean[]{false, false, false, false, false};
+        ships = new ArrayList<>();
 
     }
 
     public Sala(String id) {
-        navesState = new Enums.NaveState[]{Enums.NaveState.DEAD,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE};
+        shipsState = new Enums.ShipState[]{Enums.ShipState.DEAD,Enums.ShipState.ALIVE,Enums.ShipState.ALIVE,Enums.ShipState.ALIVE,Enums.ShipState.ALIVE};
         connectedPersons = new boolean[]{false, false, false, false, false};
-        navesVivas = new boolean[]{false, false, false, false, false};
+        shipsVivas = new boolean[]{false, false, false, false, false};
         idSala = id;
-        vidasNaves = new int[]{-1, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES};
-        naves = new ArrayList<>();
-        mapIdNaves = new HashMap<>();
+        lifesShips = new int[]{-1, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES};
+        ships = new ArrayList<>();
+        mapIdShips = new HashMap<>();
         terminada=false;
     }
 
@@ -51,20 +53,20 @@ public class Sala {
         return idSala;
     }
 
-    public ArrayList<DataToRecive> getNaves() {
-        return naves;
+    public ArrayList<DataToRecive> getShips() {
+        return ships;
     }
 
-    public Map<InetAddress, ClientData> getMapIdNaves() {
-        return mapIdNaves;
+    public Map<InetAddress, ClientData> getMapIdShips() {
+        return mapIdShips;
     }
 
-    public boolean[] getNavesVivas() {
-        return navesVivas;
+    public boolean[] getShipsVivas() {
+        return shipsVivas;
     }
 
-    public int[] getVidasNaves() {
-        return vidasNaves;
+    public int[] getLifesShips() {
+        return lifesShips;
     }
 
     @Override
@@ -84,20 +86,20 @@ public class Sala {
         connectedPersons[pos] = false;
     }
 
-    public Enums.NaveState[] getNavesState() {
-        return navesState;
+    public Enums.ShipState[] getShipsState() {
+        return shipsState;
     }
 
-    public int getNumNavesVivas() {
-        return numNavesVivas;
+    public int getNumShipsVivas() {
+        return numShipsVivas;
     }
 
-    public void addNumNavesVivas() {
-        numNavesVivas++;
+    public void addNumShipsVivas() {
+        numShipsVivas++;
     }
 
-    public void subsNumNavesVivas() {
-        numNavesVivas--;
+    public void subsNumShipsVivas() {
+        numShipsVivas--;
     }
 
     public boolean isTerminada() {

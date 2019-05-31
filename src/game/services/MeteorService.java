@@ -5,16 +5,16 @@ import javafx.scene.image.ImageView;
 import statVars.Ajustes;
 import statVars.Enums;
 import statVars.Resoluciones;
-import game.model.Meteorito;
+import game.model.Meteor;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 
 public class MeteorService {
 
-    private ArrayList<Meteorito> meteoritos = new ArrayList<>();
+    private ArrayList<Meteor> meteors = new ArrayList<>();
 
-    private ImageView imgMeteorito;
+    private ImageView imgMeteor;
 
     private final int NORTH = 0,EAST = 1, SOUTH = 2, WEST = 3;
 
@@ -29,10 +29,10 @@ public class MeteorService {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         animacion = new Animacion();
-        imgMeteorito = new ImageView("game/res/img/img_meteor.png");
+        imgMeteor = new ImageView("game/res/img/img_meteor.png");
     }
 
-    public void create(double xNave, double yNave, double speed) {
+    public void create(double xShip, double yShip, double speed) {
 
         double posX = (int) (Math.random() * screenWidth);
         double posY = (int) (Math.random() * screenHeight);
@@ -44,43 +44,43 @@ public class MeteorService {
             case SOUTH: posY = screenHeight + Resoluciones.LINEA_DESTRUCCION; break;
             default: posX = 0 - Resoluciones.LINEA_DESTRUCCION;
         }
-        meteoritos.add(new Meteorito(posX, posY, xNave, yNave, speed, graphicsContext, imgMeteorito));
+        meteors.add(new Meteor(posX, posY, xShip, yShip, speed, graphicsContext, imgMeteor));
     }
 
     public void update() {
         removeMeteor();
-        if (!meteoritos.isEmpty()){
-            meteoritos.forEach(Meteorito::update);
+        if (!meteors.isEmpty()){
+            meteors.forEach(Meteor::update);
         }
 
     }
 
     public void render(){
-        if (!meteoritos.isEmpty()) meteoritos.forEach(Meteorito::render);
+        if (!meteors.isEmpty()) meteors.forEach(Meteor::render);
     }
 
     private void removeMeteor(){
-        ArrayList<Meteorito> meteorToRemove = new ArrayList<>();
-        meteoritos.forEach(meteorito -> {
-            if(meteorito.getState() == Enums.MeteorState.TO_REMOVE) {
+        ArrayList<Meteor> meteorToRemove = new ArrayList<>();
+        meteors.forEach(meteor -> {
+            if(meteor.getState() == Enums.MeteorState.TO_REMOVE) {
                 if (animacion.getFrame() < Ajustes.METEORITODESTRUIR_LENGHT){
-                    meteorito.setImgMeteoritoRotada(animacion.meteoritoDestruido());
+                    meteor.setImgMeteorRotada(animacion.meteorDestruido());
                 }else {
                     animacion.finalAnimacion();
-                    meteorito.setState(Enums.MeteorState.DEAD);
+                    meteor.setState(Enums.MeteorState.DEAD);
                 }
             }
 
-            if (meteorito.getState() == Enums.MeteorState.DEAD) {
-                if(!meteorToRemove.contains(meteorito)) {
-                    meteorToRemove.add(meteorito);
+            if (meteor.getState() == Enums.MeteorState.DEAD) {
+                if(!meteorToRemove.contains(meteor)) {
+                    meteorToRemove.add(meteor);
                 }
             }
         });
-        meteorToRemove.forEach(meteorito -> meteoritos.remove(meteorito));
+        meteorToRemove.forEach(meteor -> meteors.remove(meteor));
     }
 
-    public ArrayList<Meteorito> getMeteoritos() {
-        return meteoritos;
+    public ArrayList<Meteor> getMeteors() {
+        return meteors;
     }
 }
