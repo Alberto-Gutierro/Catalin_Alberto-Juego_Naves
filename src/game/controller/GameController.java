@@ -203,7 +203,7 @@ public class GameController extends GameSetter implements Initializable {
                         MultiplayerLobbyController multiplayerLobbyController = loader.getController();
                         multiplayerLobbyController.setScene(scene);
                         multiplayerLobbyController.setStage(stage);
-                        multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + ":" + idSala).getBytes(), (nave.getId() + ":" + idSala).getBytes().length));
+                        multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + ":" + idSala).getBytes(), (nave.getId() + ":" + idSala).getBytes().length,ipServer,portServer));
 
                         stage.setScene(scene);
                         stage.show();
@@ -290,7 +290,7 @@ public class GameController extends GameSetter implements Initializable {
                         MultiplayerLobbyController multiplayerLobbyController = loader.getController();
                         multiplayerLobbyController.setScene(scene);
                         multiplayerLobbyController.setStage(stage);
-                        multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + ":" + idSala).getBytes(), (nave.getId() + ":" + idSala).getBytes().length));
+                        multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + ":" + idSala).getBytes(), (nave.getId() + ":" + idSala).getBytes().length,ipServer,portServer));
 
                         stage.setScene(scene);
                         stage.show();

@@ -202,7 +202,10 @@ public class ServerGameController {
                 sala.subsNumNavesVivas();
             }
 
-            if(sala.getNumNavesVivas() == 1) return "FinishGame";
+            if(sala.getNumNavesVivas() == 1){
+                sala.setTerminada(true);
+                return "FinishGame";
+            }
 //            if(sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()]) {
 //                sala.getNaves().forEach(nave -> {
 //                    if (nave.getIdNave() == sala.getMapIdNaves().get(packet.getAddress()).getIdNave()) {
@@ -224,8 +227,11 @@ public class ServerGameController {
 
 
     private String updateJsonGame(DatagramPacket packet) throws UnsupportedEncodingException {
+
         DataToRecive receivedData = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
         Sala sala = salas.get(receivedData.getIdSala());
+
+        if(sala.getNumNavesVivas() == 1) return "FinishGame";
 
         if(!sala.getNaves().contains(receivedData)) {
             sala.getNaves().add(receivedData);
@@ -234,6 +240,8 @@ public class ServerGameController {
         }
 
         //receivedData.getNaveArmaBalas().forEach(balaToSend -> System.out.println(balaToSend.getAngle()));
+
+        if(sala.getNumNavesVivas() == 1 && sala.isTerminada()) return "FinishGame";
 
         if(receivedData.getNavesTocadas() != null || receivedData.getNavesTocadas().size() != 0) {
             sala.getNaves().forEach(nave -> {
