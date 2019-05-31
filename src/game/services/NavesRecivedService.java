@@ -81,9 +81,9 @@ public class NavesRecivedService {
 
     public void renderNavesRecibidas(){
         navesRecived.forEach(nave->{
+            scores[nave.getIdNave() - 1].setText(String.valueOf(nave.getScore()));
             if (myNaveId != nave.getIdNave()) {
                 if(nave.getState() != Enums.NaveState.DEAD) {
-                scores[nave.getIdNave() - 1].setText(String.valueOf(nave.getScore()));
                     renderRecivedData(nave);
                 }
             }else {
