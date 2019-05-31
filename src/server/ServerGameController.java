@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Transform;
 import server.model.ClientData;
 import server.model.Sala;
 import server.model.SalaToSend;
@@ -18,7 +17,6 @@ import transformmer.Transformer;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -250,7 +248,7 @@ public class ServerGameController {
             });
         }
 
-        if(receivedData.getState() != Enums.NaveState.DEATH) {
+        if(receivedData.getState() != Enums.NaveState.DEAD) {
             receivedData.setState(sala.getNavesState()[receivedData.getIdNave()]);
         }
 

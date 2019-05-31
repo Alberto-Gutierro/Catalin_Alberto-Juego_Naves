@@ -202,7 +202,7 @@ public class Nave {
             }
             else {
                 animacion.finalAnimacion();
-                state=Enums.NaveState.DEATH;
+                state=Enums.NaveState.DEAD;
             }
         } else if (state.equals(Enums.NaveState.SHOOTING)) {
             if (animacion.getFrame() < Ajustes.NAVESHOOT_LENGHT) {

@@ -25,7 +25,7 @@ public class Sala {
 
 
     public Sala(String id) {
-        navesState = new Enums.NaveState[]{Enums.NaveState.DEATH,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE};
+        navesState = new Enums.NaveState[]{Enums.NaveState.DEAD,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE};
         connectedPersons = new boolean[]{false, false, false, false, false};
         navesVivas = new boolean[]{false, true, true, true, true};
         idSala = id;
