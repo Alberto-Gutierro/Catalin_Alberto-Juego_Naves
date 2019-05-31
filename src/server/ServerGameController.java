@@ -330,7 +330,7 @@ public class ServerGameController {
 
         sala.addAConnectedPerson(sala.getMapIdNaves().get(packet.getAddress()).getIdNave());
 
-        return String.valueOf(1 + sala.getIdSala());
+        return String.valueOf(1 + ":" + sala.getIdSala());
     }
 
 
