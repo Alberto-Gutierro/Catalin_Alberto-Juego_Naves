@@ -1,6 +1,7 @@
 package game.services;
 
 import formatClasses.DataToRecive;
+import game.model.Animacion;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -35,6 +36,8 @@ public class NavesRecivedService {
     private ImageView[] imagenOtrasNaves;
     private Image[] imagenRotadaOtrasNaves;
 
+    private Animacion animations;
+
 
     public NavesRecivedService(GraphicsContext graphicsContext, int myNaveId, Text score_p1, Text score_p2, Text score_p3, Text score_p4) {
         this.scores = new Text[]{score_p1, score_p2, score_p3, score_p4};
@@ -42,6 +45,8 @@ public class NavesRecivedService {
 //        this.score_p2 = score_p2;
 //        this.score_p3 = score_p3;
 //        this.score_p4 = score_p4;
+
+        animations = new Animacion();
 
         imagenOtrasNaves = new ImageView[Ajustes.NUM_NAVES+1];
         imagenRotadaOtrasNaves = new Image[Ajustes.NUM_NAVES+1];
