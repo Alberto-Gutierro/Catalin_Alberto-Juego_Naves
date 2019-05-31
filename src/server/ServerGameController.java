@@ -251,7 +251,9 @@ public class ServerGameController {
             });
         }
 
-        receivedData.setState(sala.getNavesState()[receivedData.getIdNave()]);
+        if(receivedData.getState() != Enums.NaveState.DEATH) {
+            receivedData.setState(sala.getNavesState()[receivedData.getIdNave()]);
+        }
         receivedData.setLifes(sala.getVidasNaves()[receivedData.getIdNave()]);
         sala.getNaves().set(sala.getNaves().indexOf(receivedData), receivedData);
 
