@@ -190,6 +190,10 @@ public class GameController extends GameSetter implements Initializable {
                     packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
                     socket.receive(packet);
 
+
+                    if(Transformer.packetDataToString(packet).equals("FinishGame")){
+
+                    }
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
 
                     navesRecivedService.renderNavesRecibidas();

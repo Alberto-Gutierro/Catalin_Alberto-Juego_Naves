@@ -198,16 +198,16 @@ public class ServerGameController {
         try {
             final Sala sala = salas.get(Transformer.packetDataToString(packet).split(":")[1]);
 
-            if(sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()]) {
-                sala.getNaves().forEach(nave -> {
-                    if (nave.getIdNave() == sala.getMapIdNaves().get(packet.getAddress()).getIdNave()) {
-                        naveToRemove = nave;
-                        // Aqui cogemos de la array de naves vivas y la que tiene tu Id la pasas a false
-                        sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()] = false;
-                    }
-                });
-                sala.getNaves().remove(naveToRemove);
-            }
+//            if(sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()]) {
+//                sala.getNaves().forEach(nave -> {
+//                    if (nave.getIdNave() == sala.getMapIdNaves().get(packet.getAddress()).getIdNave()) {
+//                        naveToRemove = nave;
+//                        // Aqui cogemos de la array de naves vivas y la que tiene tu Id la pasas a false
+//                        sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()] = false;
+//                    }
+//                });
+//                sala.getNaves().remove(naveToRemove);
+//            }
             return Transformer.classToJson(sala.getNaves());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
