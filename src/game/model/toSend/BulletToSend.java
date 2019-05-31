@@ -1,6 +1,6 @@
 package game.model.toSend;
 
-public class BulletToSend {
+public class BalaToSend {
 
     private final int idBullet;
     private int idShip;
