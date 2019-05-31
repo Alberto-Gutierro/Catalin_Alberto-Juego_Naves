@@ -401,7 +401,9 @@ public class GameController extends GameSetter implements Initializable {
                                 (int) bala.getImagenRotada().getWidth(),
                                 (int) bala.getImagenRotada().getHeight()
                         );
-                        if (areaObject1.intersects(areaObject2)) {
+                        if (areaObject1.intersects(areaObject2)
+                                && (naveRecivedService.getState() != Enums.NaveState.DEAD
+                                    || naveRecivedService.getState() != Enums.NaveState.DYING)) {
                             bala.remove();
                             nave.addScore(50);
                             dataToSend.addIdNaveTocada(naveRecivedService.getIdNave());
