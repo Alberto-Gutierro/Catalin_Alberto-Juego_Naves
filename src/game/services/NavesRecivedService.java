@@ -46,6 +46,8 @@ public class NavesRecivedService {
 //        this.score_p3 = score_p3;
 //        this.score_p4 = score_p4;
 
+
+
         animations = new Animacion();
 
         imagenOtrasNaves = new ImageView[Ajustes.NUM_NAVES+1];

@@ -239,7 +239,7 @@ public class ServerGameController {
                         nave.setLifes(--sala.getVidasNaves()[naveTocada]);
 
                         if(nave.getLifes() <= 0 && nave.getState() == Enums.NaveState.ALIVE){
-                            nave.setState(Enums.NaveState.DYING);
+                            sala.getNavesState()[nave.getIdNave()] = Enums.NaveState.DYING;
                         }
 
                         //AÑADIMOS UNA VIDA A LA NAVE QUE HA TOCADO A LA OTRA
