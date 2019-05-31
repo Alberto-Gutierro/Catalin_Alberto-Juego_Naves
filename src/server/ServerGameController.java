@@ -198,7 +198,10 @@ public class ServerGameController {
         try {
             final Sala sala = salas.get(Transformer.packetDataToString(packet).split(":")[1]);
 
-            if(sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()]) sala.subsNumNavesVivas();
+            if(sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()]) {
+                sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()] = false;
+                sala.subsNumNavesVivas();
+            }
 
             if(sala.getNumNavesVivas() == 1) return "FinishGame";
 //            if(sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()]) {
