@@ -207,14 +207,31 @@ public class GameController extends GameSetter implements Initializable {
 
                         stage.setScene(scene);
                         stage.show();
+                    }else {
+                        navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
+
+                        navesRecivedService.renderNavesRecibidas();
+
+                        nave.setState(navesRecivedService.getMyState());
+                        System.out.println(nave.getState());
+                        nave.setLifes(navesRecivedService.getMyLifes());
+
+
+                        if(nave.getState() != Enums.NaveState.DEAD) {
+                            nave.update(timing);
+
+                            checkCollisions();
+
+                            nave.render();
+                        }else {
+                            nave.render();
+                            runningGame = false;
+                            multiplayerSpectatorMode(navesRecivedService, socket);
+                            this.stop();
+                        }
+
+
                     }
-                    navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
-
-                    navesRecivedService.renderNavesRecibidas();
-
-                    nave.setState(navesRecivedService.getMyState());
-                    System.out.println(nave.getState());
-                    nave.setLifes(navesRecivedService.getMyLifes());
                 } catch (SocketTimeoutException e){
                     this.stop();
 
@@ -240,25 +257,9 @@ public class GameController extends GameSetter implements Initializable {
                         alert.setHeaderText("Connection Time Out");
                         alert.showAndWait();
                     });
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                if(nave.getState() != Enums.NaveState.DEAD) {
-                    nave.update(timing);
-
-                    checkCollisions();
-
-                    nave.render();
-                }else {
-                    nave.render();
-                    runningGame = false;
-                    multiplayerSpectatorMode(navesRecivedService, socket);
-                    this.stop();
-                }
-
-
             }
         }.start();
     }
@@ -294,10 +295,13 @@ public class GameController extends GameSetter implements Initializable {
 
                         stage.setScene(scene);
                         stage.show();
-                    }
-                    graphicsContext.clearRect(0,0, stage.getWidth(), stage.getHeight());
-                    navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
+                    }else {
+                        graphicsContext.clearRect(0, 0, stage.getWidth(), stage.getHeight());
+                        navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
 
+                        navesRecivedService.renderNavesRecibidas();
+
+                    }
 
                 } catch (SocketTimeoutException e){
                     this.stop();
@@ -327,8 +331,6 @@ public class GameController extends GameSetter implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                navesRecivedService.renderNavesRecibidas();
-
             }
         }.start();
     }
