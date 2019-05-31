@@ -201,6 +201,7 @@ public class GameController extends GameSetter implements Initializable {
                     navesRecivedService.renderNavesRecibidas();
 
                     nave.setState(navesRecivedService.getMyState());
+                    System.out.println(nave.getState());
                     nave.setLifes(navesRecivedService.getMyLifes());
                 } catch (SocketTimeoutException e){
                     this.stop();

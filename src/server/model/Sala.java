@@ -2,6 +2,7 @@ package server.model;
 
 import formatClasses.DataToRecive;
 import statVars.Ajustes;
+import statVars.Enums;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -20,7 +21,11 @@ public class Sala {
 
     private boolean[] connectedPersons;
 
+    private Enums.NaveState[] navesState;
+
+
     public Sala(String id) {
+        navesState = new Enums.NaveState[]{Enums.NaveState.DEATH,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE};
         connectedPersons = new boolean[]{false, false, false, false, false};
         navesVivas = new boolean[]{false, true, true, true, true};
         idSala = id;
@@ -60,7 +65,12 @@ public class Sala {
     public void addAConnectedPerson(int pos){
         connectedPersons[pos] = true;
     }
+
     public void subsAConnectedPerson(int pos){
         connectedPersons[pos] = false;
+    }
+
+    public Enums.NaveState[] getNavesState() {
+        return navesState;
     }
 }

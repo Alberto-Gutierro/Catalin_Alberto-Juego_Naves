@@ -251,6 +251,7 @@ public class ServerGameController {
             });
         }
 
+        receivedData.setState(sala.getNavesState()[receivedData.getIdNave()]);
         receivedData.setLifes(sala.getVidasNaves()[receivedData.getIdNave()]);
         sala.getNaves().set(sala.getNaves().indexOf(receivedData), receivedData);
 
