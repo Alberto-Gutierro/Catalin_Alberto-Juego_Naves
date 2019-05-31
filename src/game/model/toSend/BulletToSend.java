@@ -16,6 +16,7 @@ public class BulletToSend {
         this.idShip = idShip;
         this.angle = angle;
     }
+    //A
 
     public double getPosX() {
         return posX;
