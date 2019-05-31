@@ -229,9 +229,11 @@ public class ServerGameController {
 
         if(receivedData.getNavesTocadas() != null || receivedData.getNavesTocadas().size() != 0) {
             sala.getNaves().forEach(nave -> {
+
                 nave.setLifes(sala.getVidasNaves()[nave.getIdNave()]);
                 receivedData.getNavesTocadas().forEach(naveTocada -> {
-                    if (nave.getIdNave() == naveTocada) {
+
+                    if (nave.getIdNave() == naveTocada && nave.getState() != Enums.NaveState.DEAD && nave.getState() != Enums.NaveState.DYING) {
                         //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
                         nave.setLifes(--sala.getVidasNaves()[naveTocada]);
 
@@ -250,6 +252,8 @@ public class ServerGameController {
 
         if(receivedData.getState() != Enums.NaveState.DEAD) {
             receivedData.setState(sala.getNavesState()[receivedData.getIdNave()]);
+        }else {
+            sala.getNavesState()[receivedData.getIdNave()] = Enums.NaveState.DEAD;
         }
 
         receivedData.setLifes(sala.getVidasNaves()[receivedData.getIdNave()]);

@@ -81,14 +81,14 @@ public class NavesRecivedService {
 
     public void renderNavesRecibidas(){
         navesRecived.forEach(nave->{
-            if(nave.getState() != Enums.NaveState.DEAD) {
+            if (myNaveId != nave.getIdNave()) {
+                if(nave.getState() != Enums.NaveState.DEAD) {
                 scores[nave.getIdNave() - 1].setText(String.valueOf(nave.getScore()));
-                if (myNaveId != nave.getIdNave()) {
                     renderRecivedData(nave);
-                } else {
-                    myLifes = nave.getLifes();
-                    myState = nave.getState();
                 }
+            }else {
+                myLifes = nave.getLifes();
+                myState = nave.getState();
             }
         });
 
