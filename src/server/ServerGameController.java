@@ -216,7 +216,7 @@ public class ServerGameController {
 //                sala.getNaves().forEach(nave -> {
 //                    if (nave.getIdNave() == sala.getMapIdNaves().get(packet.getAddress()).getIdNave()) {
 //                        naveToRemove = nave;
-//                        // Aqui cogemos de la array de naves vivas y la que tiene tu Id la pasas a false
+//                        // Aqui cogemos de la array de ships vivas y la que tiene tu Id la pasas a false
 //                        sala.getNavesVivas()[sala.getMapIdNaves().get(packet.getAddress()).getIdNave()] = false;
 //                    }
 //                });
@@ -283,7 +283,7 @@ public class ServerGameController {
         receivedData.setLifes(sala.getVidasNaves()[receivedData.getIdNave()]);
         sala.getNaves().set(sala.getNaves().indexOf(receivedData), receivedData);
 
-        //naves.forEach(nave-> System.out.println(nave.toString()));
+        //ships.forEach(nave-> System.out.println(nave.toString()));
         return Transformer.classToJson(sala.getNaves());
     }
 
@@ -308,7 +308,7 @@ public class ServerGameController {
             e.printStackTrace();
         }
         if(salas.containsKey(numSala)) {
-            //SI NO CONTIENE LA IP DE EL CLIENTE && El límite de naves es inferior a 4
+            //SI NO CONTIENE LA IP DE EL CLIENTE && El límite de ships es inferior a 4
             if (!salas.get(numSala).getMapIdNaves().containsKey(packet.getAddress()) && salas.get(numSala).getMapIdNaves().size() < 4) {
 
                 salasToSend.get(numSala).addNumPlayers();

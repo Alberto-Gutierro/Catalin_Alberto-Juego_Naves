@@ -32,10 +32,10 @@ public class Animacion {
 
         for (int i = 0; i < Ajustes.NUM_NAVES ; i++) { // i = id Nave - 1
             for (int j = 0; j < Ajustes.NAVEDESTRUIR_LENGHT; j++) { // j = num de la imagen
-                naveDeathAnimation[i][j] = new ImageView("game/res/img/navesDestroy/navePlayer_" + (i+1) + "/nave"+(i+1)+"_destroy_"+ j +".png");
+                naveDeathAnimation[i][j] = new ImageView("game/res/img/shipsDestroy/navePlayer_" + (i+1) + "/nave"+(i+1)+"_destroy_"+ j +".png");
             }
             for (int j = 0; j < Ajustes.NAVESHOOT_LENGHT; j++) {
-                naveShootAnimation[i][j] = new ImageView("game/res/img/navesDisparo/navePlayer_" + (i+1) + "/nave"+(i+1)+"_disparo_"+ j +".png");
+                naveShootAnimation[i][j] = new ImageView("game/res/img/shipsDisparo/navePlayer_" + (i+1) + "/nave"+(i+1)+"_disparo_"+ j +".png");
             }
         }
     }

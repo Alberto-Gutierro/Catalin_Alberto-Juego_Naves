@@ -12,8 +12,6 @@ import statVars.Ajustes;
 import statVars.Enums;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class NavesRecivedService {
     private SnapshotParameters snapshotParameters;
@@ -52,8 +50,8 @@ public class NavesRecivedService {
         imagenRotadaOtrasNaves = new Image[Ajustes.NUM_NAVES+1];
 
         for (int i = 1; i <= Ajustes.NUM_NAVES; i++) {
-            imagenOtrasNaves[i] = new ImageView("game/res/img/naves/navePlayer_" + i + ".png");
-            imagenRotadaOtrasNaves[i] = new Image("game/res/img/naves/navePlayer_" + i + ".png");
+            imagenOtrasNaves[i] = new ImageView("game/res/img/ships/navePlayer_" + i + ".png");
+            imagenRotadaOtrasNaves[i] = new Image("game/res/img/ships/navePlayer_" + i + ".png");
 
         }
         myLifes = Ajustes.START_LIFES;
@@ -68,7 +66,7 @@ public class NavesRecivedService {
         snapshotParametersBalas = new SnapshotParameters();
         snapshotParametersBalas.setFill(Color.TRANSPARENT);
 
-        imagenBala = new ImageView("game/res/img/bala.png");
+        imagenBala = new ImageView("game/res/img/bullet.png");
     }
 
     public void setNavesRecived(ArrayList<DataToRecive> navesRecived) {

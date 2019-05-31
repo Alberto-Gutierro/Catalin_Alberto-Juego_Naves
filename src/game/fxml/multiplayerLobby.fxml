@@ -18,47 +18,47 @@
       </ImageView>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="432.0" layoutY="769.0" pickOnBounds="true" preserveRatio="true" rotate="26.6">
          <image>
-            <Image url="@../res/img/naves/navePlayer_1_x64.png" />
+            <Image url="@../res/img/ships/shipPlayer_1_x64.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="101.0" fitWidth="200.0" layoutX="663.0" layoutY="476.0" pickOnBounds="true" preserveRatio="true" rotate="26.0" scaleX="0.5" scaleY="0.5">
          <image>
-            <Image url="@../res/img/bala.png" />
+            <Image url="@../res/img/bullet.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1462.0" layoutY="616.0" pickOnBounds="true" preserveRatio="true" rotate="-104.9">
          <image>
-            <Image url="@../res/img/naves/navePlayer_3_x64.png" />
+            <Image url="@../res/img/ships/shipPlayer_3_x64.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="100.0" fitWidth="75.0" layoutX="939.0" layoutY="740.0" pickOnBounds="true" preserveRatio="true" rotate="-105.0" scaleX="0.5" scaleY="0.5">
          <image>
-            <Image url="@../res/img/bala.png" />
+            <Image url="@../res/img/bullet.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="150.0" fitWidth="100.0" layoutX="15.0" layoutY="580.0" pickOnBounds="true" preserveRatio="true" rotate="138.0">
          <image>
-            <Image url="@../res/img/img_meteorito.png" />
+            <Image url="@../res/img/img_meteor.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="150.0" fitWidth="125.0" layoutX="287.0" layoutY="158.0" pickOnBounds="true" preserveRatio="true" rotate="63.4">
          <image>
-            <Image url="@../res/img/img_meteorito.png" />
+            <Image url="@../res/img/img_meteor.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="150.0" fitWidth="100.0" layoutX="853.0" layoutY="-18.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../res/img/img_meteorito.png" />
+            <Image url="@../res/img/img_meteor.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="75.0" fitWidth="100.0" layoutX="1381.0" layoutY="143.0" pickOnBounds="true" preserveRatio="true" rotate="56.3">
          <image>
-            <Image url="@../res/img/img_meteorito.png" />
+            <Image url="@../res/img/img_meteor.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="150.0" fitWidth="50.0" layoutX="1243.0" layoutY="993.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../res/img/img_meteorito.png" />
+            <Image url="@../res/img/img_meteor.png" />
          </image>
       </ImageView>
       <Pane layoutX="580.0" layoutY="300.0" prefHeight="402.0">

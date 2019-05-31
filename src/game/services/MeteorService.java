@@ -29,7 +29,7 @@ public class MeteorService {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         animacion = new Animacion();
-        imgMeteorito = new ImageView("game/res/img/img_meteorito.png");
+        imgMeteorito = new ImageView("game/res/img/img_meteor.png");
     }
 
     public void create(double xNave, double yNave, double speed) {

@@ -11,9 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import statVars.Enums;
-import transformmer.Transformer;
 
-import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 
@@ -63,7 +61,7 @@ public abstract class GameSetter extends SceneStageSetter {
 
         initControlPress();
 
-        setNave(new Nave(graphicsContext, pane,idNave, new ImageView("game/res/img/naves/navePlayer_" + idNave + ".png"), this.upPressed, this.downPressed, this.rightPressed, this.leftPressed, this.anyPressed));
+        setNave(new Nave(graphicsContext, pane,idNave, new ImageView("game/res/img/ships/navePlayer_" + idNave + ".png"), this.upPressed, this.downPressed, this.rightPressed, this.leftPressed, this.anyPressed));
 
         setControls();
 

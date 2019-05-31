@@ -37,11 +37,11 @@ public class Arma {
     public Arma(GraphicsContext graphicsContext, Pane pane){
         imgAmmoBalas = new ImageView[MAX_BALAS];
 
-        imgBala = new ImageView("game/res/img/bala.png");
+        imgBala = new ImageView("game/res/img/bullet.png");
 
         ///IMAGENES A LAS BALAS
         for (int i = 0; i<MAX_BALAS; i++) {
-            ImageView imagen = new ImageView("game/res/img/bala.png");
+            ImageView imagen = new ImageView("game/res/img/bullet.png");
             imagen.setX(125 + (imagen.getImage().getWidth() + 20) * i+1);
             imagen.setY(85);
             pane.getChildren().add(imagen);

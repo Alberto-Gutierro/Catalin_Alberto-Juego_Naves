@@ -48,7 +48,7 @@ public class Nave {
         imgVidas = new ImageView[MAX_LIFES];
         ///IMAGENES A LAS VIDAS
         for (int i = 0; i<MAX_LIFES; i++) {
-            ImageView imagen = new ImageView("game/res/img/vida.png");
+            ImageView imagen = new ImageView("game/res/img/life.png");
             imagen.setX(120 + (imagen.getImage().getWidth() + 5) * i+1);
             imagen.setY(110);
             pane.getChildren().add(imagen);

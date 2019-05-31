@@ -279,6 +279,7 @@ public class GameController extends GameSetter implements Initializable {
                     socket.setSoTimeout(1000);
                     packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
                     socket.receive(packet);
+                    System.out.println(Transformer.packetDataToString(packet));
                     if(Transformer.packetDataToString(packet).equals("FinishGame")){
                         this.stop();
 
@@ -445,7 +446,7 @@ public class GameController extends GameSetter implements Initializable {
     }
 //HACER QUE SE GUARDE EL ID DE LA NAVE QUE HA SIDO TOCADA EN LOS DATOS QUE VAMOS A MANDAR AL SERVIDOR.
 
-    // Añadimos la las id de las naves que han sido tocadas por tus balas
+    // Añadimos la las id de las ships que han sido tocadas por tus balas
     private void checkNaveInScreen() {
         if(nave.getPosX() < 0){
             nave.setPosX(0);

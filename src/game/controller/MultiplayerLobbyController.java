@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import statVars.Packets;
 import transformmer.Transformer;
@@ -154,23 +153,23 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             for (int i = 1; i < connectedPersons.length; i++) {
                 if(connectedPersons[i] && i == idNave){
                     textsNave[i].setText("You");
-                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + i + ".png"));
+                    imagesNave[i].setImage(new Image("game/res/img/ships/navePlayer_" + i + ".png"));
                 }else if(connectedPersons[i]){
                     textsNave[i].setText("Player " + i);
-                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + i + ".png"));
+                    imagesNave[i].setImage(new Image("game/res/img/ships/navePlayer_" + i + ".png"));
                 }else {
                     textsNave[i].setText("Waiting...");
-                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayerWaiting.png"));
+                    imagesNave[i].setImage(new Image("game/res/img/ships/shipPlayerWaiting.png"));
                 }
             }
 
 //            for (int i = 0; i < Integer.parseInt(Transformer.packetDataToString(packet)); i++) {
 //                if (i + 1 != idNave) {
 //                    textsNave[i].setText("Player " + (i + 1));
-//                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i + 1) + ".png"));
+//                    imagesNave[i].setImage(new Image("game/res/img/ships/navePlayer_" + (i + 1) + ".png"));
 //                } else {
 //                    textsNave[i].setText("You");
-//                    imagesNave[i].setImage(new Image("game/res/img/naves/navePlayer_" + (i + 1) + ".png"));
+//                    imagesNave[i].setImage(new Image("game/res/img/ships/navePlayer_" + (i + 1) + ".png"));
 //                }
 //            }
         }catch (UnsupportedEncodingException e){
