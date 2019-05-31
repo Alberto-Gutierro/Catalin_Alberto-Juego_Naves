@@ -132,22 +132,26 @@ public class GameController extends GameSetter implements Initializable {
 
 
                 if(!runningGame){
-
                     this.stop();
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/gameOver.fxml"));
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/gameOver.fxml"));
 
-                        loader.load();
+                                loader.load();
 
-                        GameOverController gameController = loader.getController();
-                        gameController.setScene(scene);
-                        gameController.setStage(stage);
-                        gameController.setScore(score_p1.getText());
+                                GameOverController gameController = loader.getController();
+                                gameController.setScene(scene);
+                                gameController.setStage(stage);
+                                gameController.setScore(score_p1.getText());
 
-                        gameOverScreen.getChildren().add(loader.getRoot());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                                gameOverScreen.getChildren().add(loader.getRoot());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
             }
         }.start();
@@ -192,20 +196,32 @@ public class GameController extends GameSetter implements Initializable {
 
 
                     if(Transformer.packetDataToString(packet).equals("FinishGame")){
+                        this.stop();
 
                         //POR AQUI: Hacer que cambie de sala al acabar
-                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
-                        Parent root = loader.load();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
+                                    Parent root = loader.load();
 
-                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
+                                    scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
-                        MultiplayerLobbyController multiplayerLobbyController = loader.getController();
-                        multiplayerLobbyController.setScene(scene);
-                        multiplayerLobbyController.setStage(stage);
-                        multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + idSala).getBytes(), (nave.getId() + idSala).getBytes().length));
+                                    MultiplayerLobbyController multiplayerLobbyController = loader.getController();
+                                    multiplayerLobbyController.setScene(scene);
+                                    multiplayerLobbyController.setStage(stage);
+                                    multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + idSala).getBytes(), (nave.getId() + idSala).getBytes().length));
 
-                        stage.setScene(scene);
-                        stage.show();                                      }
+                                    stage.setScene(scene);
+                                    stage.show();
+
+                                }catch (IOException e){
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
 
                     navesRecivedService.renderNavesRecibidas();
@@ -216,30 +232,33 @@ public class GameController extends GameSetter implements Initializable {
                 } catch (SocketTimeoutException e){
                     this.stop();
 
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerMenu.fxml"));
-                        Parent root = loader.load();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerMenu.fxml"));
+                                Parent root = loader.load();
+                                scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
-                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
+                                MultiplayerMenuController multiplayerMenuController = loader.getController();
+                                multiplayerMenuController.setScene(scene);
+                                multiplayerMenuController.setStage(stage);
 
-                        MultiplayerMenuController multiplayerMenuController = loader.getController();
-                        multiplayerMenuController.setScene(scene);
-                        multiplayerMenuController.setStage(stage);
+                                stage.setScene(scene);
+                                stage.show();
+                            }catch (IOException e){
+                                e.printStackTrace();
+                            }
 
-                        stage.setScene(scene);
-                        stage.show();
-
-                    } catch (IOException ex){
-                        ex.printStackTrace();
-                    }
+                        }
+                    });
                     Platform.runLater(()->{
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("ERROR");
                         alert.setHeaderText("Connection Time Out");
                         alert.showAndWait();
                     });
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
@@ -277,20 +296,31 @@ public class GameController extends GameSetter implements Initializable {
                     packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
                     socket.receive(packet);
                     if(Transformer.packetDataToString(packet).equals("FinishGame")){
+                        this.stop();
 
                         //POR AQUI: Hacer que cambie de sala al acabar
-                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
-                        Parent root = loader.load();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
+                                    Parent root = loader.load();
 
-                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
+                                    scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
-                        MultiplayerLobbyController multiplayerLobbyController = loader.getController();
-                        multiplayerLobbyController.setScene(scene);
-                        multiplayerLobbyController.setStage(stage);
-                        multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + idSala).getBytes(), (nave.getId() + idSala).getBytes().length));
+                                    MultiplayerLobbyController multiplayerLobbyController = loader.getController();
+                                    multiplayerLobbyController.setScene(scene);
+                                    multiplayerLobbyController.setStage(stage);
+                                    multiplayerLobbyController.setPacket(new DatagramPacket((nave.getId() + idSala).getBytes(), (nave.getId() + idSala).getBytes().length));
 
-                        stage.setScene(scene);
-                        stage.show();
+                                    stage.setScene(scene);
+                                    stage.show();
+
+                                }catch (IOException e){
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
                     }
                     graphicsContext.clearRect(0,0, stage.getWidth(), stage.getHeight());
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
@@ -299,22 +329,27 @@ public class GameController extends GameSetter implements Initializable {
                 } catch (SocketTimeoutException e){
                     this.stop();
 
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerMenu.fxml"));
-                        Parent root = loader.load();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerMenu.fxml"));
+                                Parent root = loader.load();
+                                scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
-                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
+                                MultiplayerMenuController multiplayerMenuController = loader.getController();
+                                multiplayerMenuController.setScene(scene);
+                                multiplayerMenuController.setStage(stage);
 
-                        MultiplayerMenuController multiplayerMenuController = loader.getController();
-                        multiplayerMenuController.setScene(scene);
-                        multiplayerMenuController.setStage(stage);
+                                stage.setScene(scene);
+                                stage.show();
+                            }catch (IOException e){
+                                e.printStackTrace();
+                            }
 
-                        stage.setScene(scene);
-                        stage.show();
+                        }
+                    });
 
-                    } catch (IOException ex){
-                        ex.printStackTrace();
-                    }
                     Platform.runLater(()->{
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("ERROR");
