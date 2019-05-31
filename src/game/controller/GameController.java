@@ -192,7 +192,7 @@ public class GameController extends GameSetter implements Initializable {
 
 
                     if(Transformer.packetDataToString(packet).equals("FinishGame")){
-
+                        System.out.println("SACABO");
                     }
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
 
@@ -264,7 +264,9 @@ public class GameController extends GameSetter implements Initializable {
                     socket.setSoTimeout(1000);
                     packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
                     socket.receive(packet);
-
+                    if(Transformer.packetDataToString(packet).equals("FinishGame")){
+                        System.out.println("SACABO");
+                    }
                     graphicsContext.clearRect(0,0, stage.getWidth(), stage.getHeight());
                     navesRecivedService.setNavesRecived(Transformer.jsonToArrayListNaves(Transformer.packetDataToString(packet)));
 

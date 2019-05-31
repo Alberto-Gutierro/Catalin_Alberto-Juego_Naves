@@ -17,22 +17,21 @@ public class Sala {
     private Map<InetAddress, ClientData> mapIdNaves;
 
     private boolean[] navesVivas;
+    private int numNavesVivas;
+
     private int[] vidasNaves = {-1, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES, Ajustes.START_LIFES};
 
     private boolean[] connectedPersons;
 
     private Enums.NaveState[] navesState;
 
-    private boolean terminada;
-
     public Sala(String id) {
         navesState = new Enums.NaveState[]{Enums.NaveState.DEAD,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE,Enums.NaveState.ALIVE};
         connectedPersons = new boolean[]{false, false, false, false, false};
-        navesVivas = new boolean[]{false, true, true, true, true};
+        navesVivas = new boolean[]{false, false, false, false, false};
         idSala = id;
         naves = new ArrayList<>();
         mapIdNaves = new HashMap<>();
-        terminada=false;
     }
 
     public String getIdSala() {
@@ -75,4 +74,17 @@ public class Sala {
     public Enums.NaveState[] getNavesState() {
         return navesState;
     }
+
+    public int getNumNavesVivas() {
+        return numNavesVivas;
+    }
+
+    public void addNumNavesVivas() {
+        numNavesVivas++;
+    }
+
+    public void subsNumNavesVivas() {
+        numNavesVivas--;
+    }
+
 }
