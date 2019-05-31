@@ -6,11 +6,11 @@ public class Enums {
     }
 
     public enum MeteorState {
-        MOVING, TO_REMOVE, DEATH
+        MOVING, TO_REMOVE, DEAD
     }
 
     public enum NaveState {
-        ALIVE, DYING,DEATH,SHOOTING
+        ALIVE, DYING, DEATH, SHOOTING
     }
 
 }

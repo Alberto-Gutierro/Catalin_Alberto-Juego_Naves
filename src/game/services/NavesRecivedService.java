@@ -46,8 +46,6 @@ public class NavesRecivedService {
 //        this.score_p3 = score_p3;
 //        this.score_p4 = score_p4;
 
-
-
         animations = new Animacion();
 
         imagenOtrasNaves = new ImageView[Ajustes.NUM_NAVES+1];
@@ -95,8 +93,20 @@ public class NavesRecivedService {
     }
 
     private void renderRecivedData(DataToRecive nave) {
-        rotateNaveRecibida(nave.getIdNave(), nave.getAngle());
-        graphicsContext.drawImage(imagenRotadaOtrasNaves[nave.getIdNave()], nave.getNavePosX(), nave.getNavePosY());
+        if(nave.getState() == Enums.NaveState.ALIVE) {
+            rotateNaveRecibida(nave.getIdNave(), nave.getAngle());
+            graphicsContext.drawImage(imagenRotadaOtrasNaves[nave.getIdNave()], nave.getNavePosX(), nave.getNavePosY());
+        }else if(nave.getState() == Enums.NaveState.DYING) {
+            imagenOtrasNaves[nave.getIdNave()] = animations.naveDestruir(nave.getIdNave());
+        } else if (nave.getState() == Enums.NaveState.SHOOTING) {
+            if (animations.getFrame() < Ajustes.NAVESHOOT_LENGHT) {
+                imagenOtrasNaves[nave.getIdNave()] = animations.naveDisparo(nave.getIdNave());
+            }
+            else {
+                animations.finalAnimacion();
+                nave.setState(Enums.NaveState.ALIVE);
+            }
+        }
         nave.getNaveArmaBalas().forEach(bala -> {
             graphicsContext.drawImage(rotateBalaRecibida(bala.getAngle()), bala.getPosX(), bala.getPosY());
         });

@@ -67,11 +67,11 @@ public class MeteorService {
                     meteorito.setImgMeteoritoRotada(animacion.meteoritoDestruido());
                 }else {
                     animacion.finalAnimacion();
-                    meteorito.setState(Enums.MeteorState.DEATH);
+                    meteorito.setState(Enums.MeteorState.DEAD);
                 }
             }
 
-            if (meteorito.getState() == Enums.MeteorState.DEATH) {
+            if (meteorito.getState() == Enums.MeteorState.DEAD) {
                 if(!meteorToRemove.contains(meteorito)) {
                     meteorToRemove.add(meteorito);
                 }

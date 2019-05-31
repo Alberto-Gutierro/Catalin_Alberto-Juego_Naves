@@ -223,6 +223,9 @@ public class ServerGameController {
         DataToRecive receivedData = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
         Sala sala = salas.get(receivedData.getIdSala());
 
+        if(receivedData.getState() == Enums.NaveState.SHOOTING && sala.getNavesState()[receivedData.getIdNave()] != Enums.NaveState.DYING){
+            sala.getNavesState()[receivedData.getIdNave()] = Enums.NaveState.SHOOTING;
+        }
 
         if(!sala.getNaves().contains(receivedData)) {
             sala.getNaves().add(receivedData);
@@ -238,7 +241,7 @@ public class ServerGameController {
                         //RESTAMOS UNA VIDA A LA NAVE QUE HA SIDO TOCADA
                         nave.setLifes(--sala.getVidasNaves()[naveTocada]);
 
-                        if(nave.getLifes() <= 0 && nave.getState() == Enums.NaveState.ALIVE){
+                        if(nave.getLifes() <= 0 && nave.getState() != Enums.NaveState.DYING){
                             sala.getNavesState()[nave.getIdNave()] = Enums.NaveState.DYING;
                         }
 
@@ -254,6 +257,7 @@ public class ServerGameController {
         if(receivedData.getState() != Enums.NaveState.DEATH) {
             receivedData.setState(sala.getNavesState()[receivedData.getIdNave()]);
         }
+
         receivedData.setLifes(sala.getVidasNaves()[receivedData.getIdNave()]);
         sala.getNaves().set(sala.getNaves().indexOf(receivedData), receivedData);
 
