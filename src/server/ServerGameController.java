@@ -59,6 +59,8 @@ public class ServerGameController {
             ((Button) actionEvent.getSource()).setText("START");
             server.shutdown();
             ipServer.setText("DISCONNECTED");
+            salas = new HashMap<>();
+            salasToSend = new HashMap<>();
 
         }else {
 
@@ -231,7 +233,10 @@ public class ServerGameController {
         DataToRecive receivedData = Transformer.jsonToNaveToRecive(Transformer.packetDataToString(packet));
         Sala sala = salas.get(receivedData.getIdSala());
 
-        if(sala.getNumNavesVivas() == 1) return "FinishGame";
+        if(sala.getNumNavesVivas() == 1 && sala.isTerminada()){
+            System.out.println("ASDASD");
+            return "FinishGame";
+        }
 
         if(!sala.getNaves().contains(receivedData)) {
             sala.getNaves().add(receivedData);
@@ -241,7 +246,6 @@ public class ServerGameController {
 
         //receivedData.getNaveArmaBalas().forEach(balaToSend -> System.out.println(balaToSend.getAngle()));
 
-        if(sala.getNumNavesVivas() == 1 && sala.isTerminada()) return "FinishGame";
 
         if(receivedData.getNavesTocadas() != null || receivedData.getNavesTocadas().size() != 0) {
             sala.getNaves().forEach(nave -> {
