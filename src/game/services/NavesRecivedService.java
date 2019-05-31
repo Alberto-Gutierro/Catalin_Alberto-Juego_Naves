@@ -97,7 +97,12 @@ public class NavesRecivedService {
             rotateNaveRecibida(nave.getIdNave(), nave.getAngle());
             graphicsContext.drawImage(imagenRotadaOtrasNaves[nave.getIdNave()], nave.getNavePosX(), nave.getNavePosY());
         }else if(nave.getState() == Enums.NaveState.DYING) {
-            imagenOtrasNaves[nave.getIdNave()] = animations.naveDestruir(nave.getIdNave());
+            if (animations.getFrame() < Ajustes.NAVEDESTRUIR_LENGHT) {
+                imagenOtrasNaves[nave.getIdNave()] = animations.naveDestruir(nave.getIdNave());
+            }
+            else {
+                animations.finalAnimacion();
+            }
             rotateNaveRecibida(nave.getIdNave(), nave.getAngle());
             graphicsContext.drawImage(imagenRotadaOtrasNaves[nave.getIdNave()], nave.getNavePosX(), nave.getNavePosY());
         }
