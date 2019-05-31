@@ -386,7 +386,7 @@ public class GameController extends GameSetter implements Initializable {
         if(isMultiplayer) {
             Image[] imagenRotadaOtrasNaves = navesRecivedService.getImagenRotadaOtrasNaves();
             navesRecivedService.getNavesRecived().forEach(naveRecivedService -> {
-                if (naveRecivedService.getIdNave() != nave.getId()) {
+                if (naveRecivedService.getIdNave() != nave.getId() && (naveRecivedService.getState() != Enums.NaveState.DEAD && naveRecivedService.getState() != Enums.NaveState.DYING)) {
                     areaObject1.setCollisions(
                             (int) naveRecivedService.getNavePosX(),
                             (int) naveRecivedService.getNavePosY(),
@@ -401,9 +401,7 @@ public class GameController extends GameSetter implements Initializable {
                                 (int) bala.getImagenRotada().getWidth(),
                                 (int) bala.getImagenRotada().getHeight()
                         );
-                        if (areaObject1.intersects(areaObject2)
-                                && (naveRecivedService.getState() != Enums.NaveState.DEAD
-                                    || naveRecivedService.getState() != Enums.NaveState.DYING)) {
+                        if (areaObject1.intersects(areaObject2)) {
                             bala.remove();
                             nave.addScore(50);
                             dataToSend.addIdNaveTocada(naveRecivedService.getIdNave());
