@@ -174,7 +174,12 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                     ImageView crown = new ImageView("game/res/img/winners_crown.png");
                     crown.setX(imagesShip[i].getX());
                     crown.setY(imagesShip[i].getY());
-                    waitingPlayers.getChildren().add(crown);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            waitingPlayers.getChildren().add(crown);
+                        }
+                    });
                 }
             }
 
