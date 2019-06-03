@@ -26,16 +26,17 @@ import java.util.concurrent.Executors;
 
 public class MultiplayerLobbyController extends SceneStageSetter implements Initializable {
 
-    public Pane waitingPlayers;
+    @FXML private Pane player1, player2, player3, player4;
 
     private boolean startedGame;
     private boolean exitSala;
 
-    public ImageView img_playerShip1, img_playerShip2, img_playerShip3, img_playerShip4;
-    public Text playerName1, playerName2, playerName3, playerName4;
+    @FXML private ImageView img_playerShip1, img_playerShip2, img_playerShip3, img_playerShip4;
+    @FXML private Text playerName1, playerName2, playerName3, playerName4;
 
     private ImageView[] imagesShip;
     private Text[] textsShip;
+    private Pane[] playerPanes;
 
     private DatagramPacket packet;
 
@@ -55,6 +56,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
         exitSala = false;
         imagesShip = new ImageView[]{null, img_playerShip1, img_playerShip2, img_playerShip3, img_playerShip4};
         textsShip = new Text[]{null, playerName1, playerName2, playerName3, playerName4};
+        playerPanes = new Pane[]{null, player1, player2, player3, player4};
+
     }
 
     public void playGameServer(ActionEvent event) {
@@ -161,13 +164,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             System.out.println(Transformer.packetDataToString(packet));
             LobbyData lobbyData = Transformer.jsonToLobbyData(Transformer.packetDataToString(packet));
 
-            if(lobbyData.getWinner() == 0){
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        waitingPlayers.getChildren().remove(crown);
-                    }
-                });}
+
 
             boolean[] connectedPersons = lobbyData.getConnectedPersons();
             for (int i = 1; i < connectedPersons.length; i++) {
@@ -181,13 +178,18 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                     textsShip[i].setText("Waiting...");
                     imagesShip[i].setImage(new Image("game/res/img/ships/shipPlayerWaiting.png"));
                 }
-
-                if(!waitingPlayers.getChildren().contains(crown)) {
+                if(lobbyData.getWinner() == 0){
+                    final int index = i;
+                    Platform.runLater(() -> playerPanes[index].getChildren().remove(crown));
+                }
+                if(!playerPanes[i].getChildren().contains(crown)) {
                     if (i == lobbyData.getWinner()) {
-                        crown.setX(imagesShip[i].getX());
-                        crown.setY(imagesShip[i].getY());
+                        crown.setLayoutX(imagesShip[i].getLayoutX());
+                        crown.setLayoutY(imagesShip[i].getLayoutY());
+
+                        final int index = i;
                         Platform.runLater(() -> {
-                            waitingPlayers.getChildren().add(crown);
+                            playerPanes[index].getChildren().add(crown);
                         });
                     }
                 }
