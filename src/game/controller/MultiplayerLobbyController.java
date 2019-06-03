@@ -184,8 +184,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                 }
                 if(!playerPanes[i].getChildren().contains(crown)) {
                     if (i == lobbyData.getWinner()) {
-                        crown.setLayoutX(imagesShip[i].getLayoutX());
-                        crown.setLayoutY(imagesShip[i].getLayoutY());
+                        crown.setLayoutX(textsShip[i].getLayoutX()+20);
+                        crown.setLayoutY(textsShip[i].getLayoutY()-65);
 
                         final int index = i;
                         Platform.runLater(() -> {
