@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import server.model.LobbyData;
 import statVars.Packets;
 import transformmer.Transformer;
 
@@ -24,6 +25,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class MultiplayerLobbyController extends SceneStageSetter implements Initializable {
+
+    public Pane waitingPlayers;
 
     private boolean startedGame;
     private boolean exitSala;
@@ -149,8 +152,9 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
     private void showShips(DatagramPacket packet) {
         try {
-            boolean[] connectedPersons = Transformer.jsonToBooleanArray(Transformer.packetDataToString(packet));
+            LobbyData lobbyData = Transformer.jsonToLobbyData(Transformer.packetDataToString(packet));
 
+            boolean[] connectedPersons = lobbyData.getConnectedPersons();
             for (int i = 1; i < connectedPersons.length; i++) {
                 if(connectedPersons[i] && i == idShip){
                     textsShip[i].setText("You");
@@ -158,9 +162,16 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                 }else if(connectedPersons[i]){
                     textsShip[i].setText("Player " + i);
                     imagesShip[i].setImage(new Image("game/res/img/ships/shipPlayer_" + i + ".png"));
-                }else {
+                } else{
                     textsShip[i].setText("Waiting...");
                     imagesShip[i].setImage(new Image("game/res/img/ships/shipPlayerWaiting.png"));
+                }
+
+                if(i == lobbyData.getWinner()){
+                    ImageView crown = new ImageView("game/res/img/winners_crown");
+                    crown.setX(imagesShip[i].getX());
+                    crown.setY(imagesShip[i].getY());
+                    waitingPlayers.getChildren().add(crown);
                 }
             }
 

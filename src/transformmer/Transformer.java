@@ -3,6 +3,7 @@ package transformmer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import formatClasses.DataToRecive;
+import server.model.LobbyData;
 import server.model.Sala;
 import server.model.SalaToSend;
 
@@ -35,7 +36,7 @@ public abstract class Transformer {
         return new Gson().fromJson(json, new TypeToken<Map<String, SalaToSend>>(){}.getType());
     }
 
-    public static boolean[] jsonToBooleanArray(String json){
-        return new Gson().fromJson(json, boolean[].class);
+    public static LobbyData jsonToLobbyData(String json) {
+        return new Gson().fromJson(json, LobbyData.class);
     }
 }

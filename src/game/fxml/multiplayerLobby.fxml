@@ -64,7 +64,7 @@
       <Pane layoutX="580.0" layoutY="300.0" prefHeight="402.0">
          <children>
             <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#7c7c7c" height="400.0" layoutY="1.0" opacity="0.83" stroke="BLACK" strokeType="INSIDE" width="800.0" />
-            <Pane layoutX="96.0" layoutY="101.0" prefHeight="200.0" prefWidth="612.0">
+            <Pane fx:id="waitingPlayers" layoutX="96.0" layoutY="101.0" prefHeight="200.0" prefWidth="612.0">
                <children>
                   <Rectangle arcHeight="50.0" arcWidth="50.0" fill="#615d5d" height="200.0" opacity="0.83" stroke="BLACK" strokeType="INSIDE" width="612.0" />
                   <Pane layoutX="327.2" layoutY="36.0" prefHeight="150.0" prefWidth="100.0">

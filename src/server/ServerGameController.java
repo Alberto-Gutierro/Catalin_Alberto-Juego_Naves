@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import server.model.ClientData;
+import server.model.LobbyData;
 import server.model.Sala;
 import server.model.SalaToSend;
 import statVars.Ajustes;
@@ -202,7 +203,7 @@ public class ServerGameController {
             e.printStackTrace();
         }
 
-        return Transformer.classToJson(sala.getConnectedPersons()).getBytes();
+        return Transformer.classToJson(Transformer.classToJson(new LobbyData(sala.getConnectedPersons(), sala.getWinner()))).getBytes();
     }
 
     private String deadData(DatagramPacket packet){
@@ -244,7 +245,7 @@ public class ServerGameController {
         Sala sala = salas.get(receivedData.getIdSala());
 
         if(sala.getNumShipsVivas() == 1 && sala.isTerminada()){
-            System.out.println("ASDASD");
+            sala.setWinner(receivedData.getIdShip());
             return "FinishGame";
         }
 

@@ -12,6 +12,8 @@ import java.util.Map;
 public class Sala {
     private String idSala;
 
+    private int winner;
+
     private ArrayList<DataToRecive> ships;
 
     private Map<InetAddress, ClientData> mapIdShips;
@@ -108,5 +110,13 @@ public class Sala {
 
     public void setTerminada(boolean terminada) {
         this.terminada = terminada;
+    }
+
+    public int getWinner() {
+        return winner;
+    }
+
+    public void setWinner(int winner) {
+        this.winner = winner;
     }
 }
