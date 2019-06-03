@@ -66,9 +66,15 @@ public class ServerGameController {
 
             serverOn = true;
             server = (ThreadPoolExecutor) Executors.newFixedThreadPool(12);
+
             try {
-                ipServer.setText(InetAddress.getLocalHost().getHostAddress() + ":5568");
+                final DatagramSocket socket = new DatagramSocket();
+                socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+
+                ipServer.setText(socket.getLocalAddress().getHostAddress() + ":5568");
             } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (SocketException e) {
                 e.printStackTrace();
             }
             server.execute(() -> {
