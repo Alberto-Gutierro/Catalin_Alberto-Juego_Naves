@@ -203,7 +203,7 @@ public class ServerGameController {
             e.printStackTrace();
         }
 
-        return Transformer.classToJson(Transformer.classToJson(new LobbyData(sala.getConnectedPersons(), sala.getWinner()))).getBytes();
+        return Transformer.classToJson(new LobbyData(sala.getConnectedPersons(), sala.getWinner())).getBytes();
     }
 
     private String deadData(DatagramPacket packet){

@@ -107,6 +107,8 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
                     socket.setSoTimeout(1000);
 
+                    packetWait = new DatagramPacket(new byte[Packets.PACKET_LENGHT], Packets.PACKET_LENGHT);
+
                     socket.receive(packetWait);
                     try {
                         Thread.sleep(750);
@@ -152,6 +154,7 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
 
     private void showShips(DatagramPacket packet) {
         try {
+            System.out.println(Transformer.packetDataToString(packet));
             LobbyData lobbyData = Transformer.jsonToLobbyData(Transformer.packetDataToString(packet));
 
             boolean[] connectedPersons = lobbyData.getConnectedPersons();
