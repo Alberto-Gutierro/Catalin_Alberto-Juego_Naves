@@ -162,8 +162,12 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             LobbyData lobbyData = Transformer.jsonToLobbyData(Transformer.packetDataToString(packet));
 
             if(lobbyData.getWinner() == 0){
-                waitingPlayers.getChildren().remove(crown);
-            }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        waitingPlayers.getChildren().remove(crown);
+                    }
+                });}
 
             boolean[] connectedPersons = lobbyData.getConnectedPersons();
             for (int i = 1; i < connectedPersons.length; i++) {
@@ -178,12 +182,14 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                     imagesShip[i].setImage(new Image("game/res/img/ships/shipPlayerWaiting.png"));
                 }
 
-                if(i == lobbyData.getWinner()){
-                    crown.setX(imagesShip[i].getX());
-                    crown.setY(imagesShip[i].getY());
-                    Platform.runLater(() -> {
-                        waitingPlayers.getChildren().add(crown);
-                    });
+                if(!waitingPlayers.getChildren().contains(crown)) {
+                    if (i == lobbyData.getWinner()) {
+                        crown.setX(imagesShip[i].getX());
+                        crown.setY(imagesShip[i].getY());
+                        Platform.runLater(() -> {
+                            waitingPlayers.getChildren().add(crown);
+                        });
+                    }
                 }
             }
 
