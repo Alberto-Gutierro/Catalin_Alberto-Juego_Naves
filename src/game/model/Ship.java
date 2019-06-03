@@ -22,7 +22,7 @@ public class Ship {
     private double posX;
     private double posY;
 
-    private final int SPEED = 5;
+    private final int SPEED = 7;
     private int lifes;
     private final int MAX_LIFES = Ajustes.MAX_LIFES;
 
