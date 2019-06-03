@@ -170,6 +170,10 @@ public class ServerGameController {
         try {
             Sala sala = salas.get(Transformer.packetDataToString(packet).split(":")[1]);
 
+            if(sala.getWinner() == sala.getMapIdShips().get(packet.getAddress()).getIdShip()){
+                sala.setWinner(0);
+            }
+
             sala.subsAConnectedPerson(sala.getMapIdShips().get(packet.getAddress()).getIdShip());
 
             sala.getMapIdShips().remove(packet.getAddress());
