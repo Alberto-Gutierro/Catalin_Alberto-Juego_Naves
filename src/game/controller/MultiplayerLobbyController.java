@@ -42,11 +42,15 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
     private int idShip;
     private String idSala;
 
-
     private Executor executor;
+
+    ImageView crown;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        crown = new ImageView("game/res/img/winners_crown.png");
+        crown.setId("Winner");
+
         startedGame = false;
         exitSala = false;
         imagesShip = new ImageView[]{null, img_playerShip1, img_playerShip2, img_playerShip3, img_playerShip4};
@@ -157,6 +161,10 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
             System.out.println(Transformer.packetDataToString(packet));
             LobbyData lobbyData = Transformer.jsonToLobbyData(Transformer.packetDataToString(packet));
 
+            if(lobbyData.getWinner() == 0){
+                waitingPlayers.getChildren().remove(crown);
+            }
+
             boolean[] connectedPersons = lobbyData.getConnectedPersons();
             for (int i = 1; i < connectedPersons.length; i++) {
                 if(connectedPersons[i] && i == idShip){
@@ -171,14 +179,10 @@ public class MultiplayerLobbyController extends SceneStageSetter implements Init
                 }
 
                 if(i == lobbyData.getWinner()){
-                    ImageView crown = new ImageView("game/res/img/winners_crown.png");
                     crown.setX(imagesShip[i].getX());
                     crown.setY(imagesShip[i].getY());
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            waitingPlayers.getChildren().add(crown);
-                        }
+                    Platform.runLater(() -> {
+                        waitingPlayers.getChildren().add(crown);
                     });
                 }
             }
