@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import formatClasses.DataToRecive;
 import server.model.LobbyData;
-import server.model.Sala;
 import server.model.SalaToSend;
 
 import java.io.UnsupportedEncodingException;
