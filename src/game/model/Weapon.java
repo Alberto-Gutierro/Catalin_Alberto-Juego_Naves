@@ -99,9 +99,7 @@ public class Weapon {
         bulletsToRemove.forEach(bullet -> bullets.remove(bullet));
     }
 
-    public boolean update(double time){
-        boolean doingActions = false;
-
+    public void update(double time){
         removeOOSBullets();
         reloadTimer.update(time);
 
@@ -112,11 +110,7 @@ public class Weapon {
 
         if(!bullets.isEmpty()) {
             bullets.forEach(Bullet::update);
-
-            doingActions = true;
         }
-
-        return doingActions;
     }
 
     public void render(){
