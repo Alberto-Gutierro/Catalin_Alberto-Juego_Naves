@@ -9,6 +9,8 @@ import javafx.scene.canvas.GraphicsContext;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import javafx.scene.media.MediaPlayer;
 
 public class Weapon {
     ///////UTILIZAR UN ARRAY DE BALAS Y QUE SE QUITEN CUANDO HAYAN SALIDO DE LA PANTALLA
@@ -68,11 +70,11 @@ public class Weapon {
             if(bulletsDisponibles == MAX_BALAS){
                 reloadTimer.setTime(0);
             }
-            //Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundBullet).play());
+            //Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundBullet).play()); //PROBLEMA: LLEGA UN MOMENTO EN EL QUE DEJA DE ESCUCHARSE
             bulletsDisponibles--;
             bullets.add(new Bullet(graphicsContext, x, y, cc, co, angle, addIdToBullet(), imgBullet));
         }else {
-            //Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundOutOfAmmo).play());
+            //Executors.newFixedThreadPool(4).execute(()->new MediaPlayer(soundOutOfAmmo).play()); //PROBLEMA: LLEGA UN MOMENTO EN EL QUE DEJA DE ESCUCHARSE
         }
     }
 
@@ -97,9 +99,12 @@ public class Weapon {
         bulletsToRemove.forEach(bullet -> bullets.remove(bullet));
     }
 
-    public void update(double time){
+    public boolean update(double time){
+        boolean doingActions = false;
+
         removeOOSBullets();
         reloadTimer.update(time);
+
         //System.out.println(reloadTimer.check());
         if(reloadTimer.check() && bulletsDisponibles != MAX_BALAS){
             bulletsDisponibles++;
@@ -107,7 +112,11 @@ public class Weapon {
 
         if(!bullets.isEmpty()) {
             bullets.forEach(Bullet::update);
+
+            doingActions = true;
         }
+
+        return doingActions;
     }
 
     public void render(){

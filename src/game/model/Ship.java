@@ -26,6 +26,10 @@ public class Ship {
     private int lifes;
     private final int MAX_LIFES = Ajustes.MAX_LIFES;
 
+    /////NO SE ESTÁ USANDO, LO CREE PARA PROBAR EL ENVIAR DATOS AL SERVIDO SOLO CUANDO HAYA ALGUNA ACCION EN MARCHA PERO NO SE PUEDE.
+    private boolean doingActions; /////NO SE ESTÁ USANDO, LO CREE PARA PROBAR EL ENVIAR DATOS AL SERVIDO SOLO CUANDO HAYA ALGUNA ACCION EN MARCHA PERO NO SE PUEDE.
+    /////NO SE ESTÁ USANDO, LO CREE PARA PROBAR EL ENVIAR DATOS AL SERVIDO SOLO CUANDO HAYA ALGUNA ACCION EN MARCHA PERO NO SE PUEDE.
+
     private BooleanProperty upPressed, downPressed, rightPressed, leftPressed;
     private BooleanBinding anyPressed;
 
@@ -58,6 +62,8 @@ public class Ship {
         score = 0;
 
         lifes = Ajustes.START_LIFES;
+
+        doingActions = false;
 
         this.id = idShip;
 
@@ -136,6 +142,8 @@ public class Ship {
         posY = pos;
     }
 
+    public boolean isDoingActions() { return doingActions; }
+
     public int getId(){
         return id;
     }
@@ -173,7 +181,12 @@ public class Ship {
     }
 
     private void rotate(){
-        imgShip.setRotate(getAngle());
+        double newAngle = getAngle();
+
+        if (newAngle != imgShip.getRotate())
+            doingActions = true;
+
+        imgShip.setRotate(newAngle);
 
         imagenRotada = imgShip.snapshot(snapshotParameters, null);
     }
@@ -192,10 +205,13 @@ public class Ship {
     }
 
     public void update(double time){
-        weapon.update(time);
+        doingActions = weapon.update(time);
+
         if(anyPressed.get()) {
             mover();
+            doingActions = true;
         }
+
         if(state.equals(Enums.ShipState.DYING)) {
             if (animacion.getFrame() < Ajustes.NAVEDESTRUIR_LENGHT) {
                 imgShip = animacion.shipDestruir(id);

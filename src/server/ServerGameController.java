@@ -96,7 +96,7 @@ public class ServerGameController {
         int clientPort;
 
         //el servidor atén el port indefinidament
-        while(serverOn/* No esten todos los jugadores */){
+        while(serverOn){
 
             DatagramPacket packet = new DatagramPacket(receivingData, Packets.PACKET_LENGHT);
             //espera de les dades

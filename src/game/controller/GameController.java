@@ -29,6 +29,7 @@ import transformmer.Transformer;
 import java.io.*;
 import java.net.*;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
 
 public class GameController extends GameSetter implements Initializable {
     @FXML private Pane pane;
@@ -95,6 +96,8 @@ public class GameController extends GameSetter implements Initializable {
 
     private double dificulty = 1;
 
+    private static final double ONE_FRAME_DURATION = 0.0153; // This is for 60 fps.
+
     private void startSigle(){
         runningGame = true;
 
@@ -109,44 +112,44 @@ public class GameController extends GameSetter implements Initializable {
                 if (ship.getState().equals(Enums.ShipState.DEAD)) runningGame=false;
 
                 double timing = (currentNanoTime-anteriorCurrentNanoTime)*Math.pow(10, -9);
-                if(anteriorCurrentNanoTime == 0){
+
+                if (timing >= ONE_FRAME_DURATION) {
+                    timingMeteor += timing;
                     anteriorCurrentNanoTime = currentNanoTime;
-                }
-                timingMeteor += timing;
-                anteriorCurrentNanoTime = currentNanoTime;
 
-                if( timingMeteor*(dificulty/6+1) >= 1) {
-                    meteorService.create(ship.getPosX()+(ship.getImagenRotada().getWidth())/2, ship.getPosY()+(ship.getImagenRotada().getHeight())/2, 2+(dificulty));
-                    timingMeteor = 0;
-                }
+                    if( timingMeteor*(dificulty/6+1) >= 1) {
+                        meteorService.create(ship.getPosX()+(ship.getImagenRotada().getWidth())/2, ship.getPosY()+(ship.getImagenRotada().getHeight())/2, 2+(dificulty));
+                        timingMeteor = 0;
+                    }
 
-                ship.update(timing);
-                meteorService.update();
+                    ship.update(timing);
+                    meteorService.update();
 
-                checkCollisions();
+                    checkCollisions();
 
-                graphicsContext.clearRect(0,0, stage.getWidth(), stage.getHeight());
+                    graphicsContext.clearRect(0,0, stage.getWidth(), stage.getHeight());
 
-                ship.render();
-                meteorService.render();
+                    ship.render();
+                    meteorService.render();
 
 
-                if(!runningGame){
+                    if(!runningGame){
 
-                    this.stop();
-                    try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/gameOver.fxml"));
+                        this.stop();
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/gameOver.fxml"));
 
-                        loader.load();
+                            loader.load();
 
-                        GameOverController gameController = loader.getController();
-                        gameController.setScene(scene);
-                        gameController.setStage(stage);
-                        gameController.setScore(score_p1.getText());
+                            GameOverController gameController = loader.getController();
+                            gameController.setScene(scene);
+                            gameController.setStage(stage);
+                            gameController.setScore(score_p1.getText());
 
-                        gameOverScreen.getChildren().add(loader.getRoot());
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                            gameOverScreen.getChildren().add(loader.getRoot());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -168,97 +171,94 @@ public class GameController extends GameSetter implements Initializable {
             public void handle(long currentNanoTime)
             {
                 double timing = (currentNanoTime-anteriorCurrentNanoTime)*Math.pow(10, -9);
-                if(anteriorCurrentNanoTime == 0){
+                if (timing >= ONE_FRAME_DURATION) {
                     anteriorCurrentNanoTime = currentNanoTime;
-                }
-                anteriorCurrentNanoTime = currentNanoTime;
 
-                graphicsContext.clearRect(0,0, stage.getWidth(), stage.getHeight());
+                    graphicsContext.clearRect(0, 0, stage.getWidth(), stage.getHeight());
 
-                dataToSend.setData(ship, timing, idSala);
-                //dataToSend.getShipWeaponBullets().forEach(bulletToSend -> System.out.println(bulletToSend.getAngle()));
+                    dataToSend.setData(ship, timing, idSala);
+                    //dataToSend.getShipWeaponBullets().forEach(bulletToSend -> System.out.println(bulletToSend.getAngle()));
 
-                String sendData = Transformer.classToJson(dataToSend);
-                packet = new DatagramPacket(sendData.getBytes(),
-                        sendData.getBytes().length,
-                        ipServer,
-                        portServer);
-
-                try {
-                    socket.send(packet);
-                    socket.setSoTimeout(1000);
-                    packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
-                    socket.receive(packet);
-
-
-                    if(Transformer.packetDataToString(packet).equals("FinishGame")){
-                        this.stop();
-
-                        //POR AQUI: Hacer que cambie de sala al acabar
-                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
-                        Parent root = loader.load();
-
-                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
-
-                        MultiplayerLobbyController multiplayerLobbyController = loader.getController();
-                        multiplayerLobbyController.setScene(scene);
-                        multiplayerLobbyController.setStage(stage);
-                        multiplayerLobbyController.setPacket(new DatagramPacket((ship.getId() + ":" + idSala).getBytes(), (ship.getId() + ":" + idSala).getBytes().length,ipServer,portServer));
-
-                        stage.setScene(scene);
-                        stage.show();
-                    }else {
-                        shipsRecivedService.setShipsRecived(Transformer.jsonToArrayListShips(Transformer.packetDataToString(packet)));
-
-                        shipsRecivedService.renderShipsRecibidas();
-
-                        ship.setState(shipsRecivedService.getMyState());
-                        System.out.println(ship.getState());
-                        ship.setLifes(shipsRecivedService.getMyLifes());
-
-
-                        if(ship.getState() != Enums.ShipState.DEAD) {
-                            ship.update(timing);
-
-                            checkCollisions();
-
-                            ship.render();
-                        }else {
-                            ship.render();
-                            runningGame = false;
-                            multiplayerSpectatorMode(shipsRecivedService, socket);
-                            this.stop();
-                        }
-
-
-                    }
-                } catch (SocketTimeoutException e){
-                    this.stop();
+                    String sendData = Transformer.classToJson(dataToSend);
+                    packet = new DatagramPacket(sendData.getBytes(),
+                            sendData.getBytes().length,
+                            ipServer,
+                            portServer);
 
                     try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerMenu.fxml"));
-                        Parent root = loader.load();
+                        socket.send(packet);
+                        socket.setSoTimeout(1000);
+                        packet = new DatagramPacket(recivingData, Packets.PACKET_LENGHT);
+                        socket.receive(packet);
 
-                        scene = new Scene(root, stage.getWidth(), stage.getHeight());
+                        if (Transformer.packetDataToString(packet).equals("FinishGame")) {
+                            this.stop();
 
-                        MultiplayerMenuController multiplayerMenuController = loader.getController();
-                        multiplayerMenuController.setScene(scene);
-                        multiplayerMenuController.setStage(stage);
+                            //POR AQUI: Hacer que cambie de sala al acabar
+                            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerLobby.fxml"));
+                            Parent root = loader.load();
 
-                        stage.setScene(scene);
-                        stage.show();
+                            scene = new Scene(root, stage.getWidth(), stage.getHeight());
 
-                    } catch (IOException ex){
-                        ex.printStackTrace();
+                            MultiplayerLobbyController multiplayerLobbyController = loader.getController();
+                            multiplayerLobbyController.setScene(scene);
+                            multiplayerLobbyController.setStage(stage);
+                            multiplayerLobbyController.setPacket(new DatagramPacket((ship.getId() + ":" + idSala).getBytes(), (ship.getId() + ":" + idSala).getBytes().length, ipServer, portServer));
+
+                            stage.setScene(scene);
+                            stage.show();
+                        } else {
+                            shipsRecivedService.setShipsRecived(Transformer.jsonToArrayListShips(Transformer.packetDataToString(packet)));
+
+                            shipsRecivedService.renderShipsRecibidas();
+
+                            ship.setState(shipsRecivedService.getMyState());
+
+                            ship.setLifes(shipsRecivedService.getMyLifes());
+
+                            if (ship.getState() != Enums.ShipState.DEAD) {
+                                ship.update(timing);
+
+                                checkCollisions();
+
+                                ship.render();
+                            } else {
+                                ship.render();
+                                runningGame = false;
+                                multiplayerSpectatorMode(shipsRecivedService, socket);
+                                this.stop();
+                            }
+
+
+                        }
+                    } catch (SocketTimeoutException e) {
+                        this.stop();
+
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("game/fxml/multiplayerMenu.fxml"));
+                            Parent root = loader.load();
+
+                            scene = new Scene(root, stage.getWidth(), stage.getHeight());
+
+                            MultiplayerMenuController multiplayerMenuController = loader.getController();
+                            multiplayerMenuController.setScene(scene);
+                            multiplayerMenuController.setStage(stage);
+
+                            stage.setScene(scene);
+                            stage.show();
+
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("ERROR");
+                            alert.setHeaderText("Connection Time Out");
+                            alert.showAndWait();
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    Platform.runLater(()->{
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("ERROR");
-                        alert.setHeaderText("Connection Time Out");
-                        alert.showAndWait();
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         }.start();
